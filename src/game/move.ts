@@ -1,3 +1,5 @@
-export const sum = (a: number, b: number): number => {
-  return a + b;
-};
+import { Agent, Location } from "./state"
+
+export type Move = {
+  newAgentLocations: Map<Agent, Location>
+}
