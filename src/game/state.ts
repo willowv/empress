@@ -1,11 +1,6 @@
 import { Move } from "./move"
 
-export enum Location {
-    Court,
-    Delay,
-    Bribe,
-    Influence
-}
+export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
     agentID: string,
