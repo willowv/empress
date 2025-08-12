@@ -1,5 +1,3 @@
-import { Move } from "./move"
-
 export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
@@ -12,7 +10,26 @@ export type State = {
     agentLocations: Map<Agent, Location>
 }
 
-export function getInitialState(date: Date) : State {
+export type Move = {
+  newAgentLocations: Map<Agent, Location>
+}
+
+export function getEmptyMove() : Move {
+  return {
+    newAgentLocations: new Map<Agent, Location>
+  }
+}
+
+export function getScoreIncrease(move: Move) : number {
+    let score = 0;
+    move.newAgentLocations.forEach((location, agent) => {
+        if(location === "Influence")
+            score += agent.curValue;
+    })
+    return score;
+}
+
+export function getInitialState(rand: ()=>number) : State {
     // TODO: create all agents and assign them initial values
     return {
         agentLocations: new Map<Agent, Location>()
@@ -31,7 +48,7 @@ export function isMoveValid(curState: State, move: Move) : boolean {
    return true;
 }
 
-export function getNextState(curState: State, move: Move) : State {
+export function endTurn(curState: State, move: Move, rand: ()=>number) {
     // TODO: Validate move and apply to current state to get next state, or throw error
     if(isMoveValid(curState, move)){
         /*
@@ -44,6 +61,11 @@ export function getNextState(curState: State, move: Move) : State {
         }
     }
     else throw new Error("Invalid Move");
+}
+
+export function applyMove(curState: State, move: Move) : State {
+    // TODO: actually apply the changes from the move
+    return curState;
 }
 
 export function getScore(curState: State) : number {
