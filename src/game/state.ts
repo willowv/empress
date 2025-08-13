@@ -1,9 +1,9 @@
-import { Move } from "./move"
 
 export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
-    agentID: string,
+    // TODO: store Location on agent instead of as a map
+    id: number,
     maxValue: number,
     curValue: number
 }
@@ -12,11 +12,14 @@ export type State = {
     agentLocations: Map<Agent, Location>
 }
 
-export function getInitialState(date: Date) : State {
-    // TODO: create all agents and assign them initial values
-    return {
-        agentLocations: new Map<Agent, Location>()
-    }
+export type Move = {
+  newAgentLocations: Map<Agent, Location>
+}
+
+export function getEmptyMove() : Move {
+  return {
+    newAgentLocations: new Map<Agent, Location>
+  }
 }
 
 export function isMoveValid(curState: State, move: Move) : boolean {
@@ -31,27 +34,25 @@ export function isMoveValid(curState: State, move: Move) : boolean {
    return true;
 }
 
-export function getNextState(curState: State, move: Move) : State {
-    // TODO: Validate move and apply to current state to get next state, or throw error
-    if(isMoveValid(curState, move)){
-        /*
-        TODO: Implement end of turn side effects
-        Move Delay and Bribe agents from previous state to Court
-        Reroll values for all agents in Court
-        */
-        return {
-            agentLocations: new Map<Agent, Location>()
-        }
-    }
-    else throw new Error("Invalid Move");
+export function applyMove({agentLocations}: State, {newAgentLocations}: Move) : State {
+    // Aply the changes from the move
+    newAgentLocations.forEach((location, agent) => {
+        agentLocations.set(agent, location);
+    })
+    return { agentLocations };
 }
 
-export function getScore(curState: State) : number {
-    // TODO: Calculate score by adding up values of agents assigned to Influence
-    return 0;
+export function getScore(agentLocations : Map<Agent,Location>) : number {
+    // Calculate score by adding up values of agents assigned to Influence
+    let score = 0;
+    agentLocations.forEach((location, agent) => {
+        if(location === "Influence")
+            score += agent.curValue;
+    })
+    return score;
 }
 
 export function hasGameEnded(curState: State) : boolean {
     // TODO: actual condition is not initial state and (no delay agent OR <= 1 court agents)
-    return true;
+    return false;
 }
