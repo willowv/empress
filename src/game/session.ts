@@ -19,13 +19,14 @@ export function getInitialState(rand: () => number): State {
     // Create all agents and assign them initial values
     return {
         agents: AGENT_MAX_VALUES.map((maxValue, index) => {
-        return {
-            id: index,
-            curValue: randomRoll(maxValue, rand), // should give a roll between 1 and maxValue
-            maxValue: maxValue,
-            location: 'Court'
-        }
-    })}
+            return {
+                id: index,
+                curValue: randomRoll(maxValue, rand), // should give a roll between 1 and maxValue
+                maxValue: maxValue,
+                location: 'Court'
+            }
+        })
+    }
 }
 
 export function getCurrentState(session: Session): State {
