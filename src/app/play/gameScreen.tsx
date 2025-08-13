@@ -104,8 +104,8 @@ function Locations({state, setMove}:LocationsProps) {
 
 function AgentVisual(agent: Agent) {
     return (
-        <div key={agent.agentID}>
-            <div>Agent {agent.agentID}</div>
+        <div key={agent.id}>
+            <div>Agent {agent.id}</div>
             <div>{agent.curValue} / {agent.maxValue}</div>
         </div>
     );
