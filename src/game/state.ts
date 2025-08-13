@@ -1,59 +1,121 @@
 export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
-    // TODO: store Location on agent instead of as a map
-    id: number
-    maxValue: number
-    curValue: number
+    readonly id: number
+    readonly maxValue: number
+    readonly curValue: number
+    readonly location: Location
 }
 
-export type State = {
-    agentLocations: Map<Agent, Location>
-}
-
-export type Move = {
-    newAgentLocations: Map<Agent, Location>
-}
-
-export function getEmptyMove(): Move {
+export function withLocation(agent: Agent, location: Location): Agent {
     return {
-        newAgentLocations: new Map<Agent, Location>()
+        ...agent,
+        location: location
     }
 }
 
-export function isMoveValid(curState: State, move: Move): boolean {
-    /*
-        TODO: apply actual logic below
-        Only agents from Court were moved
-        At most one agent moved to Delay
-        At most one agent moved to Bribe
-        The number of moved agents is less than or equal to the bribe agent’s value + 1 (or no moved agents, if no bribe agent)
-        New Delay agent has higher value than old state Delay agent
-    */
-    return true
+export function withValue(agent: Agent, value: number): Agent {
+    return {
+        ...agent,
+        curValue: value
+    }
 }
 
-export function applyMove(
-    { agentLocations }: State,
-    { newAgentLocations }: Move
+export type State = {
+    readonly agents: Agent[]
+}
+
+export type Move = {
+    readonly agentId: number
+    readonly location: Location
+}
+
+export type Turn = {
+    readonly moves: Move[]
+}
+
+export function appendMove({ moves }: Turn, move: Move): Turn {
+    return {
+        moves: [...moves, move]
+    }
+}
+
+export function getEmptyTurn(): Turn {
+    return {
+        moves: []
+    }
+}
+
+export function isTurnValid(
+    { agents: agents }: State,
+    { moves: moves }: Turn
+): boolean {
+    // Only agents from Court were moved
+    const isOnlyCourtMoves = moves.every(
+        (move) => agents[move.agentId].location === 'Court'
+    )
+    // At most one agent moved to Delay
+    const newDelayAgents = moves.filter((move) => move.location === 'Delay')
+    const hasAtMostOneDelayAgent = newDelayAgents.length <= 1
+    // At most one agent moved to Bribe
+    const newBribeAgents = moves.filter((move) => move.location === 'Bribe')
+    const hasAtMostOneBribeAgent = newBribeAgents.length <= 1
+    // Number of moved agents is less than the new bribe agent's value
+    const maxChanges =
+        newBribeAgents.length > 0
+            ? agents[newBribeAgents[0].agentId].curValue + 1
+            : 0
+    const isUnderMaxChanges = moves.length <= maxChanges
+    // New delay agent has higher value than old one, or zero if there's no previous delay agent
+    const oldDelay =
+        agents.find((agent) => agent.location === 'Delay')?.curValue ?? 0
+    const isValidDelay =
+        newDelayAgents.length == 0 ||
+        agents[newDelayAgents[0].agentId].curValue > oldDelay
+    return (
+        isOnlyCourtMoves &&
+        hasAtMostOneDelayAgent &&
+        hasAtMostOneBribeAgent &&
+        isUnderMaxChanges &&
+        isValidDelay
+    )
+}
+
+export function applyTurn(
+    { agents: agents }: State,
+    { moves: moves }: Turn
 ): State {
     // Aply the changes from the move
-    newAgentLocations.forEach((location, agent) => {
-        agentLocations.set(agent, location)
+    // For each changedAgent, we want to update the corresponding agent in agents
+    // The IDs of agents correspond to their index in agents
+    const updatedAgents = agents.map((agent) => {
+        return { ...agent }
     })
-    return { agentLocations }
+    moves.forEach((move) => {
+        updatedAgents[move.agentId].location = move.location
+    })
+    return {
+        agents: updatedAgents
+    }
 }
 
-export function getScore(agentLocations: Map<Agent, Location>): number {
+export function getScore({ agents }: State): number {
     // Calculate score by adding up values of agents assigned to Influence
-    let score = 0
-    agentLocations.forEach((location, agent) => {
-        if (location === 'Influence') score += agent.curValue
-    })
-    return score
+    return agents.reduce(
+        (score, agent) =>
+            agent.location === 'Influence' ? score + agent.curValue : score,
+        0
+    )
 }
 
-export function hasGameEnded(curState: State): boolean {
-    // TODO: actual condition is not initial state and (no delay agent OR <= 1 court agents)
-    return false
+export function hasGameEnded(
+    isInitialState: boolean,
+    { agents }: State
+): boolean {
+    // (no delay agent OR <= 1 court agents)
+    const hasDelayAgent =
+        agents.find((agent) => agent.location === 'Delay') !== undefined
+    const hasEnoughCourtAgents =
+        agents.filter((agent) => agent.location === 'Court').length > 1
+    return !isInitialState && (!hasDelayAgent || !hasEnoughCourtAgents)
 }

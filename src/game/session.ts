@@ -1,15 +1,22 @@
 import { hash_cyrb53, random_splitmix32, randomRoll } from '@/externals/random'
-import { Agent, applyMove, isMoveValid, Location, Move, State } from './state'
+import {
+    applyTurn,
+    isTurnValid,
+    Turn,
+    State,
+    withLocation,
+    withValue
+} from './state'
 
 export type Session = {
     seed: string
-    moveHistory: Move[]
+    turnHistory: Turn[]
 }
 
-export function appendMove(session: Session, move: Move): Session {
+export function appendTurn(session: Session, turn: Turn): Session {
     return {
-        seed: session.seed,
-        moveHistory: [...session.moveHistory, move]
+        ...session,
+        turnHistory: [...session.turnHistory, turn]
     }
 }
 
@@ -17,48 +24,52 @@ const AGENT_MAX_VALUES = [4, 4, 6, 6, 8, 8, 10, 12, 20]
 
 export function getInitialState(rand: () => number): State {
     // Create all agents and assign them initial values
-    const agentLocations = new Map<Agent, Location>()
-    AGENT_MAX_VALUES.forEach((maxValue, index) => {
-        const agent: Agent = {
-            id: index,
-            curValue: randomRoll(maxValue, rand), // should give a roll between 1 and maxValue
-            maxValue: maxValue
-        }
-        agentLocations.set(agent, 'Court')
-    })
-    return { agentLocations: agentLocations }
+    return {
+        agents: AGENT_MAX_VALUES.map((maxValue, index) => {
+            return {
+                id: index,
+                curValue: randomRoll(maxValue, rand), // should give a roll between 1 and maxValue
+                maxValue: maxValue,
+                location: 'Court'
+            }
+        })
+    }
 }
 
 export function getCurrentState(session: Session): State {
     // TODO: Add tests verifying that the results properly reproduce for the same seed
     const rand = random_splitmix32(hash_cyrb53(session.seed))
-    const initialState = getInitialState(rand)
-    let curState = initialState
-    session.moveHistory.forEach((move) => {
-        curState = endTurn(curState, move, rand)
+    let curState = getInitialState(rand)
+    session.turnHistory.forEach((turn) => {
+        curState = endTurn(curState, turn, rand)
     })
     return curState
 }
 
 export function endTurn(
     curState: State,
-    move: Move,
+    turn: Turn,
     rand: () => number
 ): State {
-    // If move is valid, execute end of turn effects and return the new state
-    if (isMoveValid(curState, move)) {
-        const { agentLocations: prevAgentLocations } = curState
-        const { agentLocations: nextAgentLocations } = applyMove(curState, move)
+    // If turn is valid, execute end of turn effects and return the new state
+    if (isTurnValid(curState, turn)) {
+        const { agents: prevAgents } = curState
+        let nextAgents = applyTurn(curState, turn).agents
+
         // Move agents previously on Delay or Bribe back to Court
-        prevAgentLocations.forEach((location, agent) => {
-            if (location === 'Delay' || location === 'Bribe')
-                nextAgentLocations.set(agent, 'Court')
+        prevAgents.forEach((agent) => {
+            if (agent.location === 'Delay' || agent.location === 'Bribe')
+                nextAgents[agent.id] = withLocation(
+                    nextAgents[agent.id],
+                    'Court'
+                )
         })
         // Re-roll values for all agents in Court
-        nextAgentLocations.forEach((location, agent) => {
-            if (location === 'Court')
-                agent.curValue = randomRoll(agent.maxValue, rand)
+        nextAgents = nextAgents.map((agent) => {
+            if (agent.location === 'Court')
+                return withValue(agent, randomRoll(agent.maxValue, rand))
+            else return { ...agent }
         })
-        return { agentLocations: nextAgentLocations }
+        return { agents: nextAgents }
     } else throw new Error('Invalid Move')
 }

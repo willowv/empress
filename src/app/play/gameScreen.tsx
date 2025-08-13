@@ -1,50 +1,50 @@
 'use client'
 
-import { Session, appendMove, getCurrentState } from '@/game/session'
+import { Session, appendTurn, getCurrentState } from '@/game/session'
 import {
     Agent,
-    applyMove,
-    getEmptyMove,
+    applyTurn,
+    getEmptyTurn,
     getScore,
-    isMoveValid,
-    Move,
+    isTurnValid,
+    Turn,
     State
 } from '@/game/state'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 export interface GameScreenProps {
-    date: Date
+    readonly date: Date
 }
 
 export function GameScreen({ date }: GameScreenProps) {
     // TODO: Consider if session state should be at the level above this, since EndScreen will need it as well.
     const [curSession, setSession] = useState<Session>(() => {
-        return { seed: date.toUTCString(), moveHistory: [] }
+        return { seed: date.toUTCString(), turnHistory: [] }
     })
-    const [plannedMove, setPlannedMove] = useState<Move>(getEmptyMove())
+    const [plannedTurn, setPlannedTurn] = useState<Turn>(getEmptyTurn())
 
     // We want to visualize the player's planned turn
     const curState = getCurrentState(curSession)
-    const plannedState = applyMove(curState, plannedMove)
+    const plannedState = applyTurn(curState, plannedTurn)
 
-    // Get current score (not accounting for planned move)
-    const curScore = getScore(curState.agentLocations)
+    // Get current score (not accounting for planned turn)
+    const curScore = getScore(curState)
     // Let's grab this so we can show the player how much their score will increase with this move
-    const plannedScoreIncrease: number = getScore(plannedMove.newAgentLocations)
+    const plannedScoreIncrease: number = getScore(plannedState) - curScore
 
     return (
         <div>
             <p>Today&apos;s Date: {date.toLocaleDateString()}</p>
-            <Locations state={plannedState} setMove={setPlannedMove} />
+            <Locations state={plannedState} setPlannedTurn={setPlannedTurn} />
             <div className="flex flex-col items-center gap-4">
                 <p>
                     Current Score: {curScore} + {plannedScoreIncrease}
                 </p>
                 <button
                     className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                    disabled={!isMoveValid(curState, plannedMove)}
+                    disabled={!isTurnValid(curState, plannedTurn)}
                     onClick={() => {
-                        setSession(appendMove(curSession, plannedMove))
+                        setSession(appendTurn(curSession, plannedTurn))
                     }}
                 >
                     End Turn
@@ -52,7 +52,7 @@ export function GameScreen({ date }: GameScreenProps) {
                 <button
                     className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
                     onClick={() => {
-                        setPlannedMove(getEmptyMove)
+                        setPlannedTurn(getEmptyTurn)
                     }}
                 >
                     Reset Turn
@@ -63,32 +63,24 @@ export function GameScreen({ date }: GameScreenProps) {
 }
 
 interface LocationsProps {
-    state: State
-    setMove: Dispatch<SetStateAction<Move>>
+    readonly state: State
+    readonly setPlannedTurn: Dispatch<SetStateAction<Turn>>
 }
 
-function Locations({ state, setMove }: LocationsProps) {
+function Locations({ state, setPlannedTurn }: LocationsProps) {
     // Get Agent Locations
-    let courtAgents: Agent[] = []
-    let delayAgents: Agent[] = []
-    let bribeAgents: Agent[] = []
-    let influenceAgents: Agent[] = []
-    state.agentLocations.forEach((location, agent) => {
-        switch (location) {
-            case 'Delay':
-                delayAgents = [...delayAgents, agent]
-                break
-            case 'Bribe':
-                bribeAgents = [...bribeAgents, agent]
-                break
-            case 'Influence':
-                influenceAgents = [...influenceAgents, agent]
-                break
-            case 'Court':
-            default:
-                courtAgents = [...courtAgents, agent]
-        }
-    })
+    const courtAgents: Agent[] = state.agents.filter(
+        (agent) => agent.location === 'Court'
+    )
+    const delayAgents: Agent[] = state.agents.filter(
+        (agent) => agent.location === 'Delay'
+    )
+    const bribeAgents: Agent[] = state.agents.filter(
+        (agent) => agent.location === 'Bribe'
+    )
+    const influenceAgents: Agent[] = state.agents.filter(
+        (agent) => agent.location === 'Influence'
+    )
     return (
         <div className="flex flex-col items-center gap-4 sm:flex-row">
             <div>
