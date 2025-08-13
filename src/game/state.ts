@@ -1,53 +1,77 @@
 export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
-    id: number
-    maxValue: number
-    curValue: number
-    location: Location
+    readonly id: number
+    readonly maxValue: number
+    readonly curValue: number
+    readonly location: Location
 }
 
-export type State = {
-    agents: Agent[]
-}
-
-export type Move = {
-    changedAgents: Agent[]
-}
-
-export function getEmptyMove(): Move {
+export function withLocation(agent: Agent, location: Location): Agent {
     return {
-        changedAgents: []
+        ...agent,
+        location: location
     }
 }
 
-export function isMoveValid(
+export function withValue(agent: Agent, value: number): Agent {
+    return {
+        ...agent,
+        curValue: value
+    }
+}
+
+export type State = {
+    readonly agents: Agent[]
+}
+
+export type Move = {
+    readonly agentId: number
+    readonly location: Location
+}
+
+export type Turn = {
+    readonly moves: Move[]
+}
+
+export function appendMove({ moves }: Turn, move: Move): Turn {
+    return {
+        moves: [...moves, move]
+    }
+}
+
+export function getEmptyTurn(): Turn {
+    return {
+        moves: []
+    }
+}
+
+export function isTurnValid(
     { agents: agents }: State,
-    { changedAgents: changedAgents }: Move
+    { moves: moves }: Turn
 ): boolean {
     // Only agents from Court were moved
-    const isOnlyCourtMoves = changedAgents.every(
-        (changedAgent) => agents[changedAgent.id].location === 'Court'
+    const isOnlyCourtMoves = moves.every(
+        (move) => agents[move.agentId].location === 'Court'
     )
     // At most one agent moved to Delay
-    const newDelayAgents = changedAgents.filter(
-        (changedAgent) => changedAgent.location === 'Delay'
-    )
+    const newDelayAgents = moves.filter((move) => move.location === 'Delay')
     const hasAtMostOneDelayAgent = newDelayAgents.length <= 1
     // At most one agent moved to Bribe
-    const newBribeAgents = changedAgents.filter(
-        (changedAgent) => changedAgent.location === 'Bribe'
-    )
+    const newBribeAgents = moves.filter((move) => move.location === 'Bribe')
     const hasAtMostOneBribeAgent = newBribeAgents.length <= 1
     // Number of moved agents is less than the new bribe agent's value
     const maxChanges =
-        newBribeAgents.length > 0 ? newBribeAgents[0].curValue + 1 : 0
-    const isUnderMaxChanges = changedAgents.length <= maxChanges
+        newBribeAgents.length > 0
+            ? agents[newBribeAgents[0].agentId].curValue + 1
+            : 0
+    const isUnderMaxChanges = moves.length <= maxChanges
     // New delay agent has higher value than old one, or zero if there's no previous delay agent
     const oldDelay =
         agents.find((agent) => agent.location === 'Delay')?.curValue ?? 0
     const isValidDelay =
-        newDelayAgents.length == 0 || newDelayAgents[0].curValue > oldDelay
+        newDelayAgents.length == 0 ||
+        agents[newDelayAgents[0].agentId].curValue > oldDelay
     return (
         isOnlyCourtMoves &&
         hasAtMostOneDelayAgent &&
@@ -57,22 +81,25 @@ export function isMoveValid(
     )
 }
 
-export function applyMove(
+export function applyTurn(
     { agents: agents }: State,
-    { changedAgents: changedAgents }: Move
+    { moves: moves }: Turn
 ): State {
     // Aply the changes from the move
     // For each changedAgent, we want to update the corresponding agent in agents
     // The IDs of agents correspond to their index in agents
-    changedAgents.forEach((changedAgent) => {
-        agents[changedAgent.id].location = changedAgent.location
+    const updatedAgents = agents.map((agent) => {
+        return { ...agent }
+    })
+    moves.forEach((move) => {
+        updatedAgents[move.agentId].location = move.location
     })
     return {
-        agents: agents
+        agents: updatedAgents
     }
 }
 
-export function getScore(agents: Agent[]): number {
+export function getScore({ agents }: State): number {
     // Calculate score by adding up values of agents assigned to Influence
     return agents.reduce(
         (score, agent) =>
