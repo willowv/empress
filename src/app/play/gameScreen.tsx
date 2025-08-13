@@ -1,7 +1,7 @@
 'use client'
 
 import { Session, appendMove, getCurrentState } from '@/game/session';
-import { Agent, applyMove, getEmptyMove, getScore, getScoreIncrease, isMoveValid, Move, State } from '@/game/state';
+import { Agent, applyMove, getEmptyMove, getScore, isMoveValid, Move, State } from '@/game/state';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export interface GameScreenProps {
@@ -9,27 +9,27 @@ export interface GameScreenProps {
 }
 
 export function GameScreen({ date }: GameScreenProps) {
+    // TODO: Consider if session state should be at the level above this, since EndScreen will need it as well.
     const [curSession, setSession] = useState<Session>(()=>{
         return { seed: date.toUTCString(), moveHistory: []}
     })
-    const [plannedMove, setMove] = useState<Move>(getEmptyMove());
+    const [plannedMove, setPlannedMove] = useState<Move>(getEmptyMove());
 
     // We want to visualize the player's planned turn
     const curState = getCurrentState(curSession);
     const plannedState = applyMove(curState, plannedMove);
     
     // Get current score (not accounting for planned move)
-    const curScore = getScore(curState);
+    const curScore = getScore(curState.agentLocations);
     // Let's grab this so we can show the player how much their score will increase with this move
-    const plannedScoreIncrease : number = getScoreIncrease(plannedMove);
+    const plannedScoreIncrease : number = getScore(plannedMove.newAgentLocations);
 
-    // Is this move valid? Used to disable End Turn button if needed.
   return (
     <div>
         <p>Today&apos;s Date: {date.toLocaleDateString()}</p>
         <Locations
             state = {plannedState}
-            setMove = {setMove}
+            setMove = {setPlannedMove}
         />
         <div className="flex gap-4 items-center flex-col">
         <p>Current Score: { curScore } + { plannedScoreIncrease }</p>
@@ -44,7 +44,7 @@ export function GameScreen({ date }: GameScreenProps) {
         </button>
         <button
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            onClick={()=>{setMove(getEmptyMove)}}
+            onClick={()=>{setPlannedMove(getEmptyMove)}}
         >
             Reset Turn
         </button>
@@ -103,6 +103,7 @@ function Locations({state, setMove}:LocationsProps) {
 }
 
 function AgentVisual(agent: Agent) {
+    // TODO: Make this prettier for the interaction stage
     return (
         <div key={agent.id}>
             <div>Agent {agent.id}</div>

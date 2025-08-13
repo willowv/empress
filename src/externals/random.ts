@@ -26,3 +26,7 @@ export function random_splitmix32(seed :number) : ()=>number {
       return ((t = t ^ t >>> 15) >>> 0) / 4294967296;
     }
 }
+
+export function randomRoll(maxValue :number, rand: ()=>number) {
+    return Math.floor(rand() * maxValue) + 1;
+}

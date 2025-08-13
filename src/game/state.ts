@@ -1,6 +1,8 @@
+
 export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
+    // TODO: store Location on agent instead of as a map
     id: number,
     maxValue: number,
     curValue: number
@@ -20,31 +22,6 @@ export function getEmptyMove() : Move {
   }
 }
 
-export function getScoreIncrease(move: Move) : number {
-    let score = 0;
-    move.newAgentLocations.forEach((location, agent) => {
-        if(location === "Influence")
-            score += agent.curValue;
-    })
-    return score;
-}
-
-const AGENT_MAX_VALUES = [4, 4, 6, 6, 8, 8, 10, 12, 20];
-
-export function getInitialState(rand: ()=>number) : State {
-    // Create all agents and assign them initial values
-    const agentLocations = new Map<Agent, Location>();
-    AGENT_MAX_VALUES.forEach((maxValue, index) => {
-        const agent : Agent = {
-            id: index,
-            curValue: Math.floor(rand() * maxValue) + 1, // should give a roll between 1 and maxValue
-            maxValue: maxValue
-        };
-        agentLocations.set(agent, 'Court');
-    })
-    return { agentLocations: agentLocations };
-}
-
 export function isMoveValid(curState: State, move: Move) : boolean {
     /*
         TODO: apply actual logic below
@@ -57,26 +34,6 @@ export function isMoveValid(curState: State, move: Move) : boolean {
    return true;
 }
 
-export function endTurn(curState: State, move: Move, rand: ()=>number) : State {
-    // If move is valid, execute end of turn effects and return the new state
-    if(isMoveValid(curState, move)){
-        const {agentLocations: prevAgentLocations} = curState;
-        const {agentLocations: nextAgentLocations} = applyMove(curState, move);
-        // Move agents previously on Delay or Bribe back to Court
-        prevAgentLocations.forEach((location, agent) => {
-            if(location === "Delay" || location === "Bribe")
-                nextAgentLocations.set(agent, "Court");
-        });
-        // Re-roll values for all agents in Court
-        nextAgentLocations.forEach((location, agent) => {
-            if(location === "Court")
-                agent.curValue = Math.floor(rand() * agent.maxValue) + 1;
-        })
-        return {agentLocations: nextAgentLocations};
-    }
-    else throw new Error("Invalid Move");
-}
-
 export function applyMove({agentLocations}: State, {newAgentLocations}: Move) : State {
     // Aply the changes from the move
     newAgentLocations.forEach((location, agent) => {
@@ -85,7 +42,7 @@ export function applyMove({agentLocations}: State, {newAgentLocations}: Move) : 
     return { agentLocations };
 }
 
-export function getScore({agentLocations}: State) : number {
+export function getScore(agentLocations : Map<Agent,Location>) : number {
     // Calculate score by adding up values of agents assigned to Influence
     let score = 0;
     agentLocations.forEach((location, agent) => {
