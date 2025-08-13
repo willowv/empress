@@ -17,7 +17,7 @@ export function GameScreen({ date }: GameScreenProps) {
     // We want to visualize the player's planned turn
     const curState = getCurrentState(curSession);
     const plannedState = applyMove(curState, plannedMove);
-
+    
     // Get current score (not accounting for planned move)
     const curScore = getScore(curState);
     // Let's grab this so we can show the player how much their score will increase with this move
@@ -104,8 +104,8 @@ function Locations({state, setMove}:LocationsProps) {
 
 function AgentVisual(agent: Agent) {
     return (
-        <div>
-            <div>{agent.agentID}</div>
+        <div key={agent.agentID}>
+            <div>Agent {agent.agentID}</div>
             <div>{agent.curValue} / {agent.maxValue}</div>
         </div>
     );
