@@ -17,23 +17,21 @@ const AGENT_MAX_VALUES = [4, 4, 6, 6, 8, 8, 10, 12, 20]
 
 export function getInitialState(rand: () => number): State {
     // Create all agents and assign them initial values
-    const agentLocations = new Map<Agent, Location>()
-    AGENT_MAX_VALUES.forEach((maxValue, index) => {
-        const agent: Agent = {
+    return {
+        agents: AGENT_MAX_VALUES.map((maxValue, index) => {
+        return {
             id: index,
             curValue: randomRoll(maxValue, rand), // should give a roll between 1 and maxValue
-            maxValue: maxValue
+            maxValue: maxValue,
+            location: 'Court'
         }
-        agentLocations.set(agent, 'Court')
-    })
-    return { agentLocations: agentLocations }
+    })}
 }
 
 export function getCurrentState(session: Session): State {
     // TODO: Add tests verifying that the results properly reproduce for the same seed
     const rand = random_splitmix32(hash_cyrb53(session.seed))
-    const initialState = getInitialState(rand)
-    let curState = initialState
+    let curState = getInitialState(rand)
     session.moveHistory.forEach((move) => {
         curState = endTurn(curState, move, rand)
     })
@@ -47,18 +45,18 @@ export function endTurn(
 ): State {
     // If move is valid, execute end of turn effects and return the new state
     if (isMoveValid(curState, move)) {
-        const { agentLocations: prevAgentLocations } = curState
-        const { agentLocations: nextAgentLocations } = applyMove(curState, move)
+        const { agents: prevAgents } = curState
+        const { agents: nextAgents } = applyMove(curState, move)
         // Move agents previously on Delay or Bribe back to Court
-        prevAgentLocations.forEach((location, agent) => {
-            if (location === 'Delay' || location === 'Bribe')
-                nextAgentLocations.set(agent, 'Court')
+        prevAgents.forEach((agent) => {
+            if (agent.location === 'Delay' || agent.location === 'Bribe')
+                nextAgents[agent.id].location = 'Court'
         })
         // Re-roll values for all agents in Court
-        nextAgentLocations.forEach((location, agent) => {
-            if (location === 'Court')
+        nextAgents.forEach((agent) => {
+            if (agent.location === 'Court')
                 agent.curValue = randomRoll(agent.maxValue, rand)
         })
-        return { agentLocations: nextAgentLocations }
+        return { agents: nextAgents }
     } else throw new Error('Invalid Move')
 }

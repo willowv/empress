@@ -28,9 +28,9 @@ export function GameScreen({ date }: GameScreenProps) {
     const plannedState = applyMove(curState, plannedMove)
 
     // Get current score (not accounting for planned move)
-    const curScore = getScore(curState.agentLocations)
+    const curScore = getScore(curState.agents)
     // Let's grab this so we can show the player how much their score will increase with this move
-    const plannedScoreIncrease: number = getScore(plannedMove.newAgentLocations)
+    const plannedScoreIncrease: number = getScore(plannedMove.changedAgents)
 
     return (
         <div>
@@ -69,26 +69,18 @@ interface LocationsProps {
 
 function Locations({ state, setMove }: LocationsProps) {
     // Get Agent Locations
-    let courtAgents: Agent[] = []
-    let delayAgents: Agent[] = []
-    let bribeAgents: Agent[] = []
-    let influenceAgents: Agent[] = []
-    state.agentLocations.forEach((location, agent) => {
-        switch (location) {
-            case 'Delay':
-                delayAgents = [...delayAgents, agent]
-                break
-            case 'Bribe':
-                bribeAgents = [...bribeAgents, agent]
-                break
-            case 'Influence':
-                influenceAgents = [...influenceAgents, agent]
-                break
-            case 'Court':
-            default:
-                courtAgents = [...courtAgents, agent]
-        }
-    })
+    const courtAgents: Agent[] = state.agents.filter(
+        (agent) => agent.location === 'Court'
+    )
+    const delayAgents: Agent[] = state.agents.filter(
+        (agent) => agent.location === 'Delay'
+    )
+    const bribeAgents: Agent[] = state.agents.filter(
+        (agent) => agent.location === 'Bribe'
+    )
+    const influenceAgents: Agent[] = state.agents.filter(
+        (agent) => agent.location === 'Influence'
+    )
     return (
         <div className="flex flex-col items-center gap-4 sm:flex-row">
             <div>
