@@ -114,7 +114,7 @@ export function hasGameEnded(
 ): boolean {
     // (no delay agent OR <= 1 court agents)
     const hasDelayAgent =
-        agents.find((agent) => agent.location === 'Delay') !== null
+        agents.find((agent) => agent.location === 'Delay') !== undefined
     const hasEnoughCourtAgents =
         agents.filter((agent) => agent.location === 'Court').length > 1
     return !isInitialState && (!hasDelayAgent || !hasEnoughCourtAgents)
