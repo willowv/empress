@@ -1,58 +1,14 @@
 import { expect } from '@jest/globals'
-import { isTurnValid, Turn, State, hasGameEnded } from './state'
-import { getCurrentState, Session } from './session'
-
-const testSeed: string = 'test'
-const testInitialSession: Session = { seed: testSeed, turnHistory: [] }
-const testInitialState: State = getCurrentState(testInitialSession)
-const testValidTurn: Turn = {
-    moves: [
-        { agentId: 2, location: 'Bribe' },
-        { agentId: 1, location: 'Delay' },
-        { agentId: 5, location: 'Influence' },
-        { agentId: 8, location: 'Influence' }
-    ]
-}
-const testMidGameSession: Session = {
-    seed: testSeed,
-    turnHistory: [testValidTurn]
-}
-const testMidGameState: State = getCurrentState(testMidGameSession)
-const testEndGameTurn: Turn = {
-    moves: [
-        { agentId: 0, location: 'Influence' },
-        { agentId: 1, location: 'Delay' },
-        { agentId: 2, location: 'Influence' },
-        { agentId: 3, location: 'Influence' },
-        { agentId: 4, location: 'Influence' },
-        { agentId: 5, location: 'Influence' },
-        { agentId: 6, location: 'Influence' },
-        { agentId: 7, location: 'Influence' },
-        { agentId: 8, location: 'Bribe' }
-    ]
-}
-const testEndGameSession: Session = {
-    seed: testSeed,
-    turnHistory: [testEndGameTurn]
-}
-const testEndGameState: State = getCurrentState(testEndGameSession)
-const testInvalidTurn: Turn = { moves: [{ agentId: 5, location: 'Bribe' }] }
-const testInvalidSession: Session = {
-    seed: 'test',
-    turnHistory: [testValidTurn, testInvalidTurn]
-}
-const testValidTurn2: Turn = {
-    moves: [
-        { agentId: 4, location: 'Delay' },
-        { agentId: 3, location: 'Bribe' },
-        { agentId: 6, location: 'Influence' },
-        { agentId: 7, location: 'Influence' }
-    ]
-}
-const testMidGameSession2: Session = {
-    seed: 'test',
-    turnHistory: [testValidTurn, testValidTurn2]
-}
+import { isTurnValid, Turn, hasGameEnded } from './state'
+import { getCurrentState } from './session'
+import {
+    testInitialState,
+    testValidTurn,
+    testMidGameState,
+    testEndGameState,
+    testInvalidSession,
+    testMidGameSession2
+} from './exampleObjects'
 
 describe('isTurnValid', () => {
     it('should return true for a valid move', () => {
