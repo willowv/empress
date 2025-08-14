@@ -10,16 +10,17 @@ interface LocationsProps {
 
 export function Locations({ state, setPlannedTurn }: LocationsProps) {
     // Get Agent Locations
-    const courtAgents: Agent[] = state.agents.filter(
+    const agents: Agent[] = state.agents ?? []
+    const courtAgents: Agent[] = agents.filter(
         (agent) => agent.location === 'Court'
     )
-    const delayAgents: Agent[] = state.agents.filter(
+    const delayAgents: Agent[] = agents.filter(
         (agent) => agent.location === 'Delay'
     )
-    const bribeAgents: Agent[] = state.agents.filter(
+    const bribeAgents: Agent[] = agents.filter(
         (agent) => agent.location === 'Bribe'
     )
-    const influenceAgents: Agent[] = state.agents.filter(
+    const influenceAgents: Agent[] = agents.filter(
         (agent) => agent.location === 'Influence'
     )
     return (
