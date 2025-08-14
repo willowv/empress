@@ -1,8 +1,10 @@
+import { DieSize } from './session'
+
 export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
     readonly id: number
-    readonly maxValue: 4 | 6 | 8 | 10 | 12 | 20
+    readonly maxValue: DieSize
     readonly curValue: number
     readonly location: Location
 }
