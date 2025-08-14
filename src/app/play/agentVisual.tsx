@@ -19,7 +19,7 @@ export function AgentVisual(agent: Agent) {
                 src={dieMapping[agent.maxValue]}
                 width={1000}
                 height={1000}
-                alt="A four-sided die"
+                alt={'A ' + agent.maxValue + '-sided die'}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 invert"
             />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-xs">
