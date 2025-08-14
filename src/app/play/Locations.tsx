@@ -2,6 +2,7 @@
 import { State, Turn, Agent } from '@/game/state'
 import { Dispatch, SetStateAction } from 'react'
 import { AgentVisual } from './agentVisual'
+import 'tailwindcss'
 
 interface LocationsProps {
     readonly state: State
@@ -24,22 +25,30 @@ export function Locations({ state, setPlannedTurn }: LocationsProps) {
         (agent) => agent.location === 'Influence'
     )
     return (
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-            <div>
-                <div>Court</div>
-                {courtAgents.map((agent) => AgentVisual(agent))}
+        <div className="flex flex-col items-start gap-4 sm:flex-row">
+            <div className="w-48">
+                <div className="text-center text-lg font-bold">Court</div>
+                <div className="mx-auto flex flex-wrap items-start">
+                    {courtAgents.map((agent) => AgentVisual(agent))}
+                </div>
             </div>
-            <div>
-                <div>Delay</div>
-                {delayAgents.map((agent) => AgentVisual(agent))}
+            <div className="w-48">
+                <div className="text-center text-lg font-bold">Delay</div>
+                <div className="mx-auto flex flex-wrap items-start">
+                    {delayAgents.map((agent) => AgentVisual(agent))}
+                </div>
             </div>
-            <div>
-                <div>Bribe</div>
-                {bribeAgents.map((agent) => AgentVisual(agent))}
+            <div className="w-48">
+                <div className="text-center text-lg font-bold">Bribe</div>
+                <div className="mx-auto flex flex-wrap items-start">
+                    {bribeAgents.map((agent) => AgentVisual(agent))}
+                </div>
             </div>
-            <div>
-                <div>Influence</div>
-                {influenceAgents.map((agent) => AgentVisual(agent))}
+            <div className="w-48">
+                <div className="text-center text-lg font-bold">Influence</div>
+                <div className="mx-auto flex flex-wrap items-start">
+                    {influenceAgents.map((agent) => AgentVisual(agent))}
+                </div>
             </div>
         </div>
     )

@@ -22,7 +22,7 @@ export function AgentVisual(agent: Agent) {
                 alt={'A ' + agent.maxValue + '-sided die'}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 invert"
             />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-xs">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
                 {agent.curValue}
             </div>
         </div>
