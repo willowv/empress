@@ -2,7 +2,7 @@ export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
     readonly id: number
-    readonly maxValue: number
+    readonly maxValue: 4 | 6 | 8 | 10 | 12 | 20
     readonly curValue: number
     readonly location: Location
 }

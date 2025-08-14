@@ -13,8 +13,8 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
     args: {
         id: 0,
-        maxValue: 0,
-        curValue: 0,
+        maxValue: 4,
+        curValue: 1,
         location: 'Court'
     }
 }
