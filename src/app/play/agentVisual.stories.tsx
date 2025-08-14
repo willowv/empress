@@ -12,9 +12,13 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
     args: {
-        id: 0,
-        maxValue: 4,
-        curValue: 1,
-        location: 'Court'
+        agent: {
+            id: 0,
+            maxValue: 4,
+            curValue: 1,
+            location: 'Court'
+        },
+        isSelected: false,
+        setSelected: () => {}
     }
 }

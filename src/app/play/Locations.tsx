@@ -1,6 +1,6 @@
 'use client'
 import { State, Turn, Agent } from '@/game/state'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { AgentVisual } from './agentVisual'
 import 'tailwindcss'
 
@@ -10,6 +10,15 @@ interface LocationsProps {
 }
 
 export function Locations({ state, setPlannedTurn }: LocationsProps) {
+    const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
+
+    function handleAgentClick(id: number) {
+        if (selectedAgentId === id)
+            // clicking selected agent
+            setSelectedAgentId(null)
+        else setSelectedAgentId(id)
+    }
+
     // Get Agent Locations
     const agents: Agent[] = state.agents ?? []
     const courtAgents: Agent[] = agents.filter(
@@ -29,25 +38,49 @@ export function Locations({ state, setPlannedTurn }: LocationsProps) {
             <div className="w-48">
                 <div className="text-center text-lg font-bold">Court</div>
                 <div className="mx-auto flex flex-wrap items-start">
-                    {courtAgents.map((agent) => AgentVisual(agent))}
+                    {courtAgents.map((agent) =>
+                        AgentVisual({
+                            agent: agent,
+                            isSelected: agent.id === selectedAgentId,
+                            setSelected: handleAgentClick
+                        })
+                    )}
                 </div>
             </div>
             <div className="w-48">
                 <div className="text-center text-lg font-bold">Delay</div>
                 <div className="mx-auto flex flex-wrap items-start">
-                    {delayAgents.map((agent) => AgentVisual(agent))}
+                    {delayAgents.map((agent) =>
+                        AgentVisual({
+                            agent: agent,
+                            isSelected: agent.id === selectedAgentId,
+                            setSelected: handleAgentClick
+                        })
+                    )}
                 </div>
             </div>
             <div className="w-48">
                 <div className="text-center text-lg font-bold">Bribe</div>
                 <div className="mx-auto flex flex-wrap items-start">
-                    {bribeAgents.map((agent) => AgentVisual(agent))}
+                    {bribeAgents.map((agent) =>
+                        AgentVisual({
+                            agent: agent,
+                            isSelected: agent.id === selectedAgentId,
+                            setSelected: handleAgentClick
+                        })
+                    )}
                 </div>
             </div>
             <div className="w-48">
                 <div className="text-center text-lg font-bold">Influence</div>
                 <div className="mx-auto flex flex-wrap items-start">
-                    {influenceAgents.map((agent) => AgentVisual(agent))}
+                    {influenceAgents.map((agent) =>
+                        AgentVisual({
+                            agent: agent,
+                            isSelected: agent.id === selectedAgentId,
+                            setSelected: handleAgentClick
+                        })
+                    )}
                 </div>
             </div>
         </div>
