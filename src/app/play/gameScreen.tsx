@@ -2,15 +2,14 @@
 
 import { Session, appendTurn, getCurrentState } from '@/game/session'
 import {
-    Agent,
     applyTurn,
     getEmptyTurn,
     getScore,
     isTurnValid,
-    Turn,
-    State
+    Turn
 } from '@/game/state'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
+import { Locations } from './Locations'
 
 export interface GameScreenProps {
     readonly date: Date
@@ -57,59 +56,6 @@ export function GameScreen({ date }: GameScreenProps) {
                 >
                     Reset Turn
                 </button>
-            </div>
-        </div>
-    )
-}
-
-interface LocationsProps {
-    readonly state: State
-    readonly setPlannedTurn: Dispatch<SetStateAction<Turn>>
-}
-
-function Locations({ state, setPlannedTurn }: LocationsProps) {
-    // Get Agent Locations
-    const courtAgents: Agent[] = state.agents.filter(
-        (agent) => agent.location === 'Court'
-    )
-    const delayAgents: Agent[] = state.agents.filter(
-        (agent) => agent.location === 'Delay'
-    )
-    const bribeAgents: Agent[] = state.agents.filter(
-        (agent) => agent.location === 'Bribe'
-    )
-    const influenceAgents: Agent[] = state.agents.filter(
-        (agent) => agent.location === 'Influence'
-    )
-    return (
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-            <div>
-                <div>Court</div>
-                {courtAgents.map((agent) => AgentVisual(agent))}
-            </div>
-            <div>
-                <div>Delay</div>
-                {delayAgents.map((agent) => AgentVisual(agent))}
-            </div>
-            <div>
-                <div>Bribe</div>
-                {bribeAgents.map((agent) => AgentVisual(agent))}
-            </div>
-            <div>
-                <div>Influence</div>
-                {influenceAgents.map((agent) => AgentVisual(agent))}
-            </div>
-        </div>
-    )
-}
-
-function AgentVisual(agent: Agent) {
-    // TODO: Make this prettier for the interaction stage
-    return (
-        <div key={agent.id}>
-            <div>Agent {agent.id}</div>
-            <div>
-                {agent.curValue} / {agent.maxValue}
             </div>
         </div>
     )
