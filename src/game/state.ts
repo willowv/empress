@@ -100,8 +100,9 @@ export function isTurnValid(
             .find(([, location]) => location === targetLocation)?.[0]
         return agentId !== undefined ? agents[agentId].curValue : 0
     }
-    // Number of moved agents is less than the new bribe agent's value
-    const maxMoves: number = getValueOfAgentAssignedTo('Bribe') + 1
+    // Number of other moved agents is less than the new bribe agent's value
+    let maxMoves: number = getValueOfAgentAssignedTo('Bribe')
+    if (maxMoves > 0) maxMoves++
     const isUnderMaxChanges = agentId_location.size <= maxMoves
 
     // New delay agent has higher value than old one, or zero if there's no previous delay agent
