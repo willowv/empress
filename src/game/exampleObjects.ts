@@ -1,16 +1,16 @@
 import { Session, getCurrentState } from './session'
-import { State, Turn } from './state'
+import { State, Turn, Location } from './state'
 
 const testSeed: string = 'test'
 const testInitialSession: Session = { seed: testSeed, turnHistory: [] }
 export const testInitialState: State = getCurrentState(testInitialSession)
 export const testValidTurn: Turn = {
-    moves: [
-        { agentId: 2, location: 'Bribe' },
-        { agentId: 1, location: 'Delay' },
-        { agentId: 5, location: 'Influence' },
-        { agentId: 8, location: 'Influence' }
-    ]
+    agentId_location: new Map<number, Location>([
+        [2, 'Bribe'],
+        [1, 'Delay'],
+        [5, 'Influence'],
+        [8, 'Influence']
+    ])
 }
 const testMidGameSession: Session = {
     seed: testSeed,
@@ -18,35 +18,37 @@ const testMidGameSession: Session = {
 }
 export const testMidGameState: State = getCurrentState(testMidGameSession)
 const testEndGameTurn: Turn = {
-    moves: [
-        { agentId: 0, location: 'Influence' },
-        { agentId: 1, location: 'Delay' },
-        { agentId: 2, location: 'Influence' },
-        { agentId: 3, location: 'Influence' },
-        { agentId: 4, location: 'Influence' },
-        { agentId: 5, location: 'Influence' },
-        { agentId: 6, location: 'Influence' },
-        { agentId: 7, location: 'Influence' },
-        { agentId: 8, location: 'Bribe' }
-    ]
+    agentId_location: new Map<number, Location>([
+        [0, 'Influence'],
+        [1, 'Delay'],
+        [2, 'Influence'],
+        [3, 'Influence'],
+        [4, 'Influence'],
+        [5, 'Influence'],
+        [6, 'Influence'],
+        [7, 'Influence'],
+        [8, 'Bribe']
+    ])
 }
 const testEndGameSession: Session = {
     seed: testSeed,
     turnHistory: [testEndGameTurn]
 }
 export const testEndGameState: State = getCurrentState(testEndGameSession)
-const testInvalidTurn: Turn = { moves: [{ agentId: 5, location: 'Bribe' }] }
+const testInvalidTurn: Turn = {
+    agentId_location: new Map<number, Location>([[5, 'Bribe']])
+}
 export const testInvalidSession: Session = {
     seed: testSeed,
     turnHistory: [testValidTurn, testInvalidTurn]
 }
 const testValidTurn2: Turn = {
-    moves: [
-        { agentId: 4, location: 'Delay' },
-        { agentId: 3, location: 'Bribe' },
-        { agentId: 6, location: 'Influence' },
-        { agentId: 7, location: 'Influence' }
-    ]
+    agentId_location: new Map<number, Location>([
+        [4, 'Delay'],
+        [3, 'Bribe'],
+        [6, 'Influence'],
+        [7, 'Influence']
+    ])
 }
 export const testMidGameSession2: Session = {
     seed: testSeed,
