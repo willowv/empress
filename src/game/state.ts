@@ -79,42 +79,37 @@ export function isTurnValid(
     const isOnlyCourtMoves = agentId_location
         .keys()
         .every((agentId) => agents[agentId].location === 'Court')
-    // At most one agent moved to Delay
-    const numNewDelayAgents = agentId_location
-        .values()
-        .reduce(
-            (numDelayAgents, location) =>
-                location === 'Delay' ? numDelayAgents + 1 : numDelayAgents,
-            0
-        )
-    const hasAtMostOneNewDelayAgent = numNewDelayAgents <= 1
-    // At most one agent moved to Bribe
-    const numNewBribeAgents = agentId_location
-        .values()
-        .reduce(
-            (numBribeAgents, location) =>
-                location === 'Bribe' ? numBribeAgents + 1 : numBribeAgents,
-            0
-        )
-    const hasAtMostOneNewBribeAgent = numNewBribeAgents <= 1
-    // Number of moved agents is less than the new bribe agent's value
-    const newBribeAgentId: number | undefined = agentId_location
-        .entries()
-        .find(([, location]) => location === 'Bribe')?.[0]
 
-    const maxMoves: number =
-        newBribeAgentId !== undefined ? agents[newBribeAgentId].curValue + 1 : 0
+    function numAgentsAssignedTo(targetLocation: Location): number {
+        return agentId_location
+            .values()
+            .reduce(
+                (numDelayAgents, location) =>
+                    location === targetLocation
+                        ? numDelayAgents + 1
+                        : numDelayAgents,
+                0
+            )
+    }
+    const hasAtMostOneNewDelayAgent = numAgentsAssignedTo('Delay') <= 1
+    const hasAtMostOneNewBribeAgent = numAgentsAssignedTo('Bribe') <= 1
+
+    function getValueOfAgentAssignedTo(targetLocation: Location): number {
+        const agentId = agentId_location
+            .entries()
+            .find(([, location]) => location === targetLocation)?.[0]
+        return agentId !== undefined ? agents[agentId].curValue : 0
+    }
+    // Number of moved agents is less than the new bribe agent's value
+    const maxMoves: number = getValueOfAgentAssignedTo('Bribe') + 1
     const isUnderMaxChanges = agentId_location.size <= maxMoves
+
     // New delay agent has higher value than old one, or zero if there's no previous delay agent
     const oldDelay =
         agents.find((agent) => agent.location === 'Delay')?.curValue ?? 0
-
-    const newDelayAgentId: number | undefined = agentId_location
-        .entries()
-        .find(([, location]) => location === 'Delay')?.[0]
-    const newDelay: number =
-        newDelayAgentId !== undefined ? agents[newDelayAgentId].curValue : 0
+    const newDelay: number = getValueOfAgentAssignedTo('Delay')
     const isValidDelay = oldDelay == 0 || newDelay == 0 || newDelay > oldDelay
+
     return (
         isOnlyCourtMoves &&
         hasAtMostOneNewDelayAgent &&
