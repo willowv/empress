@@ -20,7 +20,8 @@ export function appendTurn(session: Session, turn: Turn): Session {
     }
 }
 
-const AGENT_MAX_VALUES = [4, 4, 6, 6, 8, 8, 10, 12, 20]
+export type DieSize = 4 | 6 | 8 | 10 | 12 | 20
+const AGENT_MAX_VALUES: DieSize[] = [4, 4, 6, 6, 8, 8, 10, 12, 20]
 
 export function getInitialState(rand: () => number): State {
     // Create all agents and assign them initial values

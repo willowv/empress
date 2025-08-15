@@ -1,8 +1,12 @@
+import { DieSize } from './session'
+
+import _ from 'lodash'
+
 export type Location = 'Court' | 'Delay' | 'Bribe' | 'Influence'
 
 export type Agent = {
     readonly id: number
-    readonly maxValue: number
+    readonly maxValue: DieSize
     readonly curValue: number
     readonly location: Location
 }
@@ -31,51 +35,86 @@ export type Move = {
 }
 
 export type Turn = {
-    readonly moves: Move[]
+    readonly agentId_location: Map<number, Location>
 }
 
-export function appendMove({ moves }: Turn, move: Move): Turn {
+export function updateTurnWithMove(
+    { agentId_location }: Turn,
+    move: Move
+): Turn {
+    // If we are assigning to Delay or Bribe and there is an existing move to Delay or Bribe in this set, we want to remove it
+    const updatedTurn = _.cloneDeep(agentId_location)
+    function removeExistingMoves(targetLocation: Location): void {
+        const existingMovesToTarget = agentId_location
+            .entries()
+            .filter(([, location]) => location === targetLocation)
+
+        existingMovesToTarget.forEach(([agentId]) =>
+            updatedTurn.delete(agentId)
+        )
+    }
+    if (move.location === 'Delay') {
+        removeExistingMoves('Delay')
+    }
+    if (move.location === 'Bribe') {
+        removeExistingMoves('Bribe')
+    }
+    updatedTurn.set(move.agentId, move.location)
     return {
-        moves: [...moves, move]
+        agentId_location: updatedTurn
     }
 }
 
 export function getEmptyTurn(): Turn {
     return {
-        moves: []
+        agentId_location: new Map<number, Location>()
     }
 }
 
 export function isTurnValid(
     { agents: agents }: State,
-    { moves: moves }: Turn
+    { agentId_location: agentId_location }: Turn
 ): boolean {
     // Only agents from Court were moved
-    const isOnlyCourtMoves = moves.every(
-        (move) => agents[move.agentId].location === 'Court'
-    )
-    // At most one agent moved to Delay
-    const newDelayAgents = moves.filter((move) => move.location === 'Delay')
-    const hasAtMostOneDelayAgent = newDelayAgents.length <= 1
-    // At most one agent moved to Bribe
-    const newBribeAgents = moves.filter((move) => move.location === 'Bribe')
-    const hasAtMostOneBribeAgent = newBribeAgents.length <= 1
-    // Number of moved agents is less than the new bribe agent's value
-    const maxChanges =
-        newBribeAgents.length > 0
-            ? agents[newBribeAgents[0].agentId].curValue + 1
-            : 0
-    const isUnderMaxChanges = moves.length <= maxChanges
+    const isOnlyCourtMoves = agentId_location
+        .keys()
+        .every((agentId) => agents[agentId].location === 'Court')
+
+    function numAgentsAssignedTo(targetLocation: Location): number {
+        return agentId_location
+            .values()
+            .reduce(
+                (numDelayAgents, location) =>
+                    location === targetLocation
+                        ? numDelayAgents + 1
+                        : numDelayAgents,
+                0
+            )
+    }
+    const hasAtMostOneNewDelayAgent = numAgentsAssignedTo('Delay') <= 1
+    const hasAtMostOneNewBribeAgent = numAgentsAssignedTo('Bribe') <= 1
+
+    function getValueOfAgentAssignedTo(targetLocation: Location): number {
+        const agentId = agentId_location
+            .entries()
+            .find(([, location]) => location === targetLocation)?.[0]
+        return agentId !== undefined ? agents[agentId].curValue : 0
+    }
+    // Number of other moved agents is less than the new bribe agent's value
+    let maxMoves: number = getValueOfAgentAssignedTo('Bribe')
+    if (maxMoves > 0) maxMoves++
+    const isUnderMaxChanges = agentId_location.size <= maxMoves
+
     // New delay agent has higher value than old one, or zero if there's no previous delay agent
     const oldDelay =
         agents.find((agent) => agent.location === 'Delay')?.curValue ?? 0
-    const isValidDelay =
-        newDelayAgents.length == 0 ||
-        agents[newDelayAgents[0].agentId].curValue > oldDelay
+    const newDelay: number = getValueOfAgentAssignedTo('Delay')
+    const isValidDelay = oldDelay == 0 || newDelay == 0 || newDelay > oldDelay
+
     return (
         isOnlyCourtMoves &&
-        hasAtMostOneDelayAgent &&
-        hasAtMostOneBribeAgent &&
+        hasAtMostOneNewDelayAgent &&
+        hasAtMostOneNewBribeAgent &&
         isUnderMaxChanges &&
         isValidDelay
     )
@@ -83,19 +122,18 @@ export function isTurnValid(
 
 export function applyTurn(
     { agents: agents }: State,
-    { moves: moves }: Turn
+    { agentId_location: agentId_location }: Turn
 ): State {
     // Aply the changes from the move
     // For each changedAgent, we want to update the corresponding agent in agents
     // The IDs of agents correspond to their index in agents
-    const updatedAgents = agents.map((agent) => {
-        return { ...agent }
-    })
-    moves.forEach((move) => {
-        updatedAgents[move.agentId].location = move.location
-    })
     return {
-        agents: updatedAgents
+        agents: agents.map((agent) => {
+            return {
+                ...agent,
+                location: agentId_location.get(agent.id) ?? agent.location
+            }
+        })
     }
 }
 

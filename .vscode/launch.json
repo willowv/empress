@@ -2,6 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Storybook Debug",
+            "url": "http://localhost:6006",
+            "sourceMaps": true,
+            "webRoot": "${workspaceFolder}",
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${webRoot}/*",
+                "webpack:///./*": "${webRoot}/*",
+                "webpack:///src/*": "${webRoot}/*",
+                "webpack:///./~/*": "${webRoot}/node_modules/*"
+            }
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "Jest All Tests",

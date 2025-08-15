@@ -1,58 +1,14 @@
 import { expect } from '@jest/globals'
-import { isTurnValid, Turn, State, hasGameEnded } from './state'
-import { getCurrentState, Session } from './session'
-
-const testSeed: string = 'test'
-const testInitialSession: Session = { seed: testSeed, turnHistory: [] }
-const testInitialState: State = getCurrentState(testInitialSession)
-const testValidTurn: Turn = {
-    moves: [
-        { agentId: 2, location: 'Bribe' },
-        { agentId: 1, location: 'Delay' },
-        { agentId: 5, location: 'Influence' },
-        { agentId: 8, location: 'Influence' }
-    ]
-}
-const testMidGameSession: Session = {
-    seed: testSeed,
-    turnHistory: [testValidTurn]
-}
-const testMidGameState: State = getCurrentState(testMidGameSession)
-const testEndGameTurn: Turn = {
-    moves: [
-        { agentId: 0, location: 'Influence' },
-        { agentId: 1, location: 'Delay' },
-        { agentId: 2, location: 'Influence' },
-        { agentId: 3, location: 'Influence' },
-        { agentId: 4, location: 'Influence' },
-        { agentId: 5, location: 'Influence' },
-        { agentId: 6, location: 'Influence' },
-        { agentId: 7, location: 'Influence' },
-        { agentId: 8, location: 'Bribe' }
-    ]
-}
-const testEndGameSession: Session = {
-    seed: testSeed,
-    turnHistory: [testEndGameTurn]
-}
-const testEndGameState: State = getCurrentState(testEndGameSession)
-const testInvalidTurn: Turn = { moves: [{ agentId: 5, location: 'Bribe' }] }
-const testInvalidSession: Session = {
-    seed: 'test',
-    turnHistory: [testValidTurn, testInvalidTurn]
-}
-const testValidTurn2: Turn = {
-    moves: [
-        { agentId: 4, location: 'Delay' },
-        { agentId: 3, location: 'Bribe' },
-        { agentId: 6, location: 'Influence' },
-        { agentId: 7, location: 'Influence' }
-    ]
-}
-const testMidGameSession2: Session = {
-    seed: 'test',
-    turnHistory: [testValidTurn, testValidTurn2]
-}
+import { isTurnValid, Turn, hasGameEnded, Location } from './state'
+import { getCurrentState } from './session'
+import {
+    testInitialState,
+    testValidTurn,
+    testMidGameState,
+    testEndGameState,
+    testInvalidSession,
+    testMidGameSession2
+} from './exampleObjects'
 
 describe('isTurnValid', () => {
     it('should return true for a valid move', () => {
@@ -60,43 +16,45 @@ describe('isTurnValid', () => {
     })
     it('should return false when a non-court agent is moved', () => {
         // try to move agent 5 from midgame state
-        const testTurn: Turn = { moves: [{ agentId: 5, location: 'Bribe' }] }
+        const testTurn: Turn = {
+            agentId_location: new Map<number, Location>([[5, 'Bribe']])
+        }
         expect(isTurnValid(testMidGameState, testTurn)).toBe(false)
     })
     it('should return false when too many agents are assigned to Delay', () => {
         // try to assign agents 0 and 1 to Delay from initial state
         const testTurn: Turn = {
-            moves: [
-                { agentId: 0, location: 'Delay' },
-                { agentId: 1, location: 'Delay' }
-            ]
+            agentId_location: new Map<number, Location>([
+                [0, 'Delay'],
+                [1, 'Delay']
+            ])
         }
         expect(isTurnValid(testInitialState, testTurn)).toBe(false)
     })
     it('should return false when too many agents are assigned to Bribe', () => {
         // try to assign agents 0 and 1 to Bribe from initial state
         const testTurn: Turn = {
-            moves: [
-                { agentId: 0, location: 'Bribe' },
-                { agentId: 1, location: 'Bribe' }
-            ]
+            agentId_location: new Map<number, Location>([
+                [0, 'Bribe'],
+                [1, 'Bribe']
+            ])
         }
         expect(isTurnValid(testInitialState, testTurn)).toBe(false)
     })
     it('should return false when the new Delay agent is lower than the old one', () => {
         // try to assign agent 3 to Bribe and agent 0 to Delay from midgame state
         const testTurn: Turn = {
-            moves: [
-                { agentId: 3, location: 'Bribe' },
-                { agentId: 0, location: 'Delay' }
-            ]
+            agentId_location: new Map<number, Location>([
+                [3, 'Bribe'],
+                [0, 'Delay']
+            ])
         }
         expect(isTurnValid(testMidGameState, testTurn)).toBe(false)
     })
     it('should return false when more agents were moved than the value of the new Bribe agent', () => {
         // try to assign agent 0 to Influence from initial state
         const testTurn: Turn = {
-            moves: [{ agentId: 0, location: 'Influence' }]
+            agentId_location: new Map<number, Location>([[0, 'Influence']])
         }
         expect(isTurnValid(testInitialState, testTurn)).toBe(false)
     })

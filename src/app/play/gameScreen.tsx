@@ -2,15 +2,16 @@
 
 import { Session, appendTurn, getCurrentState } from '@/game/session'
 import {
-    Agent,
+    updateTurnWithMove,
     applyTurn,
     getEmptyTurn,
     getScore,
     isTurnValid,
-    Turn,
-    State
+    Move,
+    Turn
 } from '@/game/state'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
+import { Locations } from './Locations'
 
 export interface GameScreenProps {
     readonly date: Date
@@ -32,19 +33,34 @@ export function GameScreen({ date }: GameScreenProps) {
     // Let's grab this so we can show the player how much their score will increase with this move
     const plannedScoreIncrease: number = getScore(plannedState) - curScore
 
+    // Which agents are locked?
+    // Agents previously assigned to non-Court locations
+    const lockedAgentIds = curState.agents
+        .filter((agent) => agent.location !== 'Court')
+        .map((agent) => agent.id)
+
+    function handleLocationClick(move: Move) {
+        setPlannedTurn(updateTurnWithMove(plannedTurn, move))
+    }
+
     return (
-        <div>
+        <div className="select-none">
             <p>Today&apos;s Date: {date.toLocaleDateString()}</p>
-            <Locations state={plannedState} setPlannedTurn={setPlannedTurn} />
+            <Locations
+                state={plannedState}
+                handleLocationClick={handleLocationClick}
+                lockedAgentIds={lockedAgentIds}
+            />
             <div className="flex flex-col items-center gap-4">
                 <p>
                     Current Score: {curScore} + {plannedScoreIncrease}
                 </p>
                 <button
-                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
+                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] disabled:bg-red-400 disabled:hover:bg-red-400 sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
                     disabled={!isTurnValid(curState, plannedTurn)}
                     onClick={() => {
                         setSession(appendTurn(curSession, plannedTurn))
+                        setPlannedTurn(getEmptyTurn)
                     }}
                 >
                     End Turn
@@ -57,59 +73,6 @@ export function GameScreen({ date }: GameScreenProps) {
                 >
                     Reset Turn
                 </button>
-            </div>
-        </div>
-    )
-}
-
-interface LocationsProps {
-    readonly state: State
-    readonly setPlannedTurn: Dispatch<SetStateAction<Turn>>
-}
-
-function Locations({ state, setPlannedTurn }: LocationsProps) {
-    // Get Agent Locations
-    const courtAgents: Agent[] = state.agents.filter(
-        (agent) => agent.location === 'Court'
-    )
-    const delayAgents: Agent[] = state.agents.filter(
-        (agent) => agent.location === 'Delay'
-    )
-    const bribeAgents: Agent[] = state.agents.filter(
-        (agent) => agent.location === 'Bribe'
-    )
-    const influenceAgents: Agent[] = state.agents.filter(
-        (agent) => agent.location === 'Influence'
-    )
-    return (
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-            <div>
-                <div>Court</div>
-                {courtAgents.map((agent) => AgentVisual(agent))}
-            </div>
-            <div>
-                <div>Delay</div>
-                {delayAgents.map((agent) => AgentVisual(agent))}
-            </div>
-            <div>
-                <div>Bribe</div>
-                {bribeAgents.map((agent) => AgentVisual(agent))}
-            </div>
-            <div>
-                <div>Influence</div>
-                {influenceAgents.map((agent) => AgentVisual(agent))}
-            </div>
-        </div>
-    )
-}
-
-function AgentVisual(agent: Agent) {
-    // TODO: Make this prettier for the interaction stage
-    return (
-        <div key={agent.id}>
-            <div>Agent {agent.id}</div>
-            <div>
-                {agent.curValue} / {agent.maxValue}
             </div>
         </div>
     )
