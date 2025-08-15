@@ -1,15 +1,15 @@
 'use client'
-import { State, Turn, Agent } from '@/game/state'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { State, Agent, Move } from '@/game/state'
+import { useState } from 'react'
 import { AgentVisual } from './agentVisual'
 import 'tailwindcss'
 
 interface LocationsProps {
     readonly state: State
-    readonly setPlannedTurn: Dispatch<SetStateAction<Turn>>
+    readonly handleLocationClick: (move: Move) => void
 }
 
-export function Locations({ state, setPlannedTurn }: LocationsProps) {
+export function Locations({ state, handleLocationClick }: LocationsProps) {
     const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
 
     function handleAgentClick(id: number) {
@@ -35,7 +35,21 @@ export function Locations({ state, setPlannedTurn }: LocationsProps) {
     )
     return (
         <div className="flex flex-col items-start gap-4 sm:flex-row">
-            <div className="w-48">
+            <div
+                className="min-h-32 w-48 border-2 border-amber-400"
+                onClick={() => {
+                    if (
+                        selectedAgentId != null &&
+                        agents[selectedAgentId].location != 'Court'
+                    ) {
+                        setSelectedAgentId(null)
+                        handleLocationClick({
+                            agentId: selectedAgentId,
+                            location: 'Court'
+                        })
+                    }
+                }}
+            >
                 <div className="text-center text-lg font-bold">Court</div>
                 <div className="mx-auto flex flex-wrap items-start">
                     {courtAgents.map((agent) =>
@@ -47,7 +61,21 @@ export function Locations({ state, setPlannedTurn }: LocationsProps) {
                     )}
                 </div>
             </div>
-            <div className="w-48">
+            <div
+                className="min-h-32 w-48 border-2 border-amber-400"
+                onClick={() => {
+                    if (
+                        selectedAgentId != null &&
+                        agents[selectedAgentId].location != 'Delay'
+                    ) {
+                        setSelectedAgentId(null)
+                        handleLocationClick({
+                            agentId: selectedAgentId,
+                            location: 'Delay'
+                        })
+                    }
+                }}
+            >
                 <div className="text-center text-lg font-bold">Delay</div>
                 <div className="mx-auto flex flex-wrap items-start">
                     {delayAgents.map((agent) =>
@@ -59,7 +87,21 @@ export function Locations({ state, setPlannedTurn }: LocationsProps) {
                     )}
                 </div>
             </div>
-            <div className="w-48">
+            <div
+                className="min-h-32 w-48 border-2 border-amber-400"
+                onClick={() => {
+                    if (
+                        selectedAgentId != null &&
+                        agents[selectedAgentId].location != 'Bribe'
+                    ) {
+                        setSelectedAgentId(null)
+                        handleLocationClick({
+                            agentId: selectedAgentId,
+                            location: 'Bribe'
+                        })
+                    }
+                }}
+            >
                 <div className="text-center text-lg font-bold">Bribe</div>
                 <div className="mx-auto flex flex-wrap items-start">
                     {bribeAgents.map((agent) =>
@@ -71,7 +113,21 @@ export function Locations({ state, setPlannedTurn }: LocationsProps) {
                     )}
                 </div>
             </div>
-            <div className="w-48">
+            <div
+                className="min-h-32 w-48 border-2 border-amber-400"
+                onClick={() => {
+                    if (
+                        selectedAgentId != null &&
+                        agents[selectedAgentId].location != 'Influence'
+                    ) {
+                        setSelectedAgentId(null)
+                        handleLocationClick({
+                            agentId: selectedAgentId,
+                            location: 'Influence'
+                        })
+                    }
+                }}
+            >
                 <div className="text-center text-lg font-bold">Influence</div>
                 <div className="mx-auto flex flex-wrap items-start">
                     {influenceAgents.map((agent) =>

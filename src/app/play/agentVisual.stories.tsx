@@ -22,3 +22,16 @@ export const Default: Story = {
         setSelected: () => {}
     }
 }
+
+export const Selected: Story = {
+    args: {
+        agent: {
+            id: 0,
+            maxValue: 4,
+            curValue: 1,
+            location: 'Court'
+        },
+        isSelected: true,
+        setSelected: () => {}
+    }
+}

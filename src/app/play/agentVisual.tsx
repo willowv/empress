@@ -14,7 +14,11 @@ export function AgentVisual({
     setSelected
 }: AgentVisualProps) {
     return (
-        <div key={agent.id} className="relative h-16 w-16">
+        <div
+            key={agent.id}
+            className="relative h-16 w-16 select-none"
+            onClick={() => setSelected(agent.id)}
+        >
             <div className={isSelected ? 'fill-purple-500' : 'invert'}>
                 <Die dieSize={agent.maxValue} />
             </div>
