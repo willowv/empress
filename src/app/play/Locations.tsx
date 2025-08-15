@@ -40,7 +40,7 @@ export function Locations({
     return (
         <div className="flex flex-col items-start gap-4 sm:flex-row">
             <div
-                className="min-h-32 w-48 border-2 border-amber-400"
+                className="min-h-32 w-50 border-2 border-amber-400"
                 onClick={() => {
                     if (
                         selectedAgentId != null &&
@@ -67,7 +67,7 @@ export function Locations({
                 </div>
             </div>
             <div
-                className="min-h-32 w-48 border-2 border-amber-400"
+                className="min-h-32 w-50 border-2 border-amber-400"
                 onClick={() => {
                     if (
                         selectedAgentId != null &&
@@ -94,7 +94,7 @@ export function Locations({
                 </div>
             </div>
             <div
-                className="min-h-32 w-48 border-2 border-amber-400"
+                className="min-h-32 w-50 border-2 border-amber-400"
                 onClick={() => {
                     if (
                         selectedAgentId != null &&
@@ -121,7 +121,7 @@ export function Locations({
                 </div>
             </div>
             <div
-                className="min-h-32 w-48 border-2 border-amber-400"
+                className="min-h-32 w-50 border-2 border-amber-400"
                 onClick={() => {
                     if (
                         selectedAgentId != null &&

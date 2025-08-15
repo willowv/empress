@@ -39,7 +39,22 @@ export type Turn = {
 }
 
 export function appendMove({ agentId_location }: Turn, move: Move): Turn {
+    // If we are assigning to Delay or Bribe and there is an existing move to Delay or Bribe in this set, we want to remove it
     const updatedTurn = _.cloneDeep(agentId_location)
+    if (move.location === 'Delay') {
+        const existingDelayMoves = agentId_location
+            .entries()
+            .filter(([, location]) => location === 'Delay')
+
+        existingDelayMoves.forEach(([agentId]) => updatedTurn.delete(agentId))
+    }
+    if (move.location === 'Bribe') {
+        const existingBribeMoves = agentId_location
+            .entries()
+            .filter(([, location]) => location === 'Bribe')
+
+        existingBribeMoves.forEach(([agentId]) => updatedTurn.delete(agentId))
+    }
     updatedTurn.set(move.agentId, move.location)
     return {
         agentId_location: updatedTurn
