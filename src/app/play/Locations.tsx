@@ -13,7 +13,7 @@ interface LocationsProps {
 export function Locations({
     state,
     handleLocationClick,
-    lockedAgentIds: lockedAgentIds
+    lockedAgentIds
 }: LocationsProps) {
     const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
     const agents: Agent[] = state.agents ?? []
