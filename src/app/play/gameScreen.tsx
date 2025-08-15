@@ -2,7 +2,7 @@
 
 import { Session, appendTurn, getCurrentState } from '@/game/session'
 import {
-    appendMove,
+    updateTurnWithMove,
     applyTurn,
     getEmptyTurn,
     getScore,
@@ -40,7 +40,7 @@ export function GameScreen({ date }: GameScreenProps) {
         .map((agent) => agent.id)
 
     function handleLocationClick(move: Move) {
-        setPlannedTurn(appendMove(plannedTurn, move))
+        setPlannedTurn(updateTurnWithMove(plannedTurn, move))
     }
 
     return (

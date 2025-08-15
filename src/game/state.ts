@@ -38,22 +38,26 @@ export type Turn = {
     readonly agentId_location: Map<number, Location>
 }
 
-export function appendMove({ agentId_location }: Turn, move: Move): Turn {
+export function updateTurnWithMove(
+    { agentId_location }: Turn,
+    move: Move
+): Turn {
     // If we are assigning to Delay or Bribe and there is an existing move to Delay or Bribe in this set, we want to remove it
     const updatedTurn = _.cloneDeep(agentId_location)
-    if (move.location === 'Delay') {
-        const existingDelayMoves = agentId_location
+    function removeExistingMoves(targetLocation: Location): void {
+        const existingMovesToTarget = agentId_location
             .entries()
-            .filter(([, location]) => location === 'Delay')
+            .filter(([, location]) => location === targetLocation)
 
-        existingDelayMoves.forEach(([agentId]) => updatedTurn.delete(agentId))
+        existingMovesToTarget.forEach(([agentId]) =>
+            updatedTurn.delete(agentId)
+        )
+    }
+    if (move.location === 'Delay') {
+        removeExistingMoves('Delay')
     }
     if (move.location === 'Bribe') {
-        const existingBribeMoves = agentId_location
-            .entries()
-            .filter(([, location]) => location === 'Bribe')
-
-        existingBribeMoves.forEach(([agentId]) => updatedTurn.delete(agentId))
+        removeExistingMoves('Bribe')
     }
     updatedTurn.set(move.agentId, move.location)
     return {
