@@ -7,11 +7,16 @@ import 'tailwindcss'
 interface LocationsProps {
     readonly state: State
     readonly handleLocationClick: (move: Move) => void
+    readonly lockedAgentIds: number[]
 }
 
-export function Locations({ state, handleLocationClick }: LocationsProps) {
+export function Locations({
+    state,
+    handleLocationClick,
+    lockedAgentIds: lockedAgentIds
+}: LocationsProps) {
     const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
-
+    const agents: Agent[] = state.agents ?? []
     function handleAgentClick(id: number) {
         if (selectedAgentId === id)
             // clicking selected agent
@@ -20,7 +25,6 @@ export function Locations({ state, handleLocationClick }: LocationsProps) {
     }
 
     // Get Agent Locations
-    const agents: Agent[] = state.agents ?? []
     const courtAgents: Agent[] = agents.filter(
         (agent) => agent.location === 'Court'
     )
@@ -56,6 +60,7 @@ export function Locations({ state, handleLocationClick }: LocationsProps) {
                         AgentVisual({
                             agent: agent,
                             isSelected: agent.id === selectedAgentId,
+                            isLocked: lockedAgentIds.includes(agent.id),
                             setSelected: handleAgentClick
                         })
                     )}
@@ -82,6 +87,7 @@ export function Locations({ state, handleLocationClick }: LocationsProps) {
                         AgentVisual({
                             agent: agent,
                             isSelected: agent.id === selectedAgentId,
+                            isLocked: lockedAgentIds.includes(agent.id),
                             setSelected: handleAgentClick
                         })
                     )}
@@ -108,6 +114,7 @@ export function Locations({ state, handleLocationClick }: LocationsProps) {
                         AgentVisual({
                             agent: agent,
                             isSelected: agent.id === selectedAgentId,
+                            isLocked: lockedAgentIds.includes(agent.id),
                             setSelected: handleAgentClick
                         })
                     )}
@@ -134,6 +141,7 @@ export function Locations({ state, handleLocationClick }: LocationsProps) {
                         AgentVisual({
                             agent: agent,
                             isSelected: agent.id === selectedAgentId,
+                            isLocked: lockedAgentIds.includes(agent.id),
                             setSelected: handleAgentClick
                         })
                     )}

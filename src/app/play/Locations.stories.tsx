@@ -19,27 +19,31 @@ type Story = StoryObj<typeof meta>
 export const Initial: Story = {
     args: {
         state: testInitialState,
-        handleLocationClick: () => {}
+        handleLocationClick: () => {},
+        lockedAgentIds: []
     }
 }
 
 export const Midgame: Story = {
     args: {
         state: testMidGameState,
-        handleLocationClick: () => {}
+        handleLocationClick: () => {},
+        lockedAgentIds: []
     }
 }
 
 export const Midgame2: Story = {
     args: {
         state: testMidGameState2,
-        handleLocationClick: () => {}
+        handleLocationClick: () => {},
+        lockedAgentIds: []
     }
 }
 
 export const Endgame: Story = {
     args: {
         state: testEndGameState,
-        handleLocationClick: () => {}
+        handleLocationClick: () => {},
+        lockedAgentIds: []
     }
 }

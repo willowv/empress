@@ -19,6 +19,7 @@ export const Default: Story = {
             location: 'Court'
         },
         isSelected: false,
+        isLocked: false,
         setSelected: () => {}
     }
 }
@@ -32,6 +33,7 @@ export const Selected: Story = {
             location: 'Court'
         },
         isSelected: true,
+        isLocked: false,
         setSelected: () => {}
     }
 }

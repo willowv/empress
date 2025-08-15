@@ -33,6 +33,12 @@ export function GameScreen({ date }: GameScreenProps) {
     // Let's grab this so we can show the player how much their score will increase with this move
     const plannedScoreIncrease: number = getScore(plannedState) - curScore
 
+    // Which agents are locked?
+    // Agents previously assigned to non-Court locations
+    const lockedAgentIds = curState.agents
+        .filter((agent) => agent.location !== 'Court')
+        .map((agent) => agent.id)
+
     function handleLocationClick(move: Move) {
         setPlannedTurn(appendMove(plannedTurn, move))
     }
@@ -43,6 +49,7 @@ export function GameScreen({ date }: GameScreenProps) {
             <Locations
                 state={plannedState}
                 handleLocationClick={handleLocationClick}
+                lockedAgentIds={lockedAgentIds}
             />
             <div className="flex flex-col items-center gap-4">
                 <p>
