@@ -8,7 +8,8 @@ import {
     getScore,
     isTurnValid,
     Move,
-    Turn
+    Turn,
+    hasGameEnded
 } from '@/game/state'
 import { useState } from 'react'
 import { Locations } from './Locations'
@@ -24,8 +25,29 @@ export function GameScreen({ date }: GameScreenProps) {
     })
     const [plannedTurn, setPlannedTurn] = useState<Turn>(getEmptyTurn())
 
-    // We want to visualize the player's planned turn
     const curState = getCurrentState(curSession)
+
+    // If the game is over, show end state
+    if (hasGameEnded(curSession.turnHistory.length == 0, curState)) {
+        return (
+            <div className="flex flex-col items-center gap-4">
+                <p>Final Score: {getScore(curState)}</p>
+                <button
+                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
+                    onClick={() => {
+                        setSession({
+                            seed: date.toUTCString(),
+                            turnHistory: []
+                        })
+                    }}
+                >
+                    Play Again
+                </button>
+            </div>
+        )
+    }
+
+    // We want to visualize the player's planned turn
     const plannedState = applyTurn(curState, plannedTurn)
 
     // Get current score (not accounting for planned turn)
