@@ -25,11 +25,12 @@ export default function Agent({
         >
             <div
                 className={
-                    isLocked
+                    'm-2.5 ' +
+                    (isLocked
                         ? 'fill-amber-400'
                         : isSelected
                           ? 'fill-purple-500'
-                          : 'invert'
+                          : 'invert')
                 }
             >
                 <Die dieSize={agent.maxValue} />
