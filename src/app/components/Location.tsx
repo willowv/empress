@@ -1,18 +1,18 @@
 'use client'
-import { Location, Agent, Move } from '@/game/state'
-import { AgentVisual } from './agentVisual'
+import * as EG from '@/game/empress'
+import Agent from './Agent'
 
-interface LocationVisualProps {
-    readonly location: Location
+interface LocationProps {
+    readonly location: EG.Location
     readonly selectedAgentId: number | null
-    readonly agents: Agent[]
+    readonly agents: EG.Agent[]
     readonly setSelectedAgentId: (agentId: number | null) => void
-    readonly handleLocationClick: (move: Move) => void
+    readonly handleLocationClick: (move: EG.Move) => void
     readonly handleAgentClick: (id: number) => void
     readonly lockedAgentIds: number[]
 }
 
-export function LocationVisual({
+export default function Location({
     location,
     selectedAgentId,
     agents,
@@ -20,8 +20,8 @@ export function LocationVisual({
     handleLocationClick,
     handleAgentClick,
     lockedAgentIds
-}: LocationVisualProps) {
-    const agentsHere: Agent[] = agents.filter(
+}: LocationProps) {
+    const agentsHere: EG.Agent[] = agents.filter(
         (agent) => agent.location === location
     )
     return (
@@ -43,7 +43,7 @@ export function LocationVisual({
             <div className="text-center text-lg font-bold">{location}</div>
             <div className="mx-auto flex flex-wrap items-start">
                 {agentsHere.map((agent) =>
-                    AgentVisual({
+                    Agent({
                         agent: agent,
                         isSelected: agent.id === selectedAgentId,
                         isLocked: lockedAgentIds.includes(agent.id),

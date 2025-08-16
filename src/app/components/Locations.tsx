@@ -1,22 +1,22 @@
 'use client'
-import { State, Agent, Move } from '@/game/state'
+import * as EG from '@/game/empress'
 import { useState } from 'react'
 import 'tailwindcss'
-import { LocationVisual } from './LocationVisual'
+import Location from './Location'
 
 interface LocationsProps {
-    readonly state: State
-    readonly handleLocationClick: (move: Move) => void
+    readonly state: EG.State
+    readonly handleLocationClick: (move: EG.Move) => void
     readonly lockedAgentIds: number[]
 }
 
-export function Locations({
+export default function Locations({
     state,
     handleLocationClick,
     lockedAgentIds
 }: LocationsProps) {
     const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
-    const agents: Agent[] = state.agents ?? []
+    const agents: EG.Agent[] = state.agents ?? []
     function handleAgentClick(id: number) {
         if (selectedAgentId === id)
             // clicking selected agent
@@ -26,7 +26,7 @@ export function Locations({
 
     return (
         <div className="flex flex-col items-start gap-4 sm:flex-row">
-            <LocationVisual
+            <Location
                 location="Court"
                 selectedAgentId={selectedAgentId}
                 agents={agents}
@@ -35,7 +35,7 @@ export function Locations({
                 handleLocationClick={handleLocationClick}
                 lockedAgentIds={lockedAgentIds}
             />
-            <LocationVisual
+            <Location
                 location="Delay"
                 selectedAgentId={selectedAgentId}
                 agents={agents}
@@ -44,7 +44,7 @@ export function Locations({
                 handleLocationClick={handleLocationClick}
                 lockedAgentIds={lockedAgentIds}
             />
-            <LocationVisual
+            <Location
                 location="Bribe"
                 selectedAgentId={selectedAgentId}
                 agents={agents}
@@ -53,7 +53,7 @@ export function Locations({
                 handleLocationClick={handleLocationClick}
                 lockedAgentIds={lockedAgentIds}
             />
-            <LocationVisual
+            <Location
                 location="Influence"
                 selectedAgentId={selectedAgentId}
                 agents={agents}

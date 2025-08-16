@@ -1,12 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
-import { Locations } from './Locations'
-import {
-    testEndGameState,
-    testInitialState,
-    testMidGameState,
-    testMidGameState2
-} from '@/game/exampleObjects'
+import Locations from './Locations'
+import * as Example from '@/game/example'
 
 const meta = {
     component: Locations
@@ -18,7 +13,7 @@ type Story = StoryObj<typeof meta>
 
 export const Initial: Story = {
     args: {
-        state: testInitialState,
+        state: Example.stateInitial,
         handleLocationClick: () => {},
         lockedAgentIds: []
     }
@@ -26,7 +21,7 @@ export const Initial: Story = {
 
 export const Midgame: Story = {
     args: {
-        state: testMidGameState,
+        state: Example.stateAfterTurn1,
         handleLocationClick: () => {},
         lockedAgentIds: []
     }
@@ -34,7 +29,7 @@ export const Midgame: Story = {
 
 export const Midgame2: Story = {
     args: {
-        state: testMidGameState2,
+        state: Example.stateAfterTurn2,
         handleLocationClick: () => {},
         lockedAgentIds: []
     }
@@ -42,7 +37,7 @@ export const Midgame2: Story = {
 
 export const Endgame: Story = {
     args: {
-        state: testEndGameState,
+        state: Example.stateEnded,
         handleLocationClick: () => {},
         lockedAgentIds: []
     }

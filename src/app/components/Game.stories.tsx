@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
-import { GameScreen } from './gameScreen'
+import Game from './Game'
 
 const meta = {
-    component: GameScreen
-} satisfies Meta<typeof GameScreen>
+    component: Game
+} satisfies Meta<typeof Game>
 
 export default meta
 

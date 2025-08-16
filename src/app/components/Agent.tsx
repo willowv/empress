@@ -1,20 +1,20 @@
-import { Agent } from '@/game/state'
+import * as EG from '@/game/empress'
 import 'tailwindcss'
 import Die from './die'
 
-export interface AgentVisualProps {
-    readonly agent: Agent
+export interface AgentProps {
+    readonly agent: EG.Agent
     readonly isSelected: boolean
     readonly isLocked: boolean
     readonly setSelected: (id: number) => void
 }
 
-export function AgentVisual({
+export default function Agent({
     agent,
     isSelected,
     isLocked,
     setSelected
-}: AgentVisualProps) {
+}: AgentProps) {
     return (
         <div
             key={agent.id}

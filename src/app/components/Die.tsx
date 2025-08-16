@@ -1,4 +1,4 @@
-import { DieSize } from '@/game/session'
+import type { DieSize } from '@/game/empress'
 import * as React from 'react'
 import 'tailwindcss'
 
@@ -15,7 +15,7 @@ interface DieProps {
     dieSize: DieSize
 }
 
-function Die({ dieSize }: DieProps) {
+export default function Die({ dieSize }: DieProps) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -26,5 +26,3 @@ function Die({ dieSize }: DieProps) {
         </svg>
     )
 }
-
-export default Die

@@ -1,37 +1,27 @@
 'use client'
 
-import { Session, appendTurn, getCurrentState } from '@/game/session'
-import {
-    updateTurnWithMove,
-    applyTurn,
-    getEmptyTurn,
-    getScore,
-    isTurnValid,
-    Move,
-    Turn,
-    hasGameEnded
-} from '@/game/state'
+import * as EG from '@/game/empress'
 import { useState } from 'react'
-import { Locations } from './Locations'
+import Locations from './Locations'
 
-export interface GameScreenProps {
+interface GameProps {
     readonly date: Date
 }
 
-export function GameScreen({ date }: GameScreenProps) {
+export default function Game({ date }: GameProps) {
     // TODO: Consider if session state should be at the level above this, since EndScreen will need it as well.
-    const [curSession, setSession] = useState<Session>(() => {
+    const [curSession, setSession] = useState<EG.Session>(() => {
         return { seed: date.toUTCString(), turnHistory: [] }
     })
-    const [plannedTurn, setPlannedTurn] = useState<Turn>(getEmptyTurn())
+    const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
 
-    const curState = getCurrentState(curSession)
+    const curState = EG.getCurrentState(curSession)
 
     // If the game is over, show end state
-    if (hasGameEnded(curSession.turnHistory.length == 0, curState)) {
+    if (EG.hasGameEnded(curSession.turnHistory.length == 0, curState)) {
         return (
             <div className="flex flex-col items-center gap-4">
-                <p>Final Score: {getScore(curState)}</p>
+                <p>Final Score: {EG.getScore(curState)}</p>
                 <button
                     className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
                     onClick={() => {
@@ -48,12 +38,12 @@ export function GameScreen({ date }: GameScreenProps) {
     }
 
     // We want to visualize the player's planned turn
-    const plannedState = applyTurn(curState, plannedTurn)
+    const plannedState = EG.applyTurn(curState, plannedTurn)
 
     // Get current score (not accounting for planned turn)
-    const curScore = getScore(curState)
+    const curScore = EG.getScore(curState)
     // Let's grab this so we can show the player how much their score will increase with this move
-    const plannedScoreIncrease: number = getScore(plannedState) - curScore
+    const plannedScoreIncrease: number = EG.getScore(plannedState) - curScore
 
     // Which agents are locked?
     // Agents previously assigned to non-Court locations
@@ -61,8 +51,8 @@ export function GameScreen({ date }: GameScreenProps) {
         .filter((agent) => agent.location !== 'Court')
         .map((agent) => agent.id)
 
-    function handleLocationClick(move: Move) {
-        setPlannedTurn(updateTurnWithMove(plannedTurn, move))
+    function handleLocationClick(move: EG.Move) {
+        setPlannedTurn(EG.updateTurnWithMove(plannedTurn, move))
     }
 
     return (
@@ -79,10 +69,10 @@ export function GameScreen({ date }: GameScreenProps) {
                 </p>
                 <button
                     className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] disabled:bg-red-400 disabled:hover:bg-red-400 sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                    disabled={!isTurnValid(curState, plannedTurn)}
+                    disabled={!EG.isTurnValid(curState, plannedTurn)}
                     onClick={() => {
-                        setSession(appendTurn(curSession, plannedTurn))
-                        setPlannedTurn(getEmptyTurn)
+                        setSession(EG.appendTurn(curSession, plannedTurn))
+                        setPlannedTurn(EG.getEmptyTurn)
                     }}
                 >
                     End Turn
@@ -90,7 +80,7 @@ export function GameScreen({ date }: GameScreenProps) {
                 <button
                     className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
                     onClick={() => {
-                        setPlannedTurn(getEmptyTurn)
+                        setPlannedTurn(EG.getEmptyTurn)
                     }}
                 >
                     Reset Turn

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
-import { AgentVisual } from './agentVisual'
+import Agent from './Agent'
 
 const meta = {
-    component: AgentVisual
-} satisfies Meta<typeof AgentVisual>
+    component: Agent
+} satisfies Meta<typeof Agent>
 
 export default meta
 
