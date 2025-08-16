@@ -6,8 +6,7 @@ interface LocationProps {
     readonly location: EG.Location
     readonly selectedAgentId: number | null
     readonly agents: EG.Agent[]
-    readonly setSelectedAgentId: (agentId: number | null) => void
-    readonly handleLocationClick: (move: EG.Move) => void
+    readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
     readonly lockedAgentIds: number[]
 }
@@ -16,7 +15,6 @@ export default function Location({
     location,
     selectedAgentId,
     agents,
-    setSelectedAgentId,
     handleLocationClick,
     handleAgentClick,
     lockedAgentIds
@@ -27,18 +25,7 @@ export default function Location({
     return (
         <div
             className="min-h-32 w-50 border-2 border-amber-400"
-            onClick={() => {
-                if (
-                    selectedAgentId != null &&
-                    agents[selectedAgentId].location != location
-                ) {
-                    setSelectedAgentId(null)
-                    handleLocationClick({
-                        agentId: selectedAgentId,
-                        location: location
-                    })
-                }
-            }}
+            onClick={() => handleLocationClick(location)}
         >
             <div className="text-center text-lg font-bold">{location}</div>
             <div className="mx-auto flex flex-wrap items-start">

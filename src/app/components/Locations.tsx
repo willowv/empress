@@ -3,16 +3,17 @@ import * as EG from '@/game/empress'
 import { useState } from 'react'
 import 'tailwindcss'
 import Location from './Location'
+import Delay from './Delay'
 
 interface LocationsProps {
     readonly state: EG.State
-    readonly handleLocationClick: (move: EG.Move) => void
+    readonly handleNewMove: (move: EG.Move) => void
     readonly lockedAgentIds: number[]
 }
 
 export default function Locations({
     state,
-    handleLocationClick,
+    handleNewMove,
     lockedAgentIds
 }: LocationsProps) {
     const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
@@ -24,31 +25,50 @@ export default function Locations({
         else setSelectedAgentId(id)
     }
 
+    function handleLocationClick(location: EG.Location) {
+        if (
+            selectedAgentId != null &&
+            agents[selectedAgentId].location != location
+        ) {
+            setSelectedAgentId(null)
+            handleNewMove({
+                agentId: selectedAgentId,
+                location: location
+            })
+        }
+    }
+
+    const prevDelayAgent =
+        agents.find(
+            (agent) =>
+                agent.location == 'Delay' && lockedAgentIds.includes(agent.id)
+        ) ?? null
+    const nextDelayAgent =
+        agents.find(
+            (agent) =>
+                agent.location == 'Delay' && !lockedAgentIds.includes(agent.id)
+        ) ?? null
     return (
         <div className="flex flex-col items-start gap-4 sm:flex-row">
             <Location
                 location="Court"
                 selectedAgentId={selectedAgentId}
                 agents={agents}
-                setSelectedAgentId={setSelectedAgentId}
                 handleAgentClick={handleAgentClick}
                 handleLocationClick={handleLocationClick}
                 lockedAgentIds={lockedAgentIds}
             />
-            <Location
-                location="Delay"
+            <Delay
+                prevAgent={prevDelayAgent}
+                nextAgent={nextDelayAgent}
                 selectedAgentId={selectedAgentId}
-                agents={agents}
-                setSelectedAgentId={setSelectedAgentId}
                 handleAgentClick={handleAgentClick}
                 handleLocationClick={handleLocationClick}
-                lockedAgentIds={lockedAgentIds}
             />
             <Location
                 location="Bribe"
                 selectedAgentId={selectedAgentId}
                 agents={agents}
-                setSelectedAgentId={setSelectedAgentId}
                 handleAgentClick={handleAgentClick}
                 handleLocationClick={handleLocationClick}
                 lockedAgentIds={lockedAgentIds}
@@ -57,7 +77,6 @@ export default function Locations({
                 location="Influence"
                 selectedAgentId={selectedAgentId}
                 agents={agents}
-                setSelectedAgentId={setSelectedAgentId}
                 handleAgentClick={handleAgentClick}
                 handleLocationClick={handleLocationClick}
                 lockedAgentIds={lockedAgentIds}

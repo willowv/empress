@@ -51,7 +51,7 @@ export default function Game({ date }: GameProps) {
         .filter((agent) => agent.location !== 'Court')
         .map((agent) => agent.id)
 
-    function handleLocationClick(move: EG.Move) {
+    function handleNewMove(move: EG.Move) {
         setPlannedTurn(EG.updateTurnWithMove(plannedTurn, move))
     }
 
@@ -60,7 +60,7 @@ export default function Game({ date }: GameProps) {
             <p>Today&apos;s Date: {date.toLocaleDateString()}</p>
             <Locations
                 state={plannedState}
-                handleLocationClick={handleLocationClick}
+                handleNewMove={handleNewMove}
                 lockedAgentIds={lockedAgentIds}
             />
             <div className="flex flex-col items-center gap-4">
