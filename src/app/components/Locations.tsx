@@ -4,17 +4,20 @@ import { useState } from 'react'
 import 'tailwindcss'
 import Location from './Location'
 import Delay from './Delay'
+import Bribe from './Bribe'
 
 interface LocationsProps {
     readonly state: EG.State
     readonly handleNewMove: (move: EG.Move) => void
     readonly lockedAgentIds: number[]
+    readonly numAssignments: number
 }
 
 export default function Locations({
     state,
     handleNewMove,
-    lockedAgentIds
+    lockedAgentIds,
+    numAssignments
 }: LocationsProps) {
     const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
     const agents: EG.Agent[] = state.agents ?? []
@@ -48,6 +51,8 @@ export default function Locations({
             (agent) =>
                 agent.location == 'Delay' && !lockedAgentIds.includes(agent.id)
         ) ?? null
+
+    const bribeAgent = agents.find((agent) => agent.location == 'Bribe') ?? null
     return (
         <div className="flex flex-col items-start gap-4 sm:flex-row">
             <Location
@@ -65,13 +70,12 @@ export default function Locations({
                 handleAgentClick={handleAgentClick}
                 handleLocationClick={handleLocationClick}
             />
-            <Location
-                location="Bribe"
+            <Bribe
+                agent={bribeAgent}
                 selectedAgentId={selectedAgentId}
-                agents={agents}
+                numAssignments={numAssignments}
                 handleAgentClick={handleAgentClick}
                 handleLocationClick={handleLocationClick}
-                lockedAgentIds={lockedAgentIds}
             />
             <Location
                 location="Influence"

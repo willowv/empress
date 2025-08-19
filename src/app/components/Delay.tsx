@@ -19,6 +19,8 @@ const PrevSlot = (
             agent: agent,
             isSelected: false,
             isLocked: true,
+            isInvalid: false,
+            isValid: false,
             setSelected: handleAgentClick
         })
     else
@@ -28,6 +30,28 @@ const PrevSlot = (
                     0
                 </div>
             </div>
+        )
+}
+
+const NextSlot = (
+    agent: EG.Agent | null,
+    prevValue: number,
+    isSelected: boolean,
+    handleAgentClick: (id: number) => void
+) => {
+    const isValid = (agent?.curValue ?? 0) > prevValue
+    if (!agent)
+        return <div className={'m-2.5 size-11 border-1 border-red-700'} />
+    else
+        return (
+            <Agent
+                agent={agent}
+                isSelected={isSelected}
+                isLocked={false}
+                isInvalid={!isValid}
+                isValid={isValid}
+                setSelected={handleAgentClick}
+            />
         )
 }
 
@@ -50,7 +74,7 @@ export default function Delay({
             onClick={() => handleLocationClick('Delay')}
         >
             <div className="text-center text-lg font-bold">Delay</div>
-            <div className="mx-auto flex flex-wrap items-center">
+            <div className="mx-auto flex flex-row items-center">
                 <div className="flex w-30 flex-col items-center">
                     <div className="mx-2 mt-2 text-center text-sm">
                         {'Assign an agent greater than'}
@@ -60,13 +84,14 @@ export default function Delay({
                         {'to play another round.'}
                     </div>
                 </div>
-                {nextAgent &&
-                    Agent({
-                        agent: nextAgent,
-                        isSelected: nextAgent.id === selectedAgentId,
-                        isLocked: false,
-                        setSelected: handleAgentClick
-                    })}
+                <div className="flex w-30 flex-col items-center">
+                    {NextSlot(
+                        nextAgent,
+                        prevAgent?.curValue ?? 0,
+                        nextAgent?.id === selectedAgentId,
+                        handleAgentClick
+                    )}
+                </div>
             </div>
         </div>
     )

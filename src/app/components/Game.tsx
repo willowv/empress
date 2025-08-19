@@ -51,6 +51,14 @@ export default function Game({ date }: GameProps) {
         .filter((agent) => agent.location !== 'Court')
         .map((agent) => agent.id)
 
+    const numAssignments = plannedTurn.agentId_location
+        .values()
+        .reduce<number>(
+            (count: number, location: EG.Location) =>
+                location === 'Bribe' ? count : count + 1,
+            0
+        )
+
     function handleNewMove(move: EG.Move) {
         setPlannedTurn(EG.updateTurnWithMove(plannedTurn, move))
     }
@@ -62,6 +70,7 @@ export default function Game({ date }: GameProps) {
                 state={plannedState}
                 handleNewMove={handleNewMove}
                 lockedAgentIds={lockedAgentIds}
+                numAssignments={numAssignments}
             />
             <div className="flex flex-col items-center gap-4">
                 <p>
