@@ -73,7 +73,7 @@ export default function Bribe({
                 </div>
                 <div className="flex w-30 flex-col items-center">
                     <div className="mx-2 mt-2 text-center text-sm">
-                        {'Limit'}
+                        {'Assignment Limit'}
                     </div>
                     {AssignedAgent(
                         agent,
