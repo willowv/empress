@@ -50,16 +50,22 @@ export function endTurn(
         const { agents: prevAgents } = curState
         let nextAgents = applyTurn(curState, turn).agents
 
-        // Move agents previously on Delay or Bribe back to Court
+        // Move agent previously on Delay back to Court
         prevAgents.forEach((agent) => {
-            if (agent.location === 'Delay' || agent.location === 'Bribe')
+            if (agent.location === 'Delay')
                 nextAgents[agent.id] = withLocation(
                     nextAgents[agent.id],
                     'Court'
                 )
         })
-        // Re-roll values for all agents in Court
+
+        //Move Bribe agent back to court and re-roll values for all agents in Court
         nextAgents = nextAgents.map((agent) => {
+            if (agent.location === 'Bribe')
+                return withValue(
+                    withLocation(agent, 'Court'),
+                    randomRoll(agent.maxValue, rand)
+                )
             if (agent.location === 'Court')
                 return withValue(agent, randomRoll(agent.maxValue, rand))
             else return { ...agent }
