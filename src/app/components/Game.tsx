@@ -16,25 +16,59 @@ export default function Game({ date }: GameProps) {
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
 
     const curState = EG.getCurrentState(curSession)
+    const isGameOver = EG.hasGameEnded(
+        curSession.turnHistory.length == 0,
+        curState
+    )
 
-    // If the game is over, show end state
-    if (EG.hasGameEnded(curSession.turnHistory.length == 0, curState)) {
-        return (
-            <div className="flex flex-col items-center gap-4">
-                <p>Final Score: {EG.getScore(curState)}</p>
-                <button
-                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                    onClick={() => {
-                        setSession({
-                            seed: date.toUTCString(),
-                            turnHistory: []
-                        })
-                    }}
-                >
-                    Play Again
-                </button>
-            </div>
-        )
+    function Footer() {
+        // If the game is over, show end state
+        if (isGameOver) {
+            return (
+                <div className="flex flex-col items-center gap-4">
+                    <p>Final Score: {EG.getScore(curState)}</p>
+                    <button
+                        className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
+                        onClick={() => {
+                            setSession({
+                                seed: date.toUTCString(),
+                                turnHistory: []
+                            })
+                        }}
+                    >
+                        Play Again
+                    </button>
+                </div>
+            )
+        } else {
+            return (
+                <div className="flex flex-col items-center gap-4">
+                    <p>
+                        Current Score: {curScore} + {plannedScoreIncrease}
+                    </p>
+                    <button
+                        className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] disabled:bg-red-400 disabled:hover:bg-red-400 sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
+                        disabled={!EG.isTurnValid(curState, plannedTurn)}
+                        onClick={() => {
+                            setSession(EG.appendTurn(curSession, plannedTurn))
+                            setPlannedTurn(EG.getEmptyTurn)
+                        }}
+                    >
+                        {EG.hasGameEnded(false, plannedState)
+                            ? 'End Game'
+                            : 'End Turn'}
+                    </button>
+                    <button
+                        className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
+                        onClick={() => {
+                            setPlannedTurn(EG.getEmptyTurn)
+                        }}
+                    >
+                        Reset Turn
+                    </button>
+                </div>
+            )
+        }
     }
 
     // We want to visualize the player's planned turn
@@ -48,16 +82,10 @@ export default function Game({ date }: GameProps) {
     // Which agents are locked?
     // Agents previously assigned to non-Court locations
     const lockedAgentIds = curState.agents
-        .filter((agent) => agent.location !== 'Court')
+        .filter((agent) => agent.location !== 'Court' || isGameOver)
         .map((agent) => agent.id)
 
-    const numAssignments = plannedTurn.agentId_location
-        .values()
-        .reduce<number>(
-            (count: number, location: EG.Location) =>
-                location === 'Bribe' ? count : count + 1,
-            0
-        )
+    const numAssignments = EG.numNonBribeAssignments(curState, plannedTurn)
 
     function handleNewMove(move: EG.Move) {
         setPlannedTurn(EG.updateTurnWithMove(plannedTurn, move))
@@ -72,31 +100,7 @@ export default function Game({ date }: GameProps) {
                 lockedAgentIds={lockedAgentIds}
                 numAssignments={numAssignments}
             />
-            <div className="flex flex-col items-center gap-4">
-                <p>
-                    Current Score: {curScore} + {plannedScoreIncrease}
-                </p>
-                <button
-                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] disabled:bg-red-400 disabled:hover:bg-red-400 sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                    disabled={!EG.isTurnValid(curState, plannedTurn)}
-                    onClick={() => {
-                        setSession(EG.appendTurn(curSession, plannedTurn))
-                        setPlannedTurn(EG.getEmptyTurn)
-                    }}
-                >
-                    {EG.hasGameEnded(false, plannedState)
-                        ? 'End Game'
-                        : 'End Turn'}
-                </button>
-                <button
-                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                    onClick={() => {
-                        setPlannedTurn(EG.getEmptyTurn)
-                    }}
-                >
-                    Reset Turn
-                </button>
-            </div>
+            {Footer()}
         </div>
     )
 }
