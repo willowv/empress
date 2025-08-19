@@ -41,7 +41,7 @@ const NextSlot = (
 ) => {
     const isValid = (agent?.curValue ?? 0) > prevValue
     if (!agent)
-        return <div className={'m-2.5 size-11 border-1 border-red-700'} />
+        return <div className={'m-2.5 size-11 border-1 border-gray-500'} />
     else
         return (
             <Agent
@@ -73,7 +73,9 @@ export default function Delay({
             className="min-h-32 w-60 border-2 border-amber-400"
             onClick={() => handleLocationClick('Delay')}
         >
-            <div className="text-center text-lg font-bold">Delay</div>
+            <div className="text-center text-lg font-bold">
+                Delay the Empress
+            </div>
             <div className="mx-auto flex flex-row items-center">
                 <div className="flex w-30 flex-col items-center">
                     <div className="mx-2 mt-2 text-center text-sm">
