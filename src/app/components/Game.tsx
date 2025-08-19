@@ -84,7 +84,9 @@ export default function Game({ date }: GameProps) {
                         setPlannedTurn(EG.getEmptyTurn)
                     }}
                 >
-                    End Turn
+                    {EG.hasGameEnded(false, plannedState)
+                        ? 'End Game'
+                        : 'End Turn'}
                 </button>
                 <button
                     className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
