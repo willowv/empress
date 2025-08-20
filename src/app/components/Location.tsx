@@ -24,11 +24,11 @@ export default function Location({
     )
     return (
         <div
-            className="border-2 border-amber-400"
+            className="min-h-24 basis-full border-2 border-amber-400"
             onClick={() => handleLocationClick(location)}
         >
             <div className="text-center text-lg font-bold">{location}</div>
-            <div className="flex flex-row flex-wrap items-start">
+            <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
                 {agentsHere.map((agent) =>
                     Agent({
                         agent: agent,

@@ -55,7 +55,7 @@ export default function Locations({
     const bribeAgent = agents.find((agent) => agent.location == 'Bribe') ?? null
     return (
         <div>
-            <div className="flex flex-col items-start gap-2 sm:flex-row">
+            <div className="flex flex-row flex-wrap justify-center gap-2 sm:flex-row">
                 <Location
                     location="Court"
                     selectedAgentId={selectedAgentId}
@@ -72,8 +72,6 @@ export default function Locations({
                     handleLocationClick={handleLocationClick}
                     lockedAgentIds={lockedAgentIds}
                 />
-            </div>
-            <div className="my-2 flex flex-row items-start gap-2 sm:flex-row">
                 <Delay
                     prevAgent={prevDelayAgent}
                     nextAgent={nextDelayAgent}

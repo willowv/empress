@@ -19,7 +19,7 @@ function AssignedAgent(
     const isValid = (agent?.curValue ?? 0) >= numAssignments
     if (!agent)
         return NumberBox({
-            num: undefined,
+            num: 0,
             isValid: isValid,
             isInvalid: !isValid
         })
@@ -45,16 +45,14 @@ export default function Bribe({
 }: BribeProps) {
     return (
         <div
-            className="border-2 border-amber-400 p-2"
+            className="basis-[48%] border-2 border-amber-400 p-2"
             onClick={() => handleLocationClick('Bribe')}
         >
-            <div className="text-center text-lg font-bold">
-                Bribe the Officials
-            </div>
-            <div className="flex flex-row items-center">
+            <div className="text-center text-lg font-bold">Bribe</div>
+            <div className="m-2 flex flex-col justify-center gap-2">
                 <div className="flex flex-col items-center">
-                    <div className="mx-2 mt-2 text-center text-xs">
-                        {'Other Assignments'}
+                    <div className="text-center text-xs">
+                        {'# of Assignments'}
                     </div>
                     {NumberBox({
                         num: numAssignments,
@@ -63,8 +61,8 @@ export default function Bribe({
                     })}
                 </div>
                 <div className="flex flex-col items-center">
-                    <div className="mx-2 mt-2 text-center text-xs">
-                        {'Assignment Limit'}
+                    <div className="text-center text-xs">
+                        {'Assign to increase limit'}
                     </div>
                     {AssignedAgent(
                         agent,
