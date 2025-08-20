@@ -2,8 +2,7 @@
 import * as EG from '@/game/empress'
 import Agent from './Agent'
 
-interface LocationProps {
-    readonly location: EG.Location
+interface CourtProps {
     readonly selectedAgentId: number | null
     readonly agents: EG.Agent[]
     readonly handleLocationClick: (location: EG.Location) => void
@@ -11,23 +10,23 @@ interface LocationProps {
     readonly lockedAgentIds: number[]
 }
 
-export default function Location({
-    location,
+export default function Court({
     selectedAgentId,
     agents,
     handleLocationClick,
     handleAgentClick,
     lockedAgentIds
-}: LocationProps) {
+}: CourtProps) {
     const agentsHere: EG.Agent[] = agents.filter(
-        (agent) => agent.location === location
+        (agent) => agent.location === 'Court'
     )
     return (
         <div
-            className="min-h-24 basis-full border-2 border-amber-400"
-            onClick={() => handleLocationClick(location)}
+            className="min-h-24 basis-full border-2 border-amber-400 p-2"
+            onClick={() => handleLocationClick('Court')}
         >
-            <div className="text-center text-lg font-bold">{location}</div>
+            <div className="text-center text-lg font-bold">Court</div>
+            <div className="text-center text-xs">{'Unassigned agents'}</div>
             <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
                 {agentsHere.map((agent) =>
                     Agent({

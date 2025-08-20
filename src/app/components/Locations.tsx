@@ -2,9 +2,10 @@
 import * as EG from '@/game/empress'
 import { useState } from 'react'
 import 'tailwindcss'
-import Location from './Location'
+import Influence from './Influence'
 import Delay from './Delay'
 import Bribe from './Bribe'
+import Court from './Court'
 
 interface LocationsProps {
     readonly state: EG.State
@@ -56,16 +57,14 @@ export default function Locations({
     return (
         <div>
             <div className="flex flex-row flex-wrap justify-center gap-2 sm:flex-row">
-                <Location
-                    location="Court"
+                <Court
                     selectedAgentId={selectedAgentId}
                     agents={agents}
                     handleAgentClick={handleAgentClick}
                     handleLocationClick={handleLocationClick}
                     lockedAgentIds={lockedAgentIds}
                 />
-                <Location
-                    location="Influence"
+                <Influence
                     selectedAgentId={selectedAgentId}
                     agents={agents}
                     handleAgentClick={handleAgentClick}

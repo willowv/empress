@@ -43,10 +43,7 @@ export default function Game({ date }: GameProps) {
             )
         } else {
             return (
-                <div className="flex flex-col items-center gap-4">
-                    <p>
-                        Current Score: {curScore} + {plannedScoreIncrease}
-                    </p>
+                <div className="m-2 flex flex-row justify-around gap-4">
                     <button
                         className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] disabled:bg-red-400 disabled:hover:bg-red-400 sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
                         disabled={!EG.isTurnValid(curState, plannedTurn)}
@@ -67,7 +64,6 @@ export default function Game({ date }: GameProps) {
                     >
                         Reset Turn
                     </button>
-                    <p>{date.toLocaleDateString()}</p>
                 </div>
             )
         }
