@@ -54,37 +54,41 @@ export default function Locations({
 
     const bribeAgent = agents.find((agent) => agent.location == 'Bribe') ?? null
     return (
-        <div className="flex flex-col items-start gap-4 sm:flex-row">
-            <Location
-                location="Court"
-                selectedAgentId={selectedAgentId}
-                agents={agents}
-                handleAgentClick={handleAgentClick}
-                handleLocationClick={handleLocationClick}
-                lockedAgentIds={lockedAgentIds}
-            />
-            <Delay
-                prevAgent={prevDelayAgent}
-                nextAgent={nextDelayAgent}
-                selectedAgentId={selectedAgentId}
-                handleAgentClick={handleAgentClick}
-                handleLocationClick={handleLocationClick}
-            />
-            <Bribe
-                agent={bribeAgent}
-                selectedAgentId={selectedAgentId}
-                numAssignments={numAssignments}
-                handleAgentClick={handleAgentClick}
-                handleLocationClick={handleLocationClick}
-            />
-            <Location
-                location="Influence"
-                selectedAgentId={selectedAgentId}
-                agents={agents}
-                handleAgentClick={handleAgentClick}
-                handleLocationClick={handleLocationClick}
-                lockedAgentIds={lockedAgentIds}
-            />
+        <div>
+            <div className="flex flex-col items-start gap-2 sm:flex-row">
+                <Location
+                    location="Court"
+                    selectedAgentId={selectedAgentId}
+                    agents={agents}
+                    handleAgentClick={handleAgentClick}
+                    handleLocationClick={handleLocationClick}
+                    lockedAgentIds={lockedAgentIds}
+                />
+                <Location
+                    location="Influence"
+                    selectedAgentId={selectedAgentId}
+                    agents={agents}
+                    handleAgentClick={handleAgentClick}
+                    handleLocationClick={handleLocationClick}
+                    lockedAgentIds={lockedAgentIds}
+                />
+            </div>
+            <div className="my-2 flex flex-row items-start gap-2 sm:flex-row">
+                <Delay
+                    prevAgent={prevDelayAgent}
+                    nextAgent={nextDelayAgent}
+                    selectedAgentId={selectedAgentId}
+                    handleAgentClick={handleAgentClick}
+                    handleLocationClick={handleLocationClick}
+                />
+                <Bribe
+                    agent={bribeAgent}
+                    selectedAgentId={selectedAgentId}
+                    numAssignments={numAssignments}
+                    handleAgentClick={handleAgentClick}
+                    handleLocationClick={handleLocationClick}
+                />
+            </div>
         </div>
     )
 }

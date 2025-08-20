@@ -58,21 +58,21 @@ export default function Bribe({
 }: BribeProps) {
     return (
         <div
-            className="min-h-32 w-60 border-2 border-amber-400"
+            className="border-2 border-amber-400 p-2"
             onClick={() => handleLocationClick('Bribe')}
         >
             <div className="text-center text-lg font-bold">
                 Bribe the Officials
             </div>
-            <div className="mx-auto flex flex-row items-center">
-                <div className="flex w-30 flex-col items-center">
-                    <div className="mx-2 mt-2 text-center text-sm">
+            <div className="flex flex-row items-center">
+                <div className="flex flex-col items-center">
+                    <div className="mx-2 mt-2 text-center text-xs">
                         {'Other Assignments'}
                     </div>
                     {AssignmentsCount(numAssignments)}
                 </div>
-                <div className="flex w-30 flex-col items-center">
-                    <div className="mx-2 mt-2 text-center text-sm">
+                <div className="flex flex-col items-center">
+                    <div className="mx-2 mt-2 text-center text-xs">
                         {'Assignment Limit'}
                     </div>
                     {AssignedAgent(
