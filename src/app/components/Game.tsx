@@ -38,6 +38,7 @@ export default function Game({ date }: GameProps) {
                     >
                         Play Again
                     </button>
+                    <p>{date.toLocaleDateString()}</p>
                 </div>
             )
         } else {
@@ -66,6 +67,7 @@ export default function Game({ date }: GameProps) {
                     >
                         Reset Turn
                     </button>
+                    <p>{date.toLocaleDateString()}</p>
                 </div>
             )
         }
@@ -93,7 +95,6 @@ export default function Game({ date }: GameProps) {
 
     return (
         <div className="select-none">
-            <p>Today&apos;s Date: {date.toLocaleDateString()}</p>
             <Locations
                 state={plannedState}
                 handleNewMove={handleNewMove}
