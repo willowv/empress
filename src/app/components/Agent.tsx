@@ -5,7 +5,7 @@ import Die from './Die'
 type Color = 'default' | 'gold' | 'purple' | 'green' | 'red'
 
 const colorSettings = {
-    default: 'invert',
+    default: 'fill-color-foreground',
     gold: 'fill-amber-400',
     purple: 'fill-purple-500',
     green: 'fill-green-700',
@@ -37,7 +37,7 @@ export default function Agent({
     return (
         <div
             key={agent.id}
-            className="relative size-15 p-2 select-none sm:size-16"
+            className="relative size-12 select-none"
             onClick={() => {
                 if (!isLocked) setSelected(agent.id)
             }}
@@ -63,7 +63,7 @@ export function NumberBox({ num, isValid, isInvalid }: NumberBoxProps) {
     if (isInvalid) color = 'border-red-700'
     if (isValid) color = 'border-green-700'
     return (
-        <div className={'relative size-11 border-1 select-none ' + color}>
+        <div className={'relative size-12 border-1 select-none ' + color}>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
                 {num}
             </div>
