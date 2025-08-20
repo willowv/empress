@@ -1,6 +1,6 @@
 'use client'
 import * as EG from '@/game/empress'
-import Agent from './Agent'
+import Agent, { NumberBox } from './Agent'
 
 interface DelayProps {
     readonly prevAgent: EG.Agent | null
@@ -23,14 +23,7 @@ const PrevSlot = (
             isValid: false,
             setSelected: handleAgentClick
         })
-    else
-        return (
-            <div className="relative m-2.5 size-11 border-1 border-amber-400 select-none">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
-                    0
-                </div>
-            </div>
-        )
+    else return NumberBox({ num: 0, isValid: false, isInvalid: false })
 }
 
 const NextSlot = (
@@ -41,7 +34,7 @@ const NextSlot = (
 ) => {
     const isValid = (agent?.curValue ?? 0) > prevValue
     if (!agent)
-        return <div className={'m-2.5 size-11 border-1 border-gray-500'} />
+        return NumberBox({ num: undefined, isValid: false, isInvalid: false })
     else
         return (
             <Agent

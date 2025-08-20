@@ -37,16 +37,35 @@ export default function Agent({
     return (
         <div
             key={agent.id}
-            className="relative h-16 w-16 select-none"
+            className="relative size-15 p-2 select-none sm:size-16"
             onClick={() => {
                 if (!isLocked) setSelected(agent.id)
             }}
         >
-            <div className={'m-2.5 ' + colorSettings[color]}>
+            <div className={colorSettings[color]}>
                 <Die dieSize={agent.maxValue} />
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
                 {agent.curValue}
+            </div>
+        </div>
+    )
+}
+
+interface NumberBoxProps {
+    readonly num: number | undefined
+    readonly isValid: boolean
+    readonly isInvalid: boolean
+}
+
+export function NumberBox({ num, isValid, isInvalid }: NumberBoxProps) {
+    let color: string = 'border-amber-400'
+    if (isInvalid) color = 'border-red-700'
+    if (isValid) color = 'border-green-700'
+    return (
+        <div className={'relative size-11 border-1 select-none ' + color}>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
+                {num}
             </div>
         </div>
     )

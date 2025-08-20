@@ -1,6 +1,6 @@
 'use client'
 import * as EG from '@/game/empress'
-import Agent from './Agent'
+import Agent, { NumberBox } from './Agent'
 
 interface BribeProps {
     readonly agent: EG.Agent | null
@@ -8,16 +8,6 @@ interface BribeProps {
     readonly selectedAgentId: number | null
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
-}
-
-function AssignmentsCount(count: number) {
-    return (
-        <div className="relative m-2.5 size-11 border-1 border-amber-400 select-none">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
-                {count}
-            </div>
-        </div>
-    )
 }
 
 function AssignedAgent(
@@ -28,14 +18,11 @@ function AssignedAgent(
 ) {
     const isValid = (agent?.curValue ?? 0) >= numAssignments
     if (!agent)
-        return (
-            <div
-                className={
-                    'm-2.5 size-11 border-1 ' +
-                    (isValid ? 'border-green-700' : 'border-red-700')
-                }
-            />
-        )
+        return NumberBox({
+            num: undefined,
+            isValid: isValid,
+            isInvalid: !isValid
+        })
     else
         return (
             <Agent
@@ -69,7 +56,11 @@ export default function Bribe({
                     <div className="mx-2 mt-2 text-center text-xs">
                         {'Other Assignments'}
                     </div>
-                    {AssignmentsCount(numAssignments)}
+                    {NumberBox({
+                        num: numAssignments,
+                        isInvalid: false,
+                        isValid: false
+                    })}
                 </div>
                 <div className="flex flex-col items-center">
                     <div className="mx-2 mt-2 text-center text-xs">
