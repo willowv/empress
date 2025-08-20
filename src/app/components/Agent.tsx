@@ -1,6 +1,6 @@
 import * as EG from '@/game/empress'
 import 'tailwindcss'
-import Die from './die'
+import Die from './Die'
 
 type Color = 'default' | 'gold' | 'purple' | 'green' | 'red'
 
