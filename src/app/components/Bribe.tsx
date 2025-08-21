@@ -1,6 +1,7 @@
 'use client'
 import * as EG from '@/game/empress'
-import Agent, { NumberBox } from './Agent'
+import Agent from './Agent'
+import NumberBox from './NumberBox'
 
 interface BribeProps {
     readonly agent: EG.Agent | null
