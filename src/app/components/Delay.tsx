@@ -63,19 +63,21 @@ export default function Delay({
     // We don't really need 'agents' or 'lockedAgentIds', we just need the two relevant agents
     return (
         <div
-            className="basis-[48%] border-2 border-amber-400 p-2"
+            className="basis-[48%] border-2 border-amber-400 p-2 sm:w-54 sm:basis-[20%]"
             onClick={() => handleLocationClick('Delay')}
         >
-            <div className="text-center text-lg font-bold">Delay</div>
-            <div className="m-2 flex flex-col justify-center gap-2">
+            <div className="text-foreground text-center text-lg font-bold">
+                Delay
+            </div>
+            <div className="m-2 flex flex-col justify-center gap-2 sm:flex-row">
                 <div className="flex flex-col items-center">
-                    <div className="text-center text-xs">
+                    <div className="text-foreground text-center text-xs">
                         {'Number to beat'}
                     </div>
                     {PrevSlot(prevAgent, handleAgentClick)}
                 </div>
                 <div className="flex flex-col items-center">
-                    <div className="text-center text-xs">
+                    <div className="text-foreground text-center text-xs">
                         {'Assign to continue play'}
                     </div>
                     {NextSlot(

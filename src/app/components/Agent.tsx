@@ -5,7 +5,7 @@ import Die from './Die'
 type Color = 'default' | 'gold' | 'purple' | 'green' | 'red'
 
 const colorSettings = {
-    default: 'fill-color-foreground',
+    default: 'fill-foreground',
     gold: 'fill-amber-400',
     purple: 'fill-purple-500',
     green: 'fill-green-700',
@@ -45,7 +45,7 @@ export default function Agent({
             <div className={colorSettings[color]}>
                 <Die dieSize={agent.maxValue} />
             </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
+            <div className="text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
                 {agent.curValue}
             </div>
         </div>
@@ -64,7 +64,7 @@ export function NumberBox({ num, isValid, isInvalid }: NumberBoxProps) {
     if (isValid) color = 'border-green-700'
     return (
         <div className={'relative size-12 border-1 select-none ' + color}>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
+            <div className="text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
                 {num}
             </div>
         </div>

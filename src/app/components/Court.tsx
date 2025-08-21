@@ -22,11 +22,15 @@ export default function Court({
     )
     return (
         <div
-            className="min-h-24 basis-full border-2 border-amber-400 p-2"
+            className="basis-full border-2 border-amber-400 p-2 sm:w-xs sm:basis-[45%]"
             onClick={() => handleLocationClick('Court')}
         >
-            <div className="text-center text-lg font-bold">Court</div>
-            <div className="text-center text-xs">{'Unassigned agents'}</div>
+            <div className="text-foreground text-center text-lg font-bold">
+                Court
+            </div>
+            <div className="text-foreground text-center text-xs">
+                {'Unassigned agents'}
+            </div>
             <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
                 {agentsHere.map((agent) =>
                     Agent({

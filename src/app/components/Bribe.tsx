@@ -45,13 +45,15 @@ export default function Bribe({
 }: BribeProps) {
     return (
         <div
-            className="basis-[48%] border-2 border-amber-400 p-2"
+            className="basis-[48%] border-2 border-amber-400 p-2 sm:w-54 sm:basis-[20%]"
             onClick={() => handleLocationClick('Bribe')}
         >
-            <div className="text-center text-lg font-bold">Bribe</div>
-            <div className="m-2 flex flex-col justify-center gap-2">
+            <div className="text-foreground text-center text-lg font-bold">
+                Bribe
+            </div>
+            <div className="m-2 flex flex-col justify-center gap-2 sm:flex-row">
                 <div className="flex flex-col items-center">
-                    <div className="text-center text-xs">
+                    <div className="text-foreground text-center text-xs">
                         {'# of Assignments'}
                     </div>
                     {NumberBox({
@@ -61,7 +63,7 @@ export default function Bribe({
                     })}
                 </div>
                 <div className="flex flex-col items-center">
-                    <div className="text-center text-xs">
+                    <div className="text-foreground text-center text-xs">
                         {'Assign to increase limit'}
                     </div>
                     {AssignedAgent(

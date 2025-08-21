@@ -23,11 +23,13 @@ export default function Influence({
     const score = EG.getScore({ agents: agentsHere })
     return (
         <div
-            className="min-h-24 basis-full border-2 border-amber-400 p-2"
+            className="basis-full border-2 border-amber-400 p-2 sm:w-xs sm:basis-[45%]"
             onClick={() => handleLocationClick('Influence')}
         >
-            <div className="text-center text-lg font-bold">Influence</div>
-            <div className="text-center text-xs">
+            <div className="text-foreground text-center text-lg font-bold">
+                Influence
+            </div>
+            <div className="text-foreground text-center text-xs">
                 {'Assign to score points'}
             </div>
             <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
@@ -42,7 +44,9 @@ export default function Influence({
                     })
                 )}
             </div>
-            <div className="text-center text-xs">{'Score: ' + score}</div>
+            <div className="text-foreground text-center text-xs">
+                {'Score: ' + score}
+            </div>
         </div>
     )
 }
