@@ -2,47 +2,35 @@ import * as EG from '@/game/empress'
 import 'tailwindcss'
 import Die from './Die'
 
-type Color = 'default' | 'gold' | 'purple' | 'green' | 'red'
+type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
 
-const colorSettings = {
-    default: 'fill-foreground',
-    gold: 'fill-amber-400',
-    purple: 'fill-purple-500',
-    green: 'fill-green-700',
-    red: 'fill-red-700'
-}
-
-export interface AgentProps {
+interface AgentProps {
     readonly agent: EG.Agent
-    readonly isSelected: boolean
-    readonly isLocked: boolean
-    readonly isInvalid: boolean
-    readonly isValid: boolean
-    readonly setSelected: (id: number) => void
+    readonly state?: State
+    readonly handleAgentClick: (id: number) => void
 }
 
 export default function Agent({
     agent,
-    isSelected,
-    isLocked,
-    isInvalid,
-    isValid,
-    setSelected
+    state = 'default',
+    handleAgentClick
 }: AgentProps) {
-    let color: Color = 'default'
-    if (isInvalid) color = 'red'
-    if (isValid) color = 'green'
-    if (isLocked) color = 'gold'
-    if (isSelected) color = 'purple'
+    const mapState_css = {
+        default: 'fill-foreground',
+        locked: 'fill-amber-400',
+        selected: 'fill-purple-500',
+        accepted: 'fill-green-700',
+        invalid: 'fill-red-700'
+    }
     return (
         <div
             key={agent.id}
             className="relative size-12 select-none"
             onClick={() => {
-                if (!isLocked) setSelected(agent.id)
+                handleAgentClick(agent.id)
             }}
         >
-            <div className={colorSettings[color]}>
+            <div className={mapState_css[state]}>
                 <Die dieSize={agent.maxValue} />
             </div>
             <div className="text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
@@ -52,18 +40,25 @@ export default function Agent({
     )
 }
 
+type NumberBoxState = 'default' | 'invalid' | 'accepted'
+
 interface NumberBoxProps {
     readonly num: number | undefined
-    readonly isValid: boolean
-    readonly isInvalid: boolean
+    readonly state?: NumberBoxState
 }
 
-export function NumberBox({ num, isValid, isInvalid }: NumberBoxProps) {
-    let color: string = 'border-amber-400'
-    if (isInvalid) color = 'border-red-700'
-    if (isValid) color = 'border-green-700'
+export function NumberBox({ num, state = 'default' }: NumberBoxProps) {
+    const mapState_css = {
+        default: 'border-foreground',
+        accepted: 'border-green-700',
+        invalid: 'border-red-700'
+    }
     return (
-        <div className={'relative size-12 border-1 select-none ' + color}>
+        <div
+            className={
+                'relative size-12 border-1 select-none ' + mapState_css[state]
+            }
+        >
             <div className="text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
                 {num}
             </div>

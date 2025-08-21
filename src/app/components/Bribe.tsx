@@ -20,18 +20,16 @@ function AssignedAgent(
     if (!agent)
         return NumberBox({
             num: 0,
-            isValid: isValid,
-            isInvalid: !isValid
+            state: isValid ? 'accepted' : 'invalid'
         })
     else
         return (
             <Agent
                 agent={agent}
-                isSelected={isSelected}
-                isLocked={false}
-                isInvalid={!isValid}
-                isValid={isValid}
-                setSelected={handleAgentClick}
+                state={
+                    isSelected ? 'selected' : isValid ? 'accepted' : 'invalid'
+                }
+                handleAgentClick={handleAgentClick}
             />
         )
 }
@@ -56,11 +54,7 @@ export default function Bribe({
                     <div className="text-foreground text-center text-xs">
                         {'# of Assignments'}
                     </div>
-                    {NumberBox({
-                        num: numAssignments,
-                        isInvalid: false,
-                        isValid: false
-                    })}
+                    <NumberBox num={numAssignments} />
                 </div>
                 <div className="flex flex-col items-center">
                     <div className="text-foreground text-center text-xs">

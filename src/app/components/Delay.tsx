@@ -17,13 +17,10 @@ const PrevSlot = (
     if (agent)
         return Agent({
             agent: agent,
-            isSelected: false,
-            isLocked: true,
-            isInvalid: false,
-            isValid: false,
-            setSelected: handleAgentClick
+            state: 'locked',
+            handleAgentClick: handleAgentClick
         })
-    else return NumberBox({ num: 0, isValid: false, isInvalid: false })
+    else return NumberBox({ num: 0 })
 }
 
 const NextSlot = (
@@ -33,17 +30,15 @@ const NextSlot = (
     handleAgentClick: (id: number) => void
 ) => {
     const isValid = (agent?.curValue ?? 0) > prevValue
-    if (!agent)
-        return NumberBox({ num: undefined, isValid: false, isInvalid: false })
+    if (!agent) return NumberBox({ num: undefined })
     else
         return (
             <Agent
                 agent={agent}
-                isSelected={isSelected}
-                isLocked={false}
-                isInvalid={!isValid}
-                isValid={isValid}
-                setSelected={handleAgentClick}
+                state={
+                    isSelected ? 'selected' : isValid ? 'accepted' : 'invalid'
+                }
+                handleAgentClick={handleAgentClick}
             />
         )
 }

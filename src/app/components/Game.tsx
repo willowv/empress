@@ -43,6 +43,8 @@ export default function Game({ date }: GameProps) {
     const numAssignments = EG.numNonBribeAssignments(curState, plannedTurn)
 
     function handleAgentClick(id: number) {
+        if (lockedAgentIds.includes(id)) return
+
         if (selectedAgentId === id)
             // clicking selected agent
             setSelectedAgentId(null)

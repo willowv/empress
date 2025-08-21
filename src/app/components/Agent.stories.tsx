@@ -18,9 +18,7 @@ export const Default: Story = {
             curValue: 1,
             location: 'Court'
         },
-        isSelected: false,
-        isLocked: false,
-        setSelected: () => {}
+        handleAgentClick: () => {}
     }
 }
 
@@ -32,8 +30,7 @@ export const Selected: Story = {
             curValue: 1,
             location: 'Court'
         },
-        isSelected: true,
-        isLocked: false,
-        setSelected: () => {}
+        state: 'selected',
+        handleAgentClick: () => {}
     }
 }

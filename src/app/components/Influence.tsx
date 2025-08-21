@@ -36,11 +36,13 @@ export default function Influence({
                 {agentsHere.map((agent) =>
                     Agent({
                         agent: agent,
-                        isSelected: agent.id === selectedAgentId,
-                        isLocked: lockedAgentIds.includes(agent.id),
-                        isInvalid: false,
-                        isValid: false,
-                        setSelected: handleAgentClick
+                        state:
+                            agent.id === selectedAgentId
+                                ? 'selected'
+                                : lockedAgentIds.includes(agent.id)
+                                  ? 'locked'
+                                  : 'default',
+                        handleAgentClick: handleAgentClick
                     })
                 )}
             </div>
