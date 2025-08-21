@@ -20,7 +20,7 @@ export default function Die({ dieSize }: DieProps) {
         <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlSpace="preserve"
-            viewBox="0 0 1000 1000"
+            viewBox="200 200 600 600"
         >
             <path d={dieMapping[dieSize]} />
         </svg>

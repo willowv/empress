@@ -50,16 +50,22 @@ export function endTurn(
         const { agents: prevAgents } = curState
         let nextAgents = applyTurn(curState, turn).agents
 
-        // Move agents previously on Delay or Bribe back to Court
+        // Move agent previously on Delay back to Court
         prevAgents.forEach((agent) => {
-            if (agent.location === 'Delay' || agent.location === 'Bribe')
+            if (agent.location === 'Delay')
                 nextAgents[agent.id] = withLocation(
                     nextAgents[agent.id],
                     'Court'
                 )
         })
-        // Re-roll values for all agents in Court
+
+        //Move Bribe agent back to court and re-roll values for all agents in Court
         nextAgents = nextAgents.map((agent) => {
+            if (agent.location === 'Bribe')
+                return withValue(
+                    withLocation(agent, 'Court'),
+                    randomRoll(agent.maxValue, rand)
+                )
             if (agent.location === 'Court')
                 return withValue(agent, randomRoll(agent.maxValue, rand))
             else return { ...agent }
@@ -136,6 +142,20 @@ export function getEmptyTurn(): Turn {
     }
 }
 
+export function numNonBribeAssignments(
+    { agents: agents }: State,
+    { agentId_location: agentId_location }: Turn
+): number {
+    return agentId_location.entries().reduce<number>(
+        (count: number, [agentId, location]) =>
+            // agents only count if they have actually moved
+            location === 'Bribe' || agents[agentId].location === location
+                ? count
+                : count + 1,
+        0
+    )
+}
+
 export function isTurnValid(
     { agents: agents }: State,
     { agentId_location: agentId_location }: Turn
@@ -166,9 +186,9 @@ export function isTurnValid(
         return agentId !== undefined ? agents[agentId].curValue : 0
     }
     // Number of other moved agents is less than the new bribe agent's value
-    let maxMoves: number = getValueOfAgentAssignedTo('Bribe')
-    if (maxMoves > 0) maxMoves++
-    const isUnderMaxChanges = agentId_location.size <= maxMoves
+    const maxMoves: number = getValueOfAgentAssignedTo('Bribe')
+    const isUnderMaxChanges =
+        numNonBribeAssignments({ agents }, { agentId_location }) <= maxMoves
 
     // New delay agent has higher value than old one, or zero if there's no previous delay agent
     const oldDelay =

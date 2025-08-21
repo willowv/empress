@@ -2,89 +2,143 @@
 
 import * as EG from '@/game/empress'
 import { useState } from 'react'
-import Locations from './Locations'
+import Court from './Court'
+import Bribe from './Bribe'
+import Delay from './Delay'
+import Influence from './Influence'
+import Footer from './Footer'
 
 interface GameProps {
     readonly date: Date
 }
 
 export default function Game({ date }: GameProps) {
-    // TODO: Consider if session state should be at the level above this, since EndScreen will need it as well.
     const [curSession, setSession] = useState<EG.Session>(() => {
         return { seed: date.toUTCString(), turnHistory: [] }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
+    const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
+        undefined
+    )
 
     const curState = EG.getCurrentState(curSession)
-
-    // If the game is over, show end state
-    if (EG.hasGameEnded(curSession.turnHistory.length == 0, curState)) {
-        return (
-            <div className="flex flex-col items-center gap-4">
-                <p>Final Score: {EG.getScore(curState)}</p>
-                <button
-                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                    onClick={() => {
-                        setSession({
-                            seed: date.toUTCString(),
-                            turnHistory: []
-                        })
-                    }}
-                >
-                    Play Again
-                </button>
-            </div>
-        )
-    }
-
-    // We want to visualize the player's planned turn
+    const isFirstTurn = curSession.turnHistory.length == 0
+    const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
     const plannedState = EG.applyTurn(curState, plannedTurn)
-
-    // Get current score (not accounting for planned turn)
-    const curScore = EG.getScore(curState)
-    // Let's grab this so we can show the player how much their score will increase with this move
-    const plannedScoreIncrease: number = EG.getScore(plannedState) - curScore
-
+    const isPlannedTurnValid = EG.isTurnValid(curState, plannedTurn)
+    let isPlannedTurnGameEnd = false
+    if (isPlannedTurnValid) {
+        const nextTurnState = EG.getCurrentState(
+            EG.appendTurn(curSession, plannedTurn)
+        )
+        isPlannedTurnGameEnd = EG.hasGameEnded(false, nextTurnState)
+    }
     // Which agents are locked?
     // Agents previously assigned to non-Court locations
     const lockedAgentIds = curState.agents
-        .filter((agent) => agent.location !== 'Court')
+        .filter((agent) => agent.location !== 'Court' || isGameOver)
         .map((agent) => agent.id)
 
-    function handleLocationClick(move: EG.Move) {
-        setPlannedTurn(EG.updateTurnWithMove(plannedTurn, move))
+    const numAssignments = EG.numNonBribeAssignments(curState, plannedTurn)
+
+    function handleAgentClick(id: number) {
+        if (lockedAgentIds.includes(id)) return
+
+        if (selectedAgentId === id)
+            // clicking selected agent
+            setSelectedAgentId(undefined)
+        else setSelectedAgentId(id)
     }
+
+    function handleLocationClick(location: EG.Location) {
+        if (
+            selectedAgentId != undefined &&
+            plannedState.agents[selectedAgentId].location != location
+        ) {
+            setSelectedAgentId(undefined)
+            setPlannedTurn(
+                EG.updateTurnWithMove(plannedTurn, {
+                    agentId: selectedAgentId,
+                    location
+                })
+            )
+        }
+    }
+
+    function handlePlayAgain() {
+        setSession({ seed: date.toUTCString(), turnHistory: [] })
+    }
+
+    function handleEndTurn() {
+        setSession(EG.appendTurn(curSession, plannedTurn))
+        setPlannedTurn(EG.getEmptyTurn)
+    }
+
+    function handleResetTurn() {
+        setPlannedTurn(EG.getEmptyTurn)
+    }
+
+    const prevDelayAgent = plannedState.agents.find(
+        (agent) =>
+            agent.location == 'Delay' && lockedAgentIds.includes(agent.id)
+    )
+    const nextDelayAgent = plannedState.agents.find(
+        (agent) =>
+            agent.location == 'Delay' && !lockedAgentIds.includes(agent.id)
+    )
+
+    const bribeAgent = plannedState.agents.find(
+        (agent) => agent.location == 'Bribe'
+    )
+
+    const courtAgents = plannedState.agents.filter(
+        (agent) => agent.location === 'Court'
+    )
+    const influenceAgents = plannedState.agents.filter(
+        (agent) => agent.location === 'Influence'
+    )
 
     return (
         <div className="select-none">
-            <p>Today&apos;s Date: {date.toLocaleDateString()}</p>
-            <Locations
-                state={plannedState}
-                handleLocationClick={handleLocationClick}
-                lockedAgentIds={lockedAgentIds}
-            />
-            <div className="flex flex-col items-center gap-4">
-                <p>
-                    Current Score: {curScore} + {plannedScoreIncrease}
-                </p>
-                <button
-                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] disabled:bg-red-400 disabled:hover:bg-red-400 sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                    disabled={!EG.isTurnValid(curState, plannedTurn)}
-                    onClick={() => {
-                        setSession(EG.appendTurn(curSession, plannedTurn))
-                        setPlannedTurn(EG.getEmptyTurn)
-                    }}
-                >
-                    End Turn
-                </button>
-                <button
-                    className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-                    onClick={() => {
-                        setPlannedTurn(EG.getEmptyTurn)
-                    }}
-                >
-                    Reset Turn
-                </button>
+            <div className="flex flex-row flex-wrap justify-between gap-2 sm:h-[91vh] sm:flex-col sm:content-center sm:justify-center">
+                <Court
+                    selectedAgentId={selectedAgentId}
+                    agents={courtAgents}
+                    handleAgentClick={handleAgentClick}
+                    handleLocationClick={handleLocationClick}
+                    lockedAgentIds={lockedAgentIds}
+                />
+                <Influence
+                    selectedAgentId={selectedAgentId}
+                    agents={influenceAgents}
+                    handleAgentClick={handleAgentClick}
+                    handleLocationClick={handleLocationClick}
+                    lockedAgentIds={lockedAgentIds}
+                />
+                <Delay
+                    lockedAgent={prevDelayAgent}
+                    agent={nextDelayAgent}
+                    isAgentSelected={
+                        (prevDelayAgent?.id ?? -1) === selectedAgentId
+                    }
+                    handleAgentClick={handleAgentClick}
+                    handleLocationClick={handleLocationClick}
+                />
+                <Bribe
+                    agent={bribeAgent}
+                    isAgentSelected={(bribeAgent?.id ?? -1) === selectedAgentId}
+                    numAssignments={numAssignments}
+                    handleAgentClick={handleAgentClick}
+                    handleLocationClick={handleLocationClick}
+                />
+                <Footer
+                    isGameOver={isGameOver}
+                    isPlannedTurnValid={isPlannedTurnValid}
+                    isPlannedTurnGameEnd={isPlannedTurnGameEnd}
+                    handlePlayAgain={handlePlayAgain}
+                    handleResetTurn={handleResetTurn}
+                    handleEndTurn={handleEndTurn}
+                />
             </div>
         </div>
     )

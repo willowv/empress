@@ -1,40 +1,39 @@
 import * as EG from '@/game/empress'
 import 'tailwindcss'
-import Die from './die'
+import Die from './Die'
 
-export interface AgentProps {
+type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
+
+interface AgentProps {
     readonly agent: EG.Agent
-    readonly isSelected: boolean
-    readonly isLocked: boolean
-    readonly setSelected: (id: number) => void
+    readonly state?: State
+    readonly handleAgentClick: (id: number) => void
 }
 
 export default function Agent({
     agent,
-    isSelected,
-    isLocked,
-    setSelected
+    state = 'default',
+    handleAgentClick
 }: AgentProps) {
+    const mapState_css = {
+        default: 'fill-foreground',
+        locked: 'fill-gold',
+        selected: 'fill-purple',
+        accepted: 'fill-green',
+        invalid: 'fill-red'
+    }
     return (
         <div
             key={agent.id}
-            className="relative h-16 w-16 select-none"
+            className="relative size-12 select-none"
             onClick={() => {
-                if (!isLocked) setSelected(agent.id)
+                handleAgentClick(agent.id)
             }}
         >
-            <div
-                className={
-                    isLocked
-                        ? 'fill-amber-400'
-                        : isSelected
-                          ? 'fill-purple-500'
-                          : 'invert'
-                }
-            >
+            <div className={mapState_css[state]}>
                 <Die dieSize={agent.maxValue} />
             </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
+            <div className="text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
                 {agent.curValue}
             </div>
         </div>
