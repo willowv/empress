@@ -4,50 +4,17 @@ import Agent from './Agent'
 import NumberBox from './NumberBox'
 
 interface DelayProps {
-    readonly prevAgent: EG.Agent | undefined
-    readonly nextAgent: EG.Agent | undefined
-    readonly selectedAgentId: number | undefined
+    readonly lockedAgent: EG.Agent | undefined
+    readonly agent: EG.Agent | undefined
+    readonly isAgentSelected: boolean
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
 }
 
-const PrevSlot = (
-    agent: EG.Agent | undefined,
-    handleAgentClick: (id: number) => void
-) => {
-    if (agent)
-        return Agent({
-            agent: agent,
-            state: 'locked',
-            handleAgentClick: handleAgentClick
-        })
-    else return NumberBox({ num: 0 })
-}
-
-const NextSlot = (
-    agent: EG.Agent | undefined,
-    prevValue: number,
-    isSelected: boolean,
-    handleAgentClick: (id: number) => void
-) => {
-    const isValid = (agent?.curValue ?? 0) > prevValue
-    if (!agent) return NumberBox({ num: undefined })
-    else
-        return (
-            <Agent
-                agent={agent}
-                state={
-                    isSelected ? 'selected' : isValid ? 'accepted' : 'invalid'
-                }
-                handleAgentClick={handleAgentClick}
-            />
-        )
-}
-
 export default function Delay({
-    prevAgent,
-    nextAgent,
-    selectedAgentId,
+    lockedAgent,
+    agent,
+    isAgentSelected,
     handleLocationClick,
     handleAgentClick
 }: DelayProps) {
@@ -57,6 +24,33 @@ export default function Delay({
     // Players should be aware that the new agent needs to have a higher value than the previous one
 
     // We don't really need 'agents' or 'lockedAgentIds', we just need the two relevant agents
+    let prevSlot
+    if (lockedAgent)
+        prevSlot = Agent({
+            agent: lockedAgent,
+            state: 'locked',
+            handleAgentClick: handleAgentClick
+        })
+    else prevSlot = NumberBox({ num: 0 })
+
+    let nextSlot
+    const isValid = (agent?.curValue ?? 0) > (lockedAgent?.curValue ?? 0)
+    if (!agent) nextSlot = NumberBox({ num: undefined })
+    else
+        nextSlot = (
+            <Agent
+                agent={agent}
+                state={
+                    isAgentSelected
+                        ? 'selected'
+                        : isValid
+                          ? 'accepted'
+                          : 'invalid'
+                }
+                handleAgentClick={handleAgentClick}
+            />
+        )
+
     return (
         <div
             className="border-gold basis-[48%] border-2 p-2 sm:w-54 sm:basis-[20%]"
@@ -70,18 +64,13 @@ export default function Delay({
                     <div className="text-foreground text-center text-xs">
                         {'Number to beat'}
                     </div>
-                    {PrevSlot(prevAgent, handleAgentClick)}
+                    {prevSlot}
                 </div>
                 <div className="flex flex-col items-center">
                     <div className="text-foreground text-center text-xs">
                         {'Assign to continue play'}
                     </div>
-                    {NextSlot(
-                        nextAgent,
-                        prevAgent?.curValue ?? 0,
-                        nextAgent?.id === selectedAgentId,
-                        handleAgentClick
-                    )}
+                    {nextSlot}
                 </div>
             </div>
         </div>
