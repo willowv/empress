@@ -4,7 +4,7 @@ import Agent from './Agent'
 import NumberBox from './NumberBox'
 
 interface BribeProps {
-    readonly agent: EG.Agent | null
+    readonly agent: EG.Agent | undefined
     readonly numAssignments: number
     readonly isAgentSelected: boolean
     readonly handleLocationClick: (location: EG.Location) => void

@@ -4,15 +4,15 @@ import Agent from './Agent'
 import NumberBox from './NumberBox'
 
 interface DelayProps {
-    readonly prevAgent: EG.Agent | null
-    readonly nextAgent: EG.Agent | null
-    readonly selectedAgentId: number | null
+    readonly prevAgent: EG.Agent | undefined
+    readonly nextAgent: EG.Agent | undefined
+    readonly selectedAgentId: number | undefined
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
 }
 
 const PrevSlot = (
-    agent: EG.Agent | null,
+    agent: EG.Agent | undefined,
     handleAgentClick: (id: number) => void
 ) => {
     if (agent)
@@ -25,7 +25,7 @@ const PrevSlot = (
 }
 
 const NextSlot = (
-    agent: EG.Agent | null,
+    agent: EG.Agent | undefined,
     prevValue: number,
     isSelected: boolean,
     handleAgentClick: (id: number) => void

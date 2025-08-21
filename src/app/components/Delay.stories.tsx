@@ -12,9 +12,9 @@ type Story = StoryObj<typeof meta>
 
 export const Initial: Story = {
     args: {
-        prevAgent: null,
-        nextAgent: null,
-        selectedAgentId: null,
+        prevAgent: undefined,
+        nextAgent: undefined,
+        selectedAgentId: undefined,
         handleLocationClick: () => {},
         handleAgentClick: () => {}
     }
@@ -34,7 +34,7 @@ export const Midgame: Story = {
             maxValue: 4,
             location: 'Delay'
         },
-        selectedAgentId: null,
+        selectedAgentId: undefined,
         handleLocationClick: () => {},
         handleAgentClick: () => {}
     }

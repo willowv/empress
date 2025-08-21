@@ -17,7 +17,9 @@ export default function Game({ date }: GameProps) {
         return { seed: date.toUTCString(), turnHistory: [] }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
-    const [selectedAgentId, setSelectedAgentId] = useState<number | null>(null)
+    const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
+        undefined
+    )
 
     const curState = EG.getCurrentState(curSession)
     const isGameOver = EG.hasGameEnded(
@@ -47,16 +49,16 @@ export default function Game({ date }: GameProps) {
 
         if (selectedAgentId === id)
             // clicking selected agent
-            setSelectedAgentId(null)
+            setSelectedAgentId(undefined)
         else setSelectedAgentId(id)
     }
 
     function handleLocationClick(location: EG.Location) {
         if (
-            selectedAgentId != null &&
+            selectedAgentId != undefined &&
             plannedState.agents[selectedAgentId].location != location
         ) {
-            setSelectedAgentId(null)
+            setSelectedAgentId(undefined)
             setPlannedTurn(
                 EG.updateTurnWithMove(plannedTurn, {
                     agentId: selectedAgentId,
@@ -66,19 +68,18 @@ export default function Game({ date }: GameProps) {
         }
     }
 
-    const prevDelayAgent =
-        plannedState.agents.find(
-            (agent) =>
-                agent.location == 'Delay' && lockedAgentIds.includes(agent.id)
-        ) ?? null
-    const nextDelayAgent =
-        plannedState.agents.find(
-            (agent) =>
-                agent.location == 'Delay' && !lockedAgentIds.includes(agent.id)
-        ) ?? null
+    const prevDelayAgent = plannedState.agents.find(
+        (agent) =>
+            agent.location == 'Delay' && lockedAgentIds.includes(agent.id)
+    )
+    const nextDelayAgent = plannedState.agents.find(
+        (agent) =>
+            agent.location == 'Delay' && !lockedAgentIds.includes(agent.id)
+    )
 
-    const bribeAgent =
-        plannedState.agents.find((agent) => agent.location == 'Bribe') ?? null
+    const bribeAgent = plannedState.agents.find(
+        (agent) => agent.location == 'Bribe'
+    )
 
     function Footer() {
         // If the game is over, show end state

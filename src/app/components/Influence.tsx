@@ -3,7 +3,7 @@ import * as EG from '@/game/empress'
 import Agent from './Agent'
 
 interface InfluenceProps {
-    readonly selectedAgentId: number | null
+    readonly selectedAgentId: number | undefined
     readonly agents: EG.Agent[]
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
