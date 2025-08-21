@@ -149,7 +149,7 @@ export default function Game({ date }: GameProps) {
                 />
                 <Bribe
                     agent={bribeAgent}
-                    selectedAgentId={selectedAgentId}
+                    isAgentSelected={(bribeAgent?.id ?? -1) === selectedAgentId}
                     numAssignments={numAssignments}
                     handleAgentClick={handleAgentClick}
                     handleLocationClick={handleLocationClick}

@@ -6,42 +6,40 @@ import NumberBox from './NumberBox'
 interface BribeProps {
     readonly agent: EG.Agent | null
     readonly numAssignments: number
-    readonly selectedAgentId: number | null
+    readonly isAgentSelected: boolean
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
-}
-
-function AssignedAgent(
-    agent: EG.Agent | null,
-    numAssignments: number,
-    isSelected: boolean,
-    handleAgentClick: (id: number) => void
-) {
-    const isValid = (agent?.curValue ?? 0) >= numAssignments
-    if (!agent)
-        return NumberBox({
-            num: 0,
-            state: isValid ? 'accepted' : 'invalid'
-        })
-    else
-        return (
-            <Agent
-                agent={agent}
-                state={
-                    isSelected ? 'selected' : isValid ? 'accepted' : 'invalid'
-                }
-                handleAgentClick={handleAgentClick}
-            />
-        )
 }
 
 export default function Bribe({
     agent,
     numAssignments,
-    selectedAgentId,
+    isAgentSelected,
     handleLocationClick,
     handleAgentClick
 }: BribeProps) {
+    const isValid = (agent?.curValue ?? 0) >= numAssignments
+    let assignmentSlot
+    if (!agent)
+        assignmentSlot = NumberBox({
+            num: 0,
+            state: isValid ? 'accepted' : 'invalid'
+        })
+    else
+        assignmentSlot = (
+            <Agent
+                agent={agent}
+                state={
+                    isAgentSelected
+                        ? 'selected'
+                        : isValid
+                          ? 'accepted'
+                          : 'invalid'
+                }
+                handleAgentClick={handleAgentClick}
+            />
+        )
+
     return (
         <div
             className="border-gold basis-[48%] border-2 p-2 sm:w-54 sm:basis-[20%]"
@@ -61,12 +59,7 @@ export default function Bribe({
                     <div className="text-foreground text-center text-xs">
                         {'Assign to increase limit'}
                     </div>
-                    {AssignedAgent(
-                        agent,
-                        numAssignments,
-                        agent?.id === selectedAgentId,
-                        handleAgentClick
-                    )}
+                    {assignmentSlot}
                 </div>
             </div>
         </div>
