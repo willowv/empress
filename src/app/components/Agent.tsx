@@ -17,10 +17,10 @@ export default function Agent({
 }: AgentProps) {
     const mapState_css = {
         default: 'fill-foreground',
-        locked: 'fill-amber-400',
-        selected: 'fill-purple-500',
-        accepted: 'fill-green-700',
-        invalid: 'fill-red-700'
+        locked: 'fill-gold',
+        selected: 'fill-purple',
+        accepted: 'fill-green',
+        invalid: 'fill-red'
     }
     return (
         <div
@@ -50,8 +50,8 @@ interface NumberBoxProps {
 export function NumberBox({ num, state = 'default' }: NumberBoxProps) {
     const mapState_css = {
         default: 'border-foreground',
-        accepted: 'border-green-700',
-        invalid: 'border-red-700'
+        accepted: 'border-green',
+        invalid: 'border-red'
     }
     return (
         <div

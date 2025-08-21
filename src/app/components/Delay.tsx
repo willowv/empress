@@ -58,7 +58,7 @@ export default function Delay({
     // We don't really need 'agents' or 'lockedAgentIds', we just need the two relevant agents
     return (
         <div
-            className="basis-[48%] border-2 border-amber-400 p-2 sm:w-54 sm:basis-[20%]"
+            className="border-gold basis-[48%] border-2 p-2 sm:w-54 sm:basis-[20%]"
             onClick={() => handleLocationClick('Delay')}
         >
             <div className="text-foreground text-center text-lg font-bold">

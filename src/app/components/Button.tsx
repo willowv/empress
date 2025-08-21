@@ -13,7 +13,7 @@ export default function Button({
 }: ButtonProps) {
     return (
         <button
-            className="text-foreground flex h-8 items-center justify-center rounded-xl border-2 border-amber-400 px-4 text-sm font-medium transition-colors hover:text-amber-400 disabled:border-gray-600 disabled:text-gray-600"
+            className="text-foreground border-gold hover:text-gold flex h-8 items-center justify-center rounded-xl border-2 px-4 text-sm font-medium transition-colors disabled:border-gray-600 disabled:text-gray-600"
             disabled={isDisabled}
             onClick={handleButtonPress}
         >
