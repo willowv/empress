@@ -17,9 +17,6 @@ export default function Court({
     handleAgentClick,
     lockedAgentIds
 }: CourtProps) {
-    const agentsHere: EG.Agent[] = agents.filter(
-        (agent) => agent.location === 'Court'
-    )
     return (
         <div
             className="border-gold basis-full border-2 p-2 sm:w-xs sm:basis-[45%]"
@@ -32,7 +29,7 @@ export default function Court({
                 {'Unassigned agents'}
             </div>
             <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
-                {agentsHere.map((agent) =>
+                {agents.map((agent) =>
                     Agent({
                         agent: agent,
                         state:

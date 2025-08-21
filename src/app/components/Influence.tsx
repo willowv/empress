@@ -17,10 +17,7 @@ export default function Influence({
     handleAgentClick,
     lockedAgentIds
 }: InfluenceProps) {
-    const agentsHere: EG.Agent[] = agents.filter(
-        (agent) => agent.location === 'Influence'
-    )
-    const score = EG.getScore({ agents: agentsHere })
+    const score = EG.getScore({ agents })
     return (
         <div
             className="border-gold basis-full border-2 p-2 sm:w-xs sm:basis-[45%]"
@@ -33,7 +30,7 @@ export default function Influence({
                 {'Assign to score points'}
             </div>
             <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
-                {agentsHere.map((agent) =>
+                {agents.map((agent) =>
                     Agent({
                         agent: agent,
                         state:

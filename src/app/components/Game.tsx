@@ -81,6 +81,13 @@ export default function Game({ date }: GameProps) {
         (agent) => agent.location == 'Bribe'
     )
 
+    const courtAgents = plannedState.agents.filter(
+        (agent) => agent.location === 'Court'
+    )
+    const influenceAgents = plannedState.agents.filter(
+        (agent) => agent.location === 'Influence'
+    )
+
     function Footer() {
         // If the game is over, show end state
         if (isGameOver) {
@@ -129,14 +136,14 @@ export default function Game({ date }: GameProps) {
             <div className="flex flex-row flex-wrap justify-between gap-2 sm:h-[91vh] sm:flex-col sm:content-center sm:justify-center">
                 <Court
                     selectedAgentId={selectedAgentId}
-                    agents={plannedState.agents}
+                    agents={courtAgents}
                     handleAgentClick={handleAgentClick}
                     handleLocationClick={handleLocationClick}
                     lockedAgentIds={lockedAgentIds}
                 />
                 <Influence
                     selectedAgentId={selectedAgentId}
-                    agents={plannedState.agents}
+                    agents={influenceAgents}
                     handleAgentClick={handleAgentClick}
                     handleLocationClick={handleLocationClick}
                     lockedAgentIds={lockedAgentIds}
