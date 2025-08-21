@@ -22,18 +22,15 @@ export default function Game({ date }: GameProps) {
     )
 
     const curState = EG.getCurrentState(curSession)
-    const isGameOver = EG.hasGameEnded(
-        curSession.turnHistory.length == 0,
-        curState
-    )
+    const isFirstTurn = curSession.turnHistory.length == 0
+    const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
     const plannedState = EG.applyTurn(curState, plannedTurn)
     const isTurnValid = EG.isTurnValid(curState, plannedTurn)
     let isPlannedTurnGameEnd = false
     if (isTurnValid) {
-        const nextTurnState = EG.getCurrentState({
-            ...curSession,
-            turnHistory: [...curSession.turnHistory, plannedTurn]
-        })
+        const nextTurnState = EG.getCurrentState(
+            EG.appendTurn(curSession, plannedTurn)
+        )
         isPlannedTurnGameEnd = EG.hasGameEnded(false, nextTurnState)
     }
     // Which agents are locked?
