@@ -2,11 +2,11 @@
 
 import * as EG from '@/game/empress'
 import { useState } from 'react'
-import Button from './Button'
 import Court from './Court'
 import Bribe from './Bribe'
 import Delay from './Delay'
 import Influence from './Influence'
+import Footer from './Footer'
 
 interface GameProps {
     readonly date: Date
@@ -25,9 +25,9 @@ export default function Game({ date }: GameProps) {
     const isFirstTurn = curSession.turnHistory.length == 0
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
     const plannedState = EG.applyTurn(curState, plannedTurn)
-    const isTurnValid = EG.isTurnValid(curState, plannedTurn)
+    const isPlannedTurnValid = EG.isTurnValid(curState, plannedTurn)
     let isPlannedTurnGameEnd = false
-    if (isTurnValid) {
+    if (isPlannedTurnValid) {
         const nextTurnState = EG.getCurrentState(
             EG.appendTurn(curSession, plannedTurn)
         )
@@ -65,6 +65,19 @@ export default function Game({ date }: GameProps) {
         }
     }
 
+    function handlePlayAgain() {
+        setSession({ seed: date.toUTCString(), turnHistory: [] })
+    }
+
+    function handleEndTurn() {
+        setSession(EG.appendTurn(curSession, plannedTurn))
+        setPlannedTurn(EG.getEmptyTurn)
+    }
+
+    function handleResetTurn() {
+        setPlannedTurn(EG.getEmptyTurn)
+    }
+
     const prevDelayAgent = plannedState.agents.find(
         (agent) =>
             agent.location == 'Delay' && lockedAgentIds.includes(agent.id)
@@ -84,49 +97,6 @@ export default function Game({ date }: GameProps) {
     const influenceAgents = plannedState.agents.filter(
         (agent) => agent.location === 'Influence'
     )
-
-    function Footer() {
-        // If the game is over, show end state
-        if (isGameOver) {
-            return (
-                <div className="flex basis-[100%] flex-row justify-between gap-2 sm:w-54 sm:basis-[10%]">
-                    <div className="text-foreground flex h-8 items-center justify-center rounded-xl px-4 text-sm font-medium">
-                        Game Over
-                    </div>
-                    <Button
-                        text="Play Again"
-                        isDisabled={false}
-                        handleButtonPress={() => {
-                            setSession({
-                                seed: date.toUTCString(),
-                                turnHistory: []
-                            })
-                        }}
-                    />
-                </div>
-            )
-        } else {
-            return (
-                <div className="flex basis-[100%] flex-row justify-between gap-2 sm:w-54 sm:basis-[10%]">
-                    <Button
-                        handleButtonPress={() =>
-                            setPlannedTurn(EG.getEmptyTurn)
-                        }
-                        text="Reset Turn"
-                        isDisabled={false}
-                    />
-                    <Button
-                        isDisabled={!EG.isTurnValid(curState, plannedTurn)}
-                        handleButtonPress={() => {
-                            setSession(EG.appendTurn(curSession, plannedTurn))
-                            setPlannedTurn(EG.getEmptyTurn)
-                        }}
-                        text={isPlannedTurnGameEnd ? 'End Game' : 'End Turn'}
-                    />
-                </div>
-            )
-        }
-    }
 
     return (
         <div className="select-none">
@@ -161,7 +131,14 @@ export default function Game({ date }: GameProps) {
                     handleAgentClick={handleAgentClick}
                     handleLocationClick={handleLocationClick}
                 />
-                {Footer()}
+                <Footer
+                    isGameOver={isGameOver}
+                    isPlannedTurnValid={isPlannedTurnValid}
+                    isPlannedTurnGameEnd={isPlannedTurnGameEnd}
+                    handlePlayAgain={handlePlayAgain}
+                    handleResetTurn={handleResetTurn}
+                    handleEndTurn={handleEndTurn}
+                />
             </div>
         </div>
     )
