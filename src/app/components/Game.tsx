@@ -25,8 +25,15 @@ export default function Game({ date }: GameProps) {
         curState
     )
     const plannedState = EG.applyTurn(curState, plannedTurn)
-    const isPlannedTurnGameEnd = EG.hasGameEnded(false, plannedState)
-
+    const isTurnValid = EG.isTurnValid(curState, plannedTurn)
+    let isPlannedTurnGameEnd = false
+    if (isTurnValid) {
+        const nextTurnState = EG.getCurrentState({
+            ...curSession,
+            turnHistory: [...curSession.turnHistory, plannedTurn]
+        })
+        isPlannedTurnGameEnd = EG.hasGameEnded(false, nextTurnState)
+    }
     // Which agents are locked?
     // Agents previously assigned to non-Court locations
     const lockedAgentIds = curState.agents
