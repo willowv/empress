@@ -22,7 +22,6 @@ export default function Bribe({
     let assignmentSlot
     if (!agent)
         assignmentSlot = NumberBox({
-            num: 0,
             state: isValid ? 'accepted' : 'invalid'
         })
     else
