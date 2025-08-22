@@ -119,7 +119,7 @@ export default function Game({ date }: GameProps) {
                     lockedAgent={prevDelayAgent}
                     agent={nextDelayAgent}
                     isAgentSelected={
-                        (prevDelayAgent?.id ?? -1) === selectedAgentId
+                        (nextDelayAgent?.id ?? -1) === selectedAgentId
                     }
                     handleAgentClick={handleAgentClick}
                     handleLocationClick={handleLocationClick}
