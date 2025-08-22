@@ -1,6 +1,7 @@
 import * as EG from '@/game/empress'
 import 'tailwindcss'
 import Die from './svg/Die'
+import Lock from './svg/Lock'
 
 type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
 
@@ -36,6 +37,11 @@ export default function Agent({
             <div className="text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
                 {agent.curValue}
             </div>
+            {state === 'locked' && (
+                <div className="text-foreground fill-gold absolute right-0 bottom-1 size-3">
+                    <Lock />
+                </div>
+            )}
         </div>
     )
 }
