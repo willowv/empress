@@ -12,6 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
     "@types/lodash": "^4.17.20",
     "lodash": "^4.17.21",
     "next": "15.4.6",
