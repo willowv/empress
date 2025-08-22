@@ -42,7 +42,7 @@ export default function Influence({
         )
     return (
         <div
-            className="border-gold relative basis-full border-2 p-2 sm:w-xs sm:basis-[45%]"
+            className="border-gold relative min-h-43 basis-full border-2 p-2 sm:w-xs sm:basis-[45%]"
             onClick={() => handleLocationClick('Influence')}
         >
             <div className="text-foreground text-center text-lg font-bold">

@@ -19,7 +19,7 @@ export default function Court({
 }: CourtProps) {
     return (
         <div
-            className="border-gold basis-full border-2 p-2 sm:w-xs sm:basis-[45%]"
+            className="border-gold min-h-43 basis-full border-2 p-2 sm:w-xs sm:basis-[45%]"
             onClick={() => handleLocationClick('Court')}
         >
             <div className="text-foreground text-center text-lg font-bold">
