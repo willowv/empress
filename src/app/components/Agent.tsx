@@ -16,22 +16,32 @@ export default function Agent({
     state = 'default',
     handleAgentClick
 }: AgentProps) {
-    const mapState_css = {
+    const mapState_dieColorCss = {
         default: 'fill-foreground',
         locked: 'fill-gold',
         selected: 'fill-purple',
         accepted: 'fill-green',
         invalid: 'fill-red'
     }
+    const mapState_agentCss = {
+        default: '',
+        locked: '',
+        selected: ' scale-110',
+        accepted: '',
+        invalid: ''
+    }
     return (
         <div
             key={agent.id}
-            className="relative size-12 select-none"
+            className={
+                'relative size-12 transition-all select-none' +
+                mapState_agentCss[state]
+            }
             onClick={() => {
                 handleAgentClick(agent.id)
             }}
         >
-            <div className={mapState_css[state]}>
+            <div className={mapState_dieColorCss[state]}>
                 <Die dieSize={agent.maxValue} />
             </div>
             <div className="text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs">
