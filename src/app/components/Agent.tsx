@@ -1,6 +1,6 @@
 import * as EG from '@/game/empress'
 import 'tailwindcss'
-import Die from './Die'
+import Die from './svg/Die'
 
 type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
 
