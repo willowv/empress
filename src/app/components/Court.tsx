@@ -30,19 +30,24 @@ export default function Court({
                 {'Unassigned agents'}
             </div>
             <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
-                {agents.map((agent, index) =>
-                    Agent({
-                        agent: agent,
-                        state:
-                            agent.id === selectedAgentId
-                                ? 'selected'
-                                : lockedAgentIds.includes(agent.id)
-                                  ? 'locked'
-                                  : 'default',
-                        handleAgentClick: handleAgentClick,
-                        animRollOrder: index
-                    })
-                )}
+                {agents.map((agent, index) => {
+                    const state =
+                        agent.id === selectedAgentId
+                            ? 'selected'
+                            : lockedAgentIds.includes(agent.id)
+                              ? 'locked'
+                              : 'default'
+
+                    return (
+                        <Agent
+                            key={agent.id}
+                            agent={agent}
+                            state={state}
+                            handleAgentClick={handleAgentClick}
+                            animRollOrder={index}
+                        />
+                    )
+                })}
             </div>
             <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
                 <div className="fill-gold size-2 -translate-y-0.5">
