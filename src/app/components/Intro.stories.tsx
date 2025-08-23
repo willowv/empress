@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { action } from 'storybook/actions'
 
-import Button from './Button'
+import Intro from './Intro'
 
 const meta = {
-    component: Button
-} satisfies Meta<typeof Button>
+    component: Intro
+} satisfies Meta<typeof Intro>
 
 export default meta
 
@@ -12,8 +13,6 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
     args: {
-        text: 'End Turn',
-        isDisabled: false,
-        handleButtonPress: () => {}
+        handleEndOfIntro: action('swipe')
     }
 }

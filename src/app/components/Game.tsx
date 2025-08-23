@@ -1,16 +1,24 @@
 'use client'
 
 import * as EG from '@/game/empress'
-import { useState } from 'react'
-import Court from './Court'
-import Bribe from './Bribe'
-import Delay from './Delay'
-import Influence from './Influence'
+import { createContext, useLayoutEffect, useState } from 'react'
+import Court from './locations/Court'
+import Bribe from './locations/Bribe'
+import Delay from './locations/Delay'
+import Influence from './locations/Influence'
 import Footer from './Footer'
 
 interface GameProps {
     readonly date: Date
 }
+
+interface AnimationContextProps {
+    readonly lastEndTurnAt: Date | undefined
+}
+
+export const AnimationContext = createContext<AnimationContextProps>({
+    lastEndTurnAt: new Date(0)
+})
 
 export default function Game({ date }: GameProps) {
     const [curSession, setSession] = useState<EG.Session>(() => {
@@ -20,6 +28,12 @@ export default function Game({ date }: GameProps) {
     const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
         undefined
     )
+    const [lastEndTurnAt, setLastEndTurnAt] = useState<Date>(new Date(0))
+
+    useLayoutEffect(() => {
+        // For updating animation context
+        setLastEndTurnAt(new Date())
+    }, [curSession])
 
     const curState = EG.getCurrentState(curSession)
     const isFirstTurn = curSession.turnHistory.length == 0
@@ -99,47 +113,51 @@ export default function Game({ date }: GameProps) {
     )
 
     return (
-        <div className="select-none">
-            <div className="flex flex-row flex-wrap justify-between gap-2 sm:h-[91vh] sm:flex-col sm:content-center sm:justify-center">
-                <Court
-                    selectedAgentId={selectedAgentId}
-                    agents={courtAgents}
-                    handleAgentClick={handleAgentClick}
-                    handleLocationClick={handleLocationClick}
-                    lockedAgentIds={lockedAgentIds}
-                />
-                <Influence
-                    selectedAgentId={selectedAgentId}
-                    agents={influenceAgents}
-                    handleAgentClick={handleAgentClick}
-                    handleLocationClick={handleLocationClick}
-                    lockedAgentIds={lockedAgentIds}
-                />
-                <Delay
-                    lockedAgent={prevDelayAgent}
-                    agent={nextDelayAgent}
-                    isAgentSelected={
-                        (prevDelayAgent?.id ?? -1) === selectedAgentId
-                    }
-                    handleAgentClick={handleAgentClick}
-                    handleLocationClick={handleLocationClick}
-                />
-                <Bribe
-                    agent={bribeAgent}
-                    isAgentSelected={(bribeAgent?.id ?? -1) === selectedAgentId}
-                    numAssignments={numAssignments}
-                    handleAgentClick={handleAgentClick}
-                    handleLocationClick={handleLocationClick}
-                />
-                <Footer
-                    isGameOver={isGameOver}
-                    isPlannedTurnValid={isPlannedTurnValid}
-                    isPlannedTurnGameEnd={isPlannedTurnGameEnd}
-                    handlePlayAgain={handlePlayAgain}
-                    handleResetTurn={handleResetTurn}
-                    handleEndTurn={handleEndTurn}
-                />
+        <AnimationContext value={{ lastEndTurnAt }}>
+            <div className="select-none">
+                <div className="flex flex-row flex-wrap justify-between gap-2 sm:h-[91vh] sm:flex-col sm:content-center sm:justify-center">
+                    <Court
+                        selectedAgentId={selectedAgentId}
+                        agents={courtAgents}
+                        handleAgentClick={handleAgentClick}
+                        handleLocationClick={handleLocationClick}
+                        lockedAgentIds={lockedAgentIds}
+                    />
+                    <Influence
+                        selectedAgentId={selectedAgentId}
+                        agents={influenceAgents}
+                        handleAgentClick={handleAgentClick}
+                        handleLocationClick={handleLocationClick}
+                        lockedAgentIds={lockedAgentIds}
+                    />
+                    <Delay
+                        lockedAgent={prevDelayAgent}
+                        agent={nextDelayAgent}
+                        isAgentSelected={
+                            (nextDelayAgent?.id ?? -1) === selectedAgentId
+                        }
+                        handleAgentClick={handleAgentClick}
+                        handleLocationClick={handleLocationClick}
+                    />
+                    <Bribe
+                        agent={bribeAgent}
+                        isAgentSelected={
+                            (bribeAgent?.id ?? -1) === selectedAgentId
+                        }
+                        numAssignments={numAssignments}
+                        handleAgentClick={handleAgentClick}
+                        handleLocationClick={handleLocationClick}
+                    />
+                    <Footer
+                        isGameOver={isGameOver}
+                        isPlannedTurnValid={isPlannedTurnValid}
+                        isPlannedTurnGameEnd={isPlannedTurnGameEnd}
+                        handlePlayAgain={handlePlayAgain}
+                        handleResetTurn={handleResetTurn}
+                        handleEndTurn={handleEndTurn}
+                    />
+                </div>
             </div>
-        </div>
+        </AnimationContext>
     )
 }

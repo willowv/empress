@@ -1,7 +1,8 @@
 'use client'
 import * as EG from '@/game/empress'
-import Agent from './Agent'
-import NumberBox from './NumberBox'
+import Agent from '../ui/Agent'
+import NumberBox from '../ui/NumberBox'
+import Hourglass from '../svg/Hourglass'
 
 interface DelayProps {
     readonly lockedAgent: EG.Agent | undefined
@@ -53,7 +54,7 @@ export default function Delay({
 
     return (
         <div
-            className="border-gold basis-[48%] border-2 p-2 sm:w-54 sm:basis-[20%]"
+            className="border-gold relative basis-[48%] border-2 p-2 pb-7 sm:min-w-54 sm:basis-[20%]"
             onClick={() => handleLocationClick('Delay')}
         >
             <div className="text-foreground text-center text-lg font-bold">
@@ -71,6 +72,21 @@ export default function Delay({
                         {'Assign to continue play'}
                     </div>
                     {nextSlot}
+                </div>
+            </div>
+            <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
+                <div className="fill-gold size-2 -translate-y-0.5">
+                    <Hourglass />
+                </div>
+                <div className="text-foreground w-21 text-xs">
+                    {'- The game will '}
+                </div>
+                <div
+                    className={
+                        'text-xs ' + (isValid ? 'text-green' : 'text-red')
+                    }
+                >
+                    {isValid ? 'continue' : 'END'}
                 </div>
             </div>
         </div>
