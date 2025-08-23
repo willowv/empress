@@ -29,7 +29,7 @@ export default function Court({
                 {'Unassigned agents'}
             </div>
             <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
-                {agents.map((agent) =>
+                {agents.map((agent, index) =>
                     Agent({
                         agent: agent,
                         state:
@@ -38,7 +38,8 @@ export default function Court({
                                 : lockedAgentIds.includes(agent.id)
                                   ? 'locked'
                                   : 'default',
-                        handleAgentClick: handleAgentClick
+                        handleAgentClick: handleAgentClick,
+                        animRollOrder: index
                     })
                 )}
             </div>
