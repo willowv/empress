@@ -47,10 +47,10 @@ export default function Agent({
             key={agent.id}
             className={
                 'relative size-12 transition-all select-none' +
-                mapState_agentCss[state]
+                mapState_agentCss[state] +
+                (shouldDoRollAnimation ? ' animate-diebounce' : ' animate-none')
             }
             style={{
-                animationName: shouldDoRollAnimation ? 'diebounce' : 'none',
                 animationDuration: '1s',
                 animationDelay: `${animDelay}ms`
             }}
@@ -59,9 +59,13 @@ export default function Agent({
             }}
         >
             <div
-                className={mapState_dieColorCss[state]}
+                className={
+                    mapState_dieColorCss[state] +
+                    (shouldDoRollAnimation
+                        ? ' animate-dieroll'
+                        : ' animate-none')
+                }
                 style={{
-                    animationName: shouldDoRollAnimation ? 'dieroll' : 'none',
                     animationDuration: '1s',
                     animationDelay: `${animDelay}ms`
                 }}
@@ -69,11 +73,13 @@ export default function Agent({
                 <Die dieSize={agent.maxValue} />
             </div>
             <div
-                className="text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs"
+                className={
+                    'text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs' +
+                    (shouldDoRollAnimation
+                        ? ' animate-numberblur'
+                        : ' animate-none')
+                }
                 style={{
-                    animationName: shouldDoRollAnimation
-                        ? 'numberblur'
-                        : 'none',
                     animationDuration: '1s',
                     animationDelay: `${animDelay}ms`
                 }}
