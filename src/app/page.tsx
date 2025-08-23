@@ -16,7 +16,7 @@ function getTodayWithoutTime(): Date {
 
 export default function Home() {
     const [state, setState] = useState<State>('Intro')
-    const [selectedDate, setSelectedDate] = useState<Date>(getTodayWithoutTime)
+    const [selectedDate] = useState<Date>(getTodayWithoutTime)
 
     switch (state) {
         case 'Intro':
