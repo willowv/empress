@@ -53,14 +53,14 @@ export default function Influence({
                 {'Assign to score points'}
             </div>
             {content}
-            <div className="text-foreground absolute bottom-1 text-center text-xs">
+            <div className="text-foreground absolute right-1 bottom-1 text-center text-xs">
                 {'Score: ' + score}
             </div>
-            <div className="absolute right-1 bottom-1 flex flex-row items-center gap-1 opacity-70">
+            <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
                 <div className="fill-gold size-2 -translate-y-0.5">
                     <Hourglass />
                 </div>
-                <div className="text-foreground text-xs">
+                <div className="text-foreground w-37 text-xs">
                     {'- Agents here will be locked'}
                 </div>
             </div>

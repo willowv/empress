@@ -26,15 +26,19 @@ export default function Footer({
                     Game Over
                 </div>
                 <Button isDisabled={false} handleButtonPress={handlePlayAgain}>
-                    {'Play Again'}
+                    <div className="text-foreground text-xs">
+                        {'Play Again'}
+                    </div>
                 </Button>
             </div>
         )
     } else {
         return (
-            <div className="flex basis-[100%] flex-row justify-between gap-2 sm:w-54 sm:basis-[10%]">
+            <div className="flex basis-[100%] flex-row justify-between gap-2 sm:min-w-54 sm:basis-[10%]">
                 <Button handleButtonPress={handleResetTurn} isDisabled={false}>
-                    {'Reset Turn'}
+                    <div className="text-foreground text-xs">
+                        {'Reset Turn'}
+                    </div>
                 </Button>
                 <Button
                     isDisabled={!isPlannedTurnValid}

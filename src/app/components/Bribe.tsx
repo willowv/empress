@@ -42,7 +42,7 @@ export default function Bribe({
 
     return (
         <div
-            className="border-gold relative basis-[48%] border-2 p-2 pb-7 sm:w-54 sm:basis-[20%]"
+            className="border-gold relative basis-[48%] border-2 p-2 pb-7 sm:min-w-54 sm:basis-[20%]"
             onClick={() => handleLocationClick('Bribe')}
         >
             <div className="text-foreground text-center text-lg font-bold">
@@ -62,11 +62,11 @@ export default function Bribe({
                     {assignmentSlot}
                 </div>
             </div>
-            <div className="absolute right-1 bottom-1 flex flex-row items-center gap-1 opacity-70">
+            <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
                 <div className="fill-gold size-2 -translate-y-0.5">
                     <Hourglass />
                 </div>
-                <div className="text-foreground text-xs">
+                <div className="text-foreground w-35 text-xs">
                     {'- Agent will return to Court'}
                 </div>
             </div>

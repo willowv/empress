@@ -48,7 +48,7 @@ export default function Court({
                 <div className="fill-gold size-2 -translate-y-0.5">
                     <Hourglass />
                 </div>
-                <div className="text-foreground text-xs">
+                <div className="text-foreground w-38 text-xs">
                     {'- Agents here will be rerolled'}
                 </div>
             </div>
