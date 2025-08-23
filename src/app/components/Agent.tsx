@@ -34,12 +34,12 @@ export default function Agent({
         accepted: '',
         invalid: ''
     }
-    const { lastEndTurnAt } = useContext(AnimationContext)
+
     // If the last end turn was within 1.5 seconds, add the animation class
-    const isLastEndTurnRecent =
-        Date.now() - (lastEndTurnAt?.valueOf() ?? 0) < 1500 //milliseconds
+    const { lastEndTurnAt } = useContext(AnimationContext)
+    const timeSinceLastEndTurn = Date.now() - (lastEndTurnAt?.valueOf() ?? 0)
     const shouldDoRollAnimation =
-        agent.location === 'Court' && isLastEndTurnRecent
+        agent.location === 'Court' && timeSinceLastEndTurn < 1500 // milliseconds
 
     const animDelay = 100 * (animRollOrder ?? 0) // milliseconds
     return (
@@ -80,8 +80,7 @@ export default function Agent({
                         : ' animate-none')
                 }
                 style={{
-                    animationDuration: '1s',
-                    animationDelay: `${animDelay}ms`
+                    animationDuration: 1000 + animDelay + 'ms'
                 }}
             >
                 {agent.curValue}
