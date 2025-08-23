@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
     args: {
-        text: 'End Turn',
+        children: 'End Turn',
         isDisabled: false,
         handleButtonPress: () => {}
     }
