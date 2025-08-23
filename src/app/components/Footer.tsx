@@ -1,5 +1,5 @@
 import 'tailwindcss'
-import Button from './Button'
+import Button from './ui/Button'
 import Hourglass from './svg/Hourglass'
 
 interface FooterProps {

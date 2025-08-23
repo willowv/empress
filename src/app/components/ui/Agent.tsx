@@ -1,8 +1,8 @@
 import * as EG from '@/game/empress'
 import 'tailwindcss'
-import Die from './svg/Die'
-import Lock from './svg/Lock'
-import { AnimationContext } from './Game'
+import Die from '../svg/Die'
+import Lock from '../svg/Lock'
+import { AnimationContext } from '../Game'
 import { useContext } from 'react'
 
 type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
@@ -72,18 +72,20 @@ export default function Agent({
             >
                 <Die dieSize={agent.maxValue} />
             </div>
-            <div
-                className={
-                    'text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold backdrop-blur-xs' +
-                    (shouldDoRollAnimation
-                        ? ' animate-numberblur'
-                        : ' animate-none')
-                }
-                style={{
-                    animationDuration: 1000 + animDelay + 'ms'
-                }}
-            >
-                {agent.curValue}
+            <div className="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-4xl backdrop-blur-xs">
+                <div
+                    className={
+                        'text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold' +
+                        (shouldDoRollAnimation
+                            ? ' animate-numberblur'
+                            : ' animate-none')
+                    }
+                    style={{
+                        animationDuration: 1000 + animDelay + 'ms'
+                    }}
+                >
+                    {agent.curValue}
+                </div>
             </div>
             {state === 'locked' && (
                 <div className="text-foreground fill-gold absolute right-0 bottom-1 size-3">

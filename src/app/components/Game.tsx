@@ -2,10 +2,10 @@
 
 import * as EG from '@/game/empress'
 import { createContext, useLayoutEffect, useState } from 'react'
-import Court from './Court'
-import Bribe from './Bribe'
-import Delay from './Delay'
-import Influence from './Influence'
+import Court from './locations/Court'
+import Bribe from './locations/Bribe'
+import Delay from './locations/Delay'
+import Influence from './locations/Influence'
 import Footer from './Footer'
 
 interface GameProps {

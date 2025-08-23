@@ -1,8 +1,8 @@
 'use client'
 import * as EG from '@/game/empress'
-import Agent from './Agent'
-import NumberBox from './NumberBox'
-import Hourglass from './svg/Hourglass'
+import Agent from '../ui/Agent'
+import NumberBox from '../ui/NumberBox'
+import Hourglass from '../svg/Hourglass'
 
 interface DelayProps {
     readonly lockedAgent: EG.Agent | undefined
