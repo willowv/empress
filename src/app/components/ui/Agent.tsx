@@ -42,6 +42,7 @@ export default function Agent({
         agent.location === 'Court' && timeSinceLastEndTurn < 1500 // milliseconds
 
     const animDelay = 100 * (animRollOrder ?? 0) // milliseconds
+    // TODO: animate backdrop blur opacity
     return (
         <div
             key={agent.id}
