@@ -13,6 +13,6 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
     args: {
-        handleIntroTap: action('swipe')
+        handleEndOfIntro: action('swipe')
     }
 }

@@ -3,15 +3,18 @@ import Tarot from './svg/Tarot'
 import Swipeable from './ui/Swipeable'
 
 interface IntroProps {
-    readonly handleIntroTap: () => void
+    readonly handleEndOfIntro: () => void
 }
 
-export default function Intro({ handleIntroTap }: IntroProps) {
+export default function Intro({ handleEndOfIntro }: IntroProps) {
     return (
-        <Swipeable onSwipeLeft={handleIntroTap} onSwipeRight={handleIntroTap}>
+        <Swipeable
+            onSwipeLeft={handleEndOfIntro}
+            onSwipeRight={handleEndOfIntro}
+        >
             <div
                 className="relative h-screen select-none"
-                onClick={handleIntroTap}
+                onClick={handleEndOfIntro}
             >
                 <div className="fill-gold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-70">
                     <Tarot />
