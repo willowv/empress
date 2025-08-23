@@ -1,6 +1,7 @@
 'use client'
 import * as EG from '@/game/empress'
 import Agent from './Agent'
+import Hourglass from './svg/Hourglass'
 
 interface CourtProps {
     readonly selectedAgentId: number | undefined
@@ -19,7 +20,7 @@ export default function Court({
 }: CourtProps) {
     return (
         <div
-            className="border-gold min-h-43 basis-full border-2 p-2 sm:w-xs sm:basis-[45%]"
+            className="border-gold relative min-h-43 basis-full border-2 p-2 pb-7 sm:w-xs sm:basis-[45%]"
             onClick={() => handleLocationClick('Court')}
         >
             <div className="text-foreground text-center text-lg font-bold">
@@ -42,6 +43,14 @@ export default function Court({
                         animRollOrder: index
                     })
                 )}
+            </div>
+            <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
+                <div className="fill-gold size-2 -translate-y-0.5">
+                    <Hourglass />
+                </div>
+                <div className="text-foreground text-xs">
+                    {'- Agents here will be rerolled'}
+                </div>
             </div>
         </div>
     )

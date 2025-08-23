@@ -1,5 +1,6 @@
 import 'tailwindcss'
 import Button from './Button'
+import Hourglass from './svg/Hourglass'
 
 interface FooterProps {
     readonly isGameOver: boolean
@@ -13,7 +14,6 @@ interface FooterProps {
 export default function Footer({
     isGameOver,
     isPlannedTurnValid,
-    isPlannedTurnGameEnd,
     handlePlayAgain,
     handleResetTurn,
     handleEndTurn
@@ -25,26 +25,31 @@ export default function Footer({
                 <div className="text-foreground flex h-8 items-center justify-center rounded-xl px-4 text-sm font-medium">
                     Game Over
                 </div>
-                <Button
-                    text="Play Again"
-                    isDisabled={false}
-                    handleButtonPress={handlePlayAgain}
-                />
+                <Button isDisabled={false} handleButtonPress={handlePlayAgain}>
+                    {'Play Again'}
+                </Button>
             </div>
         )
     } else {
         return (
             <div className="flex basis-[100%] flex-row justify-between gap-2 sm:w-54 sm:basis-[10%]">
-                <Button
-                    handleButtonPress={handleResetTurn}
-                    text="Reset Turn"
-                    isDisabled={false}
-                />
+                <Button handleButtonPress={handleResetTurn} isDisabled={false}>
+                    {'Reset Turn'}
+                </Button>
                 <Button
                     isDisabled={!isPlannedTurnValid}
                     handleButtonPress={handleEndTurn}
-                    text={isPlannedTurnGameEnd ? 'End Game' : 'End Turn'}
-                />
+                >
+                    <div className="flex flex-row items-center gap-1">
+                        <div className="text-foreground text-xs">
+                            {'End Turn ('}
+                        </div>
+                        <div className="fill-gold size-2 -translate-y-1">
+                            <Hourglass />
+                        </div>
+                        <div className="text-foreground text-xs">{')'}</div>
+                    </div>
+                </Button>
             </div>
         )
     }
