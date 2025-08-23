@@ -23,18 +23,22 @@ export default function Influence({
     const content =
         agents.length > 0 ? (
             <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
-                {agents.map((agent) =>
-                    Agent({
-                        agent: agent,
-                        state:
-                            agent.id === selectedAgentId
-                                ? 'selected'
-                                : lockedAgentIds.includes(agent.id)
-                                  ? 'locked'
-                                  : 'default',
-                        handleAgentClick: handleAgentClick
-                    })
-                )}
+                {agents.map((agent) => {
+                    const state =
+                        agent.id === selectedAgentId
+                            ? 'selected'
+                            : lockedAgentIds.includes(agent.id)
+                              ? 'locked'
+                              : 'default'
+                    return (
+                        <Agent
+                            key={agent.id}
+                            agent={agent}
+                            state={state}
+                            handleAgentClick={handleAgentClick}
+                        />
+                    )
+                })}
             </div>
         ) : (
             <div className="fill-foreground absolute top-1/2 left-1/2 size-6 -translate-x-1/2 opacity-15">
