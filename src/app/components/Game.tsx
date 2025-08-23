@@ -1,7 +1,7 @@
 'use client'
 
 import * as EG from '@/game/empress'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useLayoutEffect, useState } from 'react'
 import Court from './Court'
 import Bribe from './Bribe'
 import Delay from './Delay'
@@ -30,7 +30,7 @@ export default function Game({ date }: GameProps) {
     )
     const [lastEndTurnAt, setLastEndTurnAt] = useState<Date>(new Date(0))
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         // For updating animation context
         setLastEndTurnAt(new Date())
     }, [curSession])
