@@ -1,5 +1,5 @@
 import React from 'react'
-import Tarot from './svg/Tarot'
+import Tarot from './svg/tarot/Empress'
 import Swipeable from './ui/Swipeable'
 
 interface IntroProps {
