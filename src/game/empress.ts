@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { hash_cyrb53, random_splitmix32, randomRoll } from '@/game/random'
+import { hash_cyrb53, random_splitmix32, randomRoll } from './random'
 
 export type Session = {
     seed: string
