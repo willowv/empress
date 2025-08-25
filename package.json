@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.17.20",
+    "clsx": "^2.1.1",
     "lodash": "^4.17.21",
     "next": "15.4.6",
     "react": "19.1.0",
