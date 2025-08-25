@@ -3,13 +3,13 @@ import 'tailwindcss'
 
 interface ButtonProps {
     readonly children: ReactNode
-    readonly isDisabled: boolean
+    readonly isDisabled?: boolean
     readonly handleButtonPress: () => void
 }
 
 export default function Button({
     children,
-    isDisabled,
+    isDisabled = false,
     handleButtonPress
 }: ButtonProps) {
     return (
