@@ -73,7 +73,15 @@ export default function Agent({
             >
                 <Die dieSize={agent.maxValue} />
             </div>
-            <div className="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-4xl backdrop-blur-xs">
+            <div
+                className={
+                    'absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-4xl backdrop-blur-xs' +
+                    (shouldDoRollAnimation
+                        ? ' animate-numberbackdropfadein'
+                        : ' animate-none')
+                }
+                style={{ animationDuration: 1000 + animDelay + 'ms' }}
+            >
                 <div
                     className={
                         'text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold' +

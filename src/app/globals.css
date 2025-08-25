@@ -14,6 +14,7 @@
     --animate-diebounce: diebounce 1s;
     --animate-dieroll: dieroll 1s;
     --animate-numberblur: numberblur 1s;
+    --animate-numberbackdropfadein: numberbackdropfadein 1s;
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-gold: var(--color-amber-400);
@@ -33,6 +34,18 @@
         }
         100% {
             filter: none;
+        }
+    }
+
+    @keyframes numberbackdropfadein {
+        0% {
+            filter: opacity(0);
+        }
+        80% {
+            filter: opacity(0);
+        }
+        100% {
+            filter: opacity(100);
         }
     }
 
