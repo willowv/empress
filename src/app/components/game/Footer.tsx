@@ -1,6 +1,6 @@
 import 'tailwindcss'
-import Button from './ui/Button'
-import Hourglass from './svg/Hourglass'
+import Button from '@/ui/Button'
+import Hourglass from '@/svg/Hourglass'
 
 interface FooterProps {
     readonly isGameOver: boolean

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Game from './components/Game'
+import Game from '@/game/Game'
 import Intro from './components/Intro'
 
 type State = 'Intro' | 'Game' | 'Scores'

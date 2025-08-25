@@ -1,7 +1,7 @@
 'use client'
-import * as EG from '@/game/empress'
-import Agent from '../ui/Agent'
-import Hourglass from '../svg/Hourglass'
+import * as EG from '@/logic/empress'
+import Agent from '@/game/Agent'
+import Hourglass from '@/svg/Hourglass'
 
 interface CourtProps {
     readonly selectedAgentId: number | undefined

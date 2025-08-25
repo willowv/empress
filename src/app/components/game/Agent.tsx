@@ -1,8 +1,8 @@
-import * as EG from '@/game/empress'
+import * as EG from '@/logic/empress'
 import 'tailwindcss'
-import Die from '../svg/Die'
-import Lock from '../svg/Lock'
-import { AnimationContext } from '../Game'
+import Die from '@/svg/Die'
+import Lock from '@/svg/Lock'
+import { AnimationContext } from '@/game/Game'
 import { useContext } from 'react'
 
 type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'

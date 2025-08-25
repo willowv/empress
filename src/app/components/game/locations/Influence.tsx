@@ -1,8 +1,8 @@
 'use client'
-import * as EG from '@/game/empress'
-import Agent from '../ui/Agent'
-import Person from '../svg/Person'
-import Hourglass from '../svg/Hourglass'
+import * as EG from '@/logic/empress'
+import Agent from '@/game/Agent'
+import Person from '@/svg/Person'
+import Hourglass from '@/svg/Hourglass'
 
 interface InfluenceProps {
     readonly selectedAgentId: number | undefined

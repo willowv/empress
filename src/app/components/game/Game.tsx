@@ -1,6 +1,6 @@
 'use client'
 
-import * as EG from '@/game/empress'
+import * as EG from '@/logic/empress'
 import { createContext, useLayoutEffect, useState } from 'react'
 import Court from './locations/Court'
 import Bribe from './locations/Bribe'

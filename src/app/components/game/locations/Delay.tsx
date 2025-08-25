@@ -1,32 +1,44 @@
 'use client'
-import * as EG from '@/game/empress'
-import Agent from '../ui/Agent'
-import NumberBox from '../ui/NumberBox'
-import Hourglass from '../svg/Hourglass'
+import * as EG from '@/logic/empress'
+import Agent from '@/game/Agent'
+import NumberBox from '@/game/NumberBox'
+import Hourglass from '@/svg/Hourglass'
 
-interface BribeProps {
+interface DelayProps {
+    readonly lockedAgent: EG.Agent | undefined
     readonly agent: EG.Agent | undefined
-    readonly numAssignments: number
     readonly isAgentSelected: boolean
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
 }
 
-export default function Bribe({
+export default function Delay({
+    lockedAgent,
     agent,
-    numAssignments,
     isAgentSelected,
     handleLocationClick,
     handleAgentClick
-}: BribeProps) {
-    const isValid = (agent?.curValue ?? 0) >= numAssignments
-    let assignmentSlot
-    if (!agent)
-        assignmentSlot = NumberBox({
-            state: isValid ? 'accepted' : 'invalid'
+}: DelayProps) {
+    // Delay can only display two agents
+    // The previous agent and the new one (who might not be assigned yet)
+    // Players should be aware that if they end turn without assigning a new agent here, game ends
+    // Players should be aware that the new agent needs to have a higher value than the previous one
+
+    // We don't really need 'agents' or 'lockedAgentIds', we just need the two relevant agents
+    let prevSlot
+    if (lockedAgent)
+        prevSlot = Agent({
+            agent: lockedAgent,
+            state: 'locked',
+            handleAgentClick: handleAgentClick
         })
+    else prevSlot = NumberBox({ num: 0 })
+
+    let nextSlot
+    const isValid = (agent?.curValue ?? 0) > (lockedAgent?.curValue ?? 0)
+    if (!agent) nextSlot = NumberBox({ num: undefined })
     else
-        assignmentSlot = (
+        nextSlot = (
             <Agent
                 agent={agent}
                 state={
@@ -43,31 +55,38 @@ export default function Bribe({
     return (
         <div
             className="border-gold relative basis-[48%] border-2 p-2 pb-7 sm:min-w-54 sm:basis-[20%]"
-            onClick={() => handleLocationClick('Bribe')}
+            onClick={() => handleLocationClick('Delay')}
         >
             <div className="text-foreground text-center text-lg font-bold">
-                Bribe
+                Delay
             </div>
             <div className="m-2 flex flex-col justify-center gap-2 sm:flex-row">
                 <div className="flex flex-col items-center">
                     <div className="text-foreground text-center text-xs">
-                        {'# of Assignments'}
+                        {'Number to beat'}
                     </div>
-                    <NumberBox num={numAssignments} />
+                    {prevSlot}
                 </div>
                 <div className="flex flex-col items-center">
                     <div className="text-foreground text-center text-xs">
-                        {'Assign to increase limit'}
+                        {'Assign to continue play'}
                     </div>
-                    {assignmentSlot}
+                    {nextSlot}
                 </div>
             </div>
             <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
                 <div className="fill-gold size-2 -translate-y-0.5">
                     <Hourglass />
                 </div>
-                <div className="text-foreground w-35 text-xs">
-                    {'- Agent will return to Court'}
+                <div className="text-foreground w-21 text-xs">
+                    {'- The game will '}
+                </div>
+                <div
+                    className={
+                        'text-xs ' + (isValid ? 'text-green' : 'text-red')
+                    }
+                >
+                    {isValid ? 'continue' : 'END'}
                 </div>
             </div>
         </div>
