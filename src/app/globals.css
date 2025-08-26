@@ -15,6 +15,12 @@
     --animate-dieroll: dieroll 1s;
     --animate-numberblur: numberblur 1s;
     --animate-numberbackdropfadein: numberbackdropfadein 1s;
+    --animate-slidefromright: slideFromRight 1s;
+    --animate-slidefromleft: slideFromLeft 1s;
+    --animate-slidefromtop: slideFromTop 1s;
+    --animate-slidefrombottom: slideFromBottom 1s;
+    --animate-fadein: fadeIn 5s;
+    --animate-fadeout: fadeOut 1s;
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-gold: var(--color-amber-400);
@@ -24,6 +30,60 @@
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
     --font-empress: 'RoyalImperial';
+
+    @keyframes fadeIn {
+        from {
+            filter: opacity(0%);
+        }
+        to {
+            filter: opacity(100%);
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            filter: opacity(100%);
+        }
+        to {
+            filter: opacity(0%);
+        }
+    }
+
+    @keyframes slideFromLeft {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(0%);
+        }
+    }
+
+    @keyframes slideFromRight {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0%);
+        }
+    }
+
+    @keyframes slideFromTop {
+        from {
+            transform: translateY(-100%);
+        }
+        to {
+            transform: translateY(0%);
+        }
+    }
+
+    @keyframes slideFromBottom {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0%);
+        }
+    }
 
     @keyframes numberblur {
         0% {

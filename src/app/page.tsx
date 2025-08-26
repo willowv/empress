@@ -10,7 +10,7 @@ export default function Home() {
 
     if (isStoryVisible)
         return (
-            <div className="relative h-screen select-none">
+            <div className="not-motion-reduce:animate-slidefrombottom relative h-screen select-none">
                 <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-100">
                     <Fool />
                 </div>
@@ -40,7 +40,7 @@ export default function Home() {
         )
     else
         return (
-            <div className="relative h-screen select-none">
+            <div className="not-motion-reduce:animate-slidefromtop relative h-screen select-none">
                 <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                     <Empress />
                 </div>
