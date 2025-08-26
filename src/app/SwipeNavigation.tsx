@@ -1,7 +1,7 @@
 'use client'
 
 import Swipeable from '@/ui/Swipeable'
-import { usePathname, useRouter } from 'next/navigation'
+import { notFound, usePathname, useRouter } from 'next/navigation'
 import { pages, nextPage, prevPage } from './util'
 import DoubleArrow from '@/svg/DoubleArrow'
 import Link from 'next/link'
@@ -20,7 +20,7 @@ function getPageName(href: string) {
 export default function SwipeNavigation() {
     const router = useRouter()
     const currentPage = usePathname()
-    if (!pages.includes(currentPage)) throw new Error('Page out of bounds')
+    if (!pages.includes(currentPage)) notFound()
 
     const nextPageHref = nextPage(currentPage)
     const prevPageHref = prevPage(currentPage)
