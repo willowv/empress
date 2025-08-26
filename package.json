@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.17.20",
+    "@vercel/analytics": "^1.5.0",
     "clsx": "^2.1.1",
     "lodash": "^4.17.21",
     "next": "15.4.6",
