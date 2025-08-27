@@ -7,6 +7,8 @@ import Bribe from './locations/Bribe'
 import Delay from './locations/Delay'
 import Influence from './locations/Influence'
 import Footer from './Footer'
+import Chariot from '@/svg/tarot/Chariot'
+import Button from '@/ui/Button'
 
 interface GameProps {
     readonly date: Date
@@ -38,6 +40,47 @@ export default function Game({ date }: GameProps) {
     const curState = EG.getCurrentState(curSession)
     const isFirstTurn = curSession.turnHistory.length == 0
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
+
+    if (isGameOver) {
+        //TODO: Hook up score submission
+        const finalScore = EG.getScore(curState)
+        const numTurns = curSession.turnHistory.length
+        return (
+            <div className="not-motion-reduce:animate-slidefrombottom relative h-screen select-none">
+                <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <Chariot />
+                </div>
+                <div className="absolute top-1/2 left-1/2 w-100 -translate-x-1/2 -translate-y-1/2">
+                    <div className="flex flex-col gap-2">
+                        <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                            {date.toDateString()}
+                        </div>
+                        <div className="text-foreground m-2 rounded-lg p-2 text-center text-lg backdrop-blur-xl">
+                            {'GAME OVER'}
+                        </div>
+                        <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                            {`${finalScore} in ${numTurns} turns`}
+                        </div>
+                        <div className="flex flex-row justify-between gap-2">
+                            <Button
+                                isDisabled={false}
+                                handleButtonPress={handlePlayAgain}
+                            >
+                                {'Play Again'}
+                            </Button>
+                            <Button
+                                isDisabled={false}
+                                handleButtonPress={() => {}}
+                            >
+                                {'Submit Score'}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     const plannedState = EG.applyTurn(curState, plannedTurn)
     const isPlannedTurnValid = EG.isTurnValid(curState, plannedTurn)
     let isPlannedTurnGameEnd = false
@@ -149,10 +192,7 @@ export default function Game({ date }: GameProps) {
                         handleLocationClick={handleLocationClick}
                     />
                     <Footer
-                        isGameOver={isGameOver}
                         isPlannedTurnValid={isPlannedTurnValid}
-                        isPlannedTurnGameEnd={isPlannedTurnGameEnd}
-                        handlePlayAgain={handlePlayAgain}
                         handleResetTurn={handleResetTurn}
                         handleEndTurn={handleEndTurn}
                     />
