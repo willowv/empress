@@ -12,8 +12,13 @@ export default async function Scores() {
 
     if (count == 0)
         return (
-            <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                {'There are no scores recorded yet for today!'}
+            <div className="flex flex-col gap-2">
+                <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                    {date.toDateString()}
+                </div>
+                <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                    {'There are no scores recorded yet for today!'}
+                </div>
             </div>
         )
 
@@ -23,6 +28,9 @@ export default async function Scores() {
         const scores = await Data.getTopNScoresByDate(date, 5)
         return (
             <div className="flex flex-col gap-2">
+                <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                    {date.toDateString()}
+                </div>
                 {scores.map((score, index) => {
                     return (
                         <div
@@ -41,6 +49,9 @@ export default async function Scores() {
     const bucketIncrement = (max - min) / 5
     return (
         <div className="flex flex-col gap-2">
+            <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                {date.toDateString()}
+            </div>
             {buckets.map((bucket, index) => {
                 const bucketMin = Math.floor(min + bucketIncrement * index)
                 const bucketMax = Math.floor(
