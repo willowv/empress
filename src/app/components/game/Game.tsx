@@ -1,23 +1,15 @@
 'use client'
 
 import * as EG from '@/logic/empress'
-import {
-    createContext,
-    startTransition,
-    useActionState,
-    useLayoutEffect,
-    useState
-} from 'react'
+import { createContext, useLayoutEffect, useState } from 'react'
 import Court from './locations/Court'
 import Bribe from './locations/Bribe'
 import Delay from './locations/Delay'
 import Influence from './locations/Influence'
-import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
 import { dateOnlyString } from 'app/util'
-import { SubmissionState, submitScore } from 'app/scores/actions'
 import Hourglass from '@/svg/Hourglass'
-import SwipeNavigation from '@/ui/SwipeNavigation'
+import EndScreen from './EndScreen'
 
 interface GameProps {
     readonly date: Date
@@ -40,11 +32,6 @@ export default function Game({ date }: GameProps) {
         undefined
     )
     const [lastEndTurnAt, setLastEndTurnAt] = useState<Date>(new Date(0))
-    const [submissionState, submitAction, isSubmissionPending] =
-        useActionState<SubmissionState>(
-            (previousState) => submitScore(previousState, curSession, date),
-            'initial'
-        )
 
     useLayoutEffect(() => {
         // For updating animation context
@@ -55,59 +42,17 @@ export default function Game({ date }: GameProps) {
     const isFirstTurn = curSession.turnHistory.length == 0
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
 
-    const mpSubmissionState_Content = {
-        initial: 'Submit Score',
-        success: 'Success!',
-        failure: 'Submission Failed'
+    function handlePlayAgain() {
+        setSession({ seed: dateOnlyString(date), turnHistory: [] })
     }
 
     if (isGameOver) {
-        const finalScore = EG.getScore(curState)
-        const numTurns = curSession.turnHistory.length
         return (
-            <div className="not-motion-reduce:animate-slidefrombottom relative h-screen select-none">
-                <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <SwipeNavigation>
-                        <Chariot />
-                    </SwipeNavigation>
-                </div>
-                <div className="absolute top-1/2 left-1/2 w-100 -translate-x-1/2 -translate-y-1/2">
-                    <div className="flex flex-col gap-2">
-                        <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                            {dateOnlyString(date)}
-                        </div>
-                        <div className="text-foreground m-2 rounded-lg p-2 text-center text-lg backdrop-blur-xl">
-                            {'GAME OVER'}
-                        </div>
-                        <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                            {`${finalScore} in ${numTurns} turns`}
-                        </div>
-                        <div className="flex flex-row justify-between gap-2">
-                            <Button
-                                isDisabled={false}
-                                handleButtonPress={handlePlayAgain}
-                            >
-                                {'Play Again'}
-                            </Button>
-                            <Button
-                                isDisabled={
-                                    submissionState !== 'initial' ||
-                                    finalScore == 0
-                                }
-                                handleButtonPress={() =>
-                                    startTransition(submitAction)
-                                }
-                            >
-                                {isSubmissionPending ? (
-                                    <Hourglass className="fill-gold size-3 not-motion-reduce:animate-spin" />
-                                ) : (
-                                    mpSubmissionState_Content[submissionState]
-                                )}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <EndScreen
+                session={curSession}
+                date={date}
+                handlePlayAgain={handlePlayAgain}
+            />
         )
     }
 
@@ -146,10 +91,6 @@ export default function Game({ date }: GameProps) {
         }
     }
 
-    function handlePlayAgain() {
-        setSession({ seed: dateOnlyString(date), turnHistory: [] })
-    }
-
     function handleEndTurn() {
         setSession(EG.appendTurn(curSession, plannedTurn))
         setPlannedTurn(EG.getEmptyTurn)
@@ -167,11 +108,9 @@ export default function Game({ date }: GameProps) {
         (agent) =>
             agent.location == 'Delay' && !lockedAgentIds.includes(agent.id)
     )
-
     const bribeAgent = plannedState.agents.find(
         (agent) => agent.location == 'Bribe'
     )
-
     const courtAgents = plannedState.agents.filter(
         (agent) => agent.location === 'Court'
     )
