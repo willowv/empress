@@ -4,7 +4,7 @@ import Empress from '@/svg/tarot/Empress'
 import Button from '@/ui/Button'
 import SwipeNavigation from '@/ui/SwipeNavigation'
 import { useState } from 'react'
-import StoryScreen from './StoryScreen'
+import StoryScreen from '@/screens/StoryScreen'
 
 export default function Home() {
     const [isStoryVisible, setIsStoryVisible] = useState<boolean>(false)

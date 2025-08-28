@@ -2,12 +2,12 @@
 
 import * as EG from '@/logic/empress'
 import { createContext, useLayoutEffect, useState } from 'react'
-import Court from './locations/Court'
-import Bribe from './locations/Bribe'
-import Delay from './locations/Delay'
-import Influence from './locations/Influence'
+import Court from '@/game/locations/Court'
+import Bribe from '@/game/locations/Bribe'
+import Delay from '@/game/locations/Delay'
+import Influence from '@/game/locations/Influence'
 import Button from '@/ui/Button'
-import { dateOnlyString } from 'app/util'
+import { dateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
 
@@ -23,7 +23,7 @@ export const AnimationContext = createContext<AnimationContextProps>({
     lastEndTurnAt: new Date(0)
 })
 
-export default function Game({ date }: GameProps) {
+export default function GameScreen({ date }: GameProps) {
     const [curSession, setSession] = useState<EG.Session>(() => {
         return { seed: dateOnlyString(date), turnHistory: [] }
     })

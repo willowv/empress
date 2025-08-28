@@ -2,7 +2,7 @@
 
 import Swipeable from '@/ui/Swipeable'
 import { notFound, usePathname, useRouter } from 'next/navigation'
-import { pages, nextPage, prevPage } from 'app/util'
+import { pages, nextPage, prevPage } from 'lib/util'
 import React, { ReactNode } from 'react'
 
 interface SwipeNavigationProps {

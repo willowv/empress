@@ -1,5 +1,5 @@
-import { dateOnlyString, getTodayWithoutTime } from 'app/util'
-import * as Data from './data'
+import { dateOnlyString, getTodayWithoutTime } from 'lib/util'
+import * as Data from 'lib/data'
 
 export default async function Scores() {
     // Different display based on number of scores for this day

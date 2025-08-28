@@ -2,10 +2,10 @@ import Hourglass from '@/svg/Hourglass'
 import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
 import SwipeNavigation from '@/ui/SwipeNavigation'
-import { dateOnlyString } from 'app/util'
+import { dateOnlyString } from 'lib/util'
 import { startTransition, useActionState } from 'react'
 import { getCurrentState, getScore, Session } from '@/logic/empress'
-import { SubmissionState, submitScore } from 'app/scores/actions'
+import { SubmissionState, submitScore } from 'lib/actions'
 
 const mpSubmissionState_Content = {
     initial: 'Submit Score',

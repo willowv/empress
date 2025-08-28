@@ -3,7 +3,7 @@
 import { notFound, usePathname } from 'next/navigation'
 import DoubleArrow from '@/svg/DoubleArrow'
 import Link from 'next/link'
-import { getPageName, pages, prevPage } from 'app/util'
+import { getPageName, pages, prevPage } from 'lib/util'
 
 export default function LeftLink() {
     const currentPage = usePathname()

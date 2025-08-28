@@ -1,7 +1,7 @@
 'use server'
 
 import * as EG from '@/logic/empress'
-import { dateOnlyString } from 'app/util'
+import { dateOnlyString } from 'lib/util'
 import postgres from 'postgres'
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' })
