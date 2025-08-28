@@ -18,6 +18,7 @@ import Button from '@/ui/Button'
 import { dateOnlyString } from 'app/util'
 import { SubmissionState, submitScore } from 'app/scores/actions'
 import Hourglass from '@/svg/Hourglass'
+import SwipeNavigation from '@/ui/SwipeNavigation'
 
 interface GameProps {
     readonly date: Date
@@ -78,7 +79,9 @@ export default function Game({ date }: GameProps) {
         return (
             <div className="not-motion-reduce:animate-slidefrombottom relative h-screen select-none">
                 <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <Chariot />
+                    <SwipeNavigation>
+                        <Chariot />
+                    </SwipeNavigation>
                 </div>
                 <div className="absolute top-1/2 left-1/2 w-100 -translate-x-1/2 -translate-y-1/2">
                     <div className="flex flex-col gap-2">

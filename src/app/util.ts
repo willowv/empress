@@ -20,3 +20,14 @@ export function prevPage(page: string): string {
     const prevIndex = pages.indexOf(page) - 1
     return pages[prevIndex < 0 ? pages.length - 1 : prevIndex]
 }
+
+export function getPageName(href: string) {
+    switch (href) {
+        case '/':
+            return 'Main'
+        case '/play':
+            return 'Play'
+        case '/scores':
+            return 'Scores'
+    }
+}
