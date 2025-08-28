@@ -9,7 +9,6 @@ export default async function Scores() {
     // Get count of scores for this date
     const date = getTodayWithoutTime()
     const [count, min, max] = await Data.getScoreStatsByDate(date)
-    // TODO: Scores animation
     if (count == 0)
         return (
             <div className="flex flex-col gap-2">
