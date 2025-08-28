@@ -31,13 +31,16 @@ export default async function Scores() {
                 <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                     {dateOnlyString(date)}
                 </div>
+                <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                    {'Top 5 Scores'}
+                </div>
                 {scores.map((score, index) => {
                     return (
                         <div
                             key={index}
                             className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl"
                         >
-                            {`${score.score} in ${score.numturns} turns`}
+                            {`#${index + 1} | ${score.score} in ${score.numturns} turns`}
                         </div>
                     )
                 })}
@@ -51,6 +54,9 @@ export default async function Scores() {
         <div className="flex flex-col gap-2">
             <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                 {dateOnlyString(date)}
+            </div>
+            <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                {"Today's Scores"}
             </div>
             {buckets.map((bucket, index) => {
                 const bucketMin = Math.floor(min + bucketIncrement * index)
