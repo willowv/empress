@@ -1,7 +1,7 @@
 'use client'
 
 import Swipeable from '@/ui/Swipeable'
-import { notFound, usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { pages, nextPage, prevPage } from 'lib/util'
 import React, { ReactNode } from 'react'
 
@@ -11,8 +11,8 @@ interface SwipeNavigationProps {
 
 export default function SwipeNavigation({ children }: SwipeNavigationProps) {
     const router = useRouter()
-    const currentPage = usePathname()
-    if (!pages.includes(currentPage)) notFound()
+    let currentPage = usePathname()
+    if (!pages.includes(currentPage)) currentPage = '/'
 
     const nextPageHref = nextPage(currentPage)
     const prevPageHref = prevPage(currentPage)
