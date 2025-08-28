@@ -14,6 +14,10 @@ export default async function Page({
     const parsedDate = new Date(date)
     if (parsedDate > getTodayWithoutTime()) notFound()
 
+    const oneYearAgo = getTodayWithoutTime()
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+    if (parsedDate < oneYearAgo) notFound()
+
     return (
         <div className="not-motion-reduce:animate-slidefrombottom">
             <GameScreen date={parsedDate} />
