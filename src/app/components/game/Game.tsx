@@ -55,24 +55,13 @@ export default function Game({ date }: GameProps) {
     const isFirstTurn = curSession.turnHistory.length == 0
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
 
+    const mpSubmissionState_Content = {
+        initial: 'Submit Score',
+        success: 'Success!',
+        failure: 'Submission Failed'
+    }
+
     if (isGameOver) {
-        let submitButtonContent
-        if (isSubmissionPending)
-            submitButtonContent = (
-                <Hourglass className="fill-gold size-3 not-motion-reduce:animate-spin" />
-            )
-        else {
-            switch (submissionState) {
-                case 'initial':
-                    submitButtonContent = 'Submit Score'
-                    break
-                case 'success':
-                    submitButtonContent = 'Success!'
-                    break
-                case 'failure':
-                    submitButtonContent = 'Submission Failed'
-            }
-        }
         const finalScore = EG.getScore(curState)
         const numTurns = curSession.turnHistory.length
         return (
@@ -109,7 +98,11 @@ export default function Game({ date }: GameProps) {
                                     startTransition(submitAction)
                                 }
                             >
-                                {submitButtonContent}
+                                {isSubmissionPending ? (
+                                    <Hourglass className="fill-gold size-3 not-motion-reduce:animate-spin" />
+                                ) : (
+                                    mpSubmissionState_Content[submissionState]
+                                )}
                             </Button>
                         </div>
                     </div>
