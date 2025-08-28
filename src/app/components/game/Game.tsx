@@ -99,7 +99,10 @@ export default function Game({ date }: GameProps) {
                                 {'Play Again'}
                             </Button>
                             <Button
-                                isDisabled={submissionState !== 'initial'}
+                                isDisabled={
+                                    submissionState !== 'initial' ||
+                                    finalScore == 0
+                                }
                                 handleButtonPress={() =>
                                     startTransition(submitAction)
                                 }
