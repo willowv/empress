@@ -1,3 +1,4 @@
+import { dateOnlyString } from 'app/util'
 import postgres from 'postgres'
 
 interface Score {
@@ -26,7 +27,7 @@ export async function getTopNScoresByDate(date: Date, n: number) {
     return await sql<Score[]>`
   SELECT *
   FROM scores
-  WHERE date = ${date.toISOString()}
+  WHERE date = ${dateOnlyString(date)}
   ORDER BY score DESC, numturns ASC
   LIMIT ${n}`
 }
@@ -36,7 +37,7 @@ export async function getScoreStatsByDate(date: Date) {
     WITH today_scores AS (
     SELECT score
     FROM scores
-    WHERE date = ${date.toISOString()}
+    WHERE date = ${dateOnlyString(date)}
 )
   SELECT COUNT(score), MIN(score), MAX(score)
   FROM today_scores`
@@ -53,7 +54,7 @@ export async function getScoreBucketsByDate(
   WITH buckets_cte AS (
     SELECT WIDTH_BUCKET(score, ${min}, ${max}, ${numBuckets}) AS bucket_number
     FROM scores
-    WHERE date = ${date.toISOString()}
+    WHERE date = ${dateOnlyString(date)}
 )
 SELECT
     bucket_number,

@@ -1,4 +1,4 @@
-import { getTodayWithoutTime } from 'app/util'
+import { dateOnlyString, getTodayWithoutTime } from 'app/util'
 import * as Data from './data'
 
 export default async function Scores() {
@@ -9,12 +9,12 @@ export default async function Scores() {
     // Get count of scores for this date
     const date = getTodayWithoutTime()
     const [count, min, max] = await Data.getScoreStatsByDate(date)
-
+    // TODO: Scores animation
     if (count == 0)
         return (
             <div className="flex flex-col gap-2">
                 <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                    {date.toDateString()}
+                    {dateOnlyString(date)}
                 </div>
                 <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                     {'There are no scores recorded yet for today!'}
@@ -29,7 +29,7 @@ export default async function Scores() {
         return (
             <div className="flex flex-col gap-2">
                 <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                    {date.toDateString()}
+                    {dateOnlyString(date)}
                 </div>
                 {scores.map((score, index) => {
                     return (
@@ -50,7 +50,7 @@ export default async function Scores() {
     return (
         <div className="flex flex-col gap-2">
             <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                {date.toDateString()}
+                {dateOnlyString(date)}
             </div>
             {buckets.map((bucket, index) => {
                 const bucketMin = Math.floor(min + bucketIncrement * index)

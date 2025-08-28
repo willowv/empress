@@ -6,6 +6,10 @@ export function getTodayWithoutTime(): Date {
     return new Date(year, month, day)
 }
 
+export function dateOnlyString(date: Date) {
+    return date.toISOString().split('T')[0]
+}
+
 export const pages: string[] = ['/', '/play', '/scores']
 
 export function nextPage(page: string): string {

@@ -1,7 +1,13 @@
 'use client'
 
 import * as EG from '@/logic/empress'
-import { createContext, useLayoutEffect, useState } from 'react'
+import {
+    createContext,
+    startTransition,
+    useActionState,
+    useLayoutEffect,
+    useState
+} from 'react'
 import Court from './locations/Court'
 import Bribe from './locations/Bribe'
 import Delay from './locations/Delay'
@@ -9,6 +15,9 @@ import Influence from './locations/Influence'
 import Footer from './Footer'
 import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
+import { dateOnlyString } from 'app/util'
+import { SubmissionState, submitScore } from 'app/scores/actions'
+import Hourglass from '@/svg/Hourglass'
 
 interface GameProps {
     readonly date: Date
@@ -24,13 +33,18 @@ export const AnimationContext = createContext<AnimationContextProps>({
 
 export default function Game({ date }: GameProps) {
     const [curSession, setSession] = useState<EG.Session>(() => {
-        return { seed: date.toUTCString(), turnHistory: [] }
+        return { seed: dateOnlyString(date), turnHistory: [] }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
     const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
         undefined
     )
     const [lastEndTurnAt, setLastEndTurnAt] = useState<Date>(new Date(0))
+    const [submissionState, submitAction, isSubmissionPending] =
+        useActionState<SubmissionState>(
+            (previousState) => submitScore(previousState, curSession, date),
+            'initial'
+        )
 
     useLayoutEffect(() => {
         // For updating animation context
@@ -42,7 +56,23 @@ export default function Game({ date }: GameProps) {
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
 
     if (isGameOver) {
-        //TODO: Hook up score submission
+        let submitButtonContent
+        if (isSubmissionPending)
+            submitButtonContent = (
+                <Hourglass className="fill-gold size-3 not-motion-reduce:animate-spin" />
+            )
+        else {
+            switch (submissionState) {
+                case 'initial':
+                    submitButtonContent = 'Submit Score'
+                    break
+                case 'success':
+                    submitButtonContent = 'Success!'
+                    break
+                case 'failure':
+                    submitButtonContent = 'Submission Failed'
+            }
+        }
         const finalScore = EG.getScore(curState)
         const numTurns = curSession.turnHistory.length
         return (
@@ -53,7 +83,7 @@ export default function Game({ date }: GameProps) {
                 <div className="absolute top-1/2 left-1/2 w-100 -translate-x-1/2 -translate-y-1/2">
                     <div className="flex flex-col gap-2">
                         <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                            {date.toDateString()}
+                            {dateOnlyString(date)}
                         </div>
                         <div className="text-foreground m-2 rounded-lg p-2 text-center text-lg backdrop-blur-xl">
                             {'GAME OVER'}
@@ -69,10 +99,12 @@ export default function Game({ date }: GameProps) {
                                 {'Play Again'}
                             </Button>
                             <Button
-                                isDisabled={false}
-                                handleButtonPress={() => {}}
+                                isDisabled={submissionState !== 'initial'}
+                                handleButtonPress={() =>
+                                    startTransition(submitAction)
+                                }
                             >
-                                {'Submit Score'}
+                                {submitButtonContent}
                             </Button>
                         </div>
                     </div>
@@ -83,13 +115,7 @@ export default function Game({ date }: GameProps) {
 
     const plannedState = EG.applyTurn(curState, plannedTurn)
     const isPlannedTurnValid = EG.isTurnValid(curState, plannedTurn)
-    let isPlannedTurnGameEnd = false
-    if (isPlannedTurnValid) {
-        const nextTurnState = EG.getCurrentState(
-            EG.appendTurn(curSession, plannedTurn)
-        )
-        isPlannedTurnGameEnd = EG.hasGameEnded(false, nextTurnState)
-    }
+
     // Which agents are locked?
     // Agents previously assigned to non-Court locations
     const lockedAgentIds = curState.agents
@@ -123,7 +149,7 @@ export default function Game({ date }: GameProps) {
     }
 
     function handlePlayAgain() {
-        setSession({ seed: date.toUTCString(), turnHistory: [] })
+        setSession({ seed: dateOnlyString(date), turnHistory: [] })
     }
 
     function handleEndTurn() {
