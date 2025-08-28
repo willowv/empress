@@ -1,29 +1,33 @@
 'use client'
 
+import Empress from '@/svg/tarot/Empress'
+import Button from '@/ui/Button'
+import SwipeNavigation from '@/ui/SwipeNavigation'
 import { useState } from 'react'
-import Game from './components/Game'
-import Intro from './components/Intro'
-
-type State = 'Intro' | 'Game' | 'Scores'
-
-function getTodayWithoutTime(): Date {
-    const todayWithTime: Date = new Date()
-    const day: number = todayWithTime.getUTCDate()
-    const month: number = todayWithTime.getUTCMonth()
-    const year: number = todayWithTime.getUTCFullYear()
-    return new Date(year, month, day)
-}
+import StoryScreen from './StoryScreen'
 
 export default function Home() {
-    const [state, setState] = useState<State>('Intro')
-    const [selectedDate] = useState<Date>(getTodayWithoutTime)
+    const [isStoryVisible, setIsStoryVisible] = useState<boolean>(false)
 
-    switch (state) {
-        case 'Intro':
-            return <Intro handleEndOfIntro={() => setState('Game')} />
-        case 'Game':
-            return <Game date={selectedDate} />
-        case 'Scores':
-            return <></>
-    }
+    if (isStoryVisible)
+        return <StoryScreen handleBackButton={() => setIsStoryVisible(false)} />
+    else
+        return (
+            <div className="not-motion-reduce:animate-slidefromtop relative h-screen select-none">
+                <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <SwipeNavigation>
+                        <Empress />
+                    </SwipeNavigation>
+                </div>
+                <div className="absolute top-2/5 left-1/2 h-10 w-65 -translate-x-1/2 -translate-y-1/2 rounded-xl backdrop-blur-md" />
+                <div className="text-foreground font-empress absolute top-2/5 left-1/2 w-65 -translate-x-1/2 -translate-y-1/2 text-5xl">
+                    {'The Empress Returns'}
+                </div>
+                <div className="bg-background absolute bottom-5 left-1/2 -translate-x-1/2 rounded-xl">
+                    <Button handleButtonPress={() => setIsStoryVisible(true)}>
+                        <div className="m-1 text-center text-xs">Story</div>
+                    </Button>
+                </div>
+            </div>
+        )
 }

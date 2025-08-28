@@ -1,9 +1,10 @@
-import * as EG from '@/game/empress'
+import * as EG from '@/logic/empress'
 import 'tailwindcss'
-import Die from '../svg/Die'
-import Lock from '../svg/Lock'
-import { AnimationContext } from '../Game'
+import Die from '@/svg/Die'
+import Lock from '@/svg/Lock'
+import { AnimationContext } from '@/game/Game'
 import { useContext } from 'react'
+import clsx from 'clsx'
 
 type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
 
@@ -42,15 +43,18 @@ export default function Agent({
         agent.location === 'Court' && timeSinceLastEndTurn < 1500 // milliseconds
 
     const animDelay = 100 * (animRollOrder ?? 0) // milliseconds
-    // TODO: animate backdrop blur opacity
     return (
         <div
             key={agent.id}
-            className={
+            className={clsx(
                 'relative size-12 transition-all select-none' +
-                mapState_agentCss[state] +
-                (shouldDoRollAnimation ? ' animate-diebounce' : ' animate-none')
-            }
+                    mapState_agentCss[state],
+                {
+                    'not-motion-reduce:animate-diebounce':
+                        shouldDoRollAnimation,
+                    'animate-none': !shouldDoRollAnimation
+                }
+            )}
             style={{
                 animationDuration: '1s',
                 animationDelay: `${animDelay}ms`
@@ -60,12 +64,10 @@ export default function Agent({
             }}
         >
             <div
-                className={
-                    mapState_dieColorCss[state] +
-                    (shouldDoRollAnimation
-                        ? ' animate-dieroll'
-                        : ' animate-none')
-                }
+                className={clsx(mapState_dieColorCss[state], {
+                    'not-motion-reduce:animate-dieroll': shouldDoRollAnimation,
+                    'animate-none': !shouldDoRollAnimation
+                })}
                 style={{
                     animationDuration: '1s',
                     animationDelay: `${animDelay}ms`
@@ -73,14 +75,24 @@ export default function Agent({
             >
                 <Die dieSize={agent.maxValue} />
             </div>
-            <div className="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-4xl backdrop-blur-xs">
-                <div
-                    className={
-                        'text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold' +
-                        (shouldDoRollAnimation
-                            ? ' animate-numberblur'
-                            : ' animate-none')
+            <div
+                className={clsx(
+                    'absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-4xl backdrop-blur-xs',
+                    {
+                        'animate-numberbackdropfadein': shouldDoRollAnimation,
+                        'animate-none': !shouldDoRollAnimation
                     }
+                )}
+                style={{ animationDuration: 1000 + animDelay + 'ms' }}
+            >
+                <div
+                    className={clsx(
+                        'text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold' +
+                            {
+                                'animate-numberblur': shouldDoRollAnimation,
+                                'animate-none': !shouldDoRollAnimation
+                            }
+                    )}
                     style={{
                         animationDuration: 1000 + animDelay + 'ms'
                     }}

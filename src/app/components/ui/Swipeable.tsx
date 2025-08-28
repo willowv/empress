@@ -1,6 +1,14 @@
 'use client'
 
-import React, { useState, ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
+
+interface SwipeableProps {
+    children: ReactNode
+    onSwipeLeft?: () => void
+    onSwipeRight?: () => void
+    onSwipeUp?: () => void
+    onSwipeDown?: () => void
+}
 
 // https://stackoverflow.com/questions/70612769/how-do-i-recognize-swipe-events-in-react
 export default function Swipeable(props: SwipeableProps) {
@@ -77,12 +85,4 @@ export default function Swipeable(props: SwipeableProps) {
             {props.children}
         </div>
     )
-}
-
-export interface SwipeableProps {
-    children: ReactNode
-    onSwipeLeft?: () => void
-    onSwipeRight?: () => void
-    onSwipeUp?: () => void
-    onSwipeDown?: () => void
 }

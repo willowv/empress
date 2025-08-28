@@ -1,12 +1,15 @@
 'use client'
 
-import * as EG from '@/game/empress'
+import * as EG from '@/logic/empress'
 import { createContext, useLayoutEffect, useState } from 'react'
 import Court from './locations/Court'
 import Bribe from './locations/Bribe'
 import Delay from './locations/Delay'
 import Influence from './locations/Influence'
-import Footer from './Footer'
+import Button from '@/ui/Button'
+import { dateOnlyString } from 'app/util'
+import Hourglass from '@/svg/Hourglass'
+import EndScreen from './EndScreen'
 
 interface GameProps {
     readonly date: Date
@@ -22,7 +25,7 @@ export const AnimationContext = createContext<AnimationContextProps>({
 
 export default function Game({ date }: GameProps) {
     const [curSession, setSession] = useState<EG.Session>(() => {
-        return { seed: date.toUTCString(), turnHistory: [] }
+        return { seed: dateOnlyString(date), turnHistory: [] }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
     const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
@@ -38,15 +41,24 @@ export default function Game({ date }: GameProps) {
     const curState = EG.getCurrentState(curSession)
     const isFirstTurn = curSession.turnHistory.length == 0
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
+
+    function handlePlayAgain() {
+        setSession({ seed: dateOnlyString(date), turnHistory: [] })
+    }
+
+    if (isGameOver) {
+        return (
+            <EndScreen
+                session={curSession}
+                date={date}
+                handlePlayAgain={handlePlayAgain}
+            />
+        )
+    }
+
     const plannedState = EG.applyTurn(curState, plannedTurn)
     const isPlannedTurnValid = EG.isTurnValid(curState, plannedTurn)
-    let isPlannedTurnGameEnd = false
-    if (isPlannedTurnValid) {
-        const nextTurnState = EG.getCurrentState(
-            EG.appendTurn(curSession, plannedTurn)
-        )
-        isPlannedTurnGameEnd = EG.hasGameEnded(false, nextTurnState)
-    }
+
     // Which agents are locked?
     // Agents previously assigned to non-Court locations
     const lockedAgentIds = curState.agents
@@ -79,10 +91,6 @@ export default function Game({ date }: GameProps) {
         }
     }
 
-    function handlePlayAgain() {
-        setSession({ seed: date.toUTCString(), turnHistory: [] })
-    }
-
     function handleEndTurn() {
         setSession(EG.appendTurn(curSession, plannedTurn))
         setPlannedTurn(EG.getEmptyTurn)
@@ -100,11 +108,9 @@ export default function Game({ date }: GameProps) {
         (agent) =>
             agent.location == 'Delay' && !lockedAgentIds.includes(agent.id)
     )
-
     const bribeAgent = plannedState.agents.find(
         (agent) => agent.location == 'Bribe'
     )
-
     const courtAgents = plannedState.agents.filter(
         (agent) => agent.location === 'Court'
     )
@@ -148,14 +154,26 @@ export default function Game({ date }: GameProps) {
                         handleAgentClick={handleAgentClick}
                         handleLocationClick={handleLocationClick}
                     />
-                    <Footer
-                        isGameOver={isGameOver}
-                        isPlannedTurnValid={isPlannedTurnValid}
-                        isPlannedTurnGameEnd={isPlannedTurnGameEnd}
-                        handlePlayAgain={handlePlayAgain}
-                        handleResetTurn={handleResetTurn}
-                        handleEndTurn={handleEndTurn}
-                    />
+                    <div className="flex basis-[100%] flex-row justify-between gap-2 sm:min-w-54 sm:basis-[10%]">
+                        <Button
+                            handleButtonPress={handleResetTurn}
+                            isDisabled={false}
+                        >
+                            {'Reset Turn'}
+                        </Button>
+                        <Button
+                            isDisabled={!isPlannedTurnValid}
+                            handleButtonPress={handleEndTurn}
+                        >
+                            <div className="flex flex-row items-center gap-1">
+                                <div>{'End Turn ('}</div>
+                                <div className="fill-gold size-2 -translate-y-1">
+                                    <Hourglass />
+                                </div>
+                                <div>{')'}</div>
+                            </div>
+                        </Button>
+                    </div>
                 </div>
             </div>
         </AnimationContext>

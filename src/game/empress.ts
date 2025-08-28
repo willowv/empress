@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { hash_cyrb53, random_splitmix32, randomRoll } from '@/game/random'
+import { hash_cyrb53, random_splitmix32, randomRoll } from './random'
 
 export type Session = {
     seed: string
@@ -31,7 +31,6 @@ export function getInitialState(rand: () => number): State {
 }
 
 export function getCurrentState(session: Session): State {
-    // TODO: Add tests verifying that the results properly reproduce for the same seed
     const rand = random_splitmix32(hash_cyrb53(session.seed))
     let curState = getInitialState(rand)
     session.turnHistory.forEach((turn) => {

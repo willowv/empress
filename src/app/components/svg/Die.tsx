@@ -1,4 +1,4 @@
-import type { DieSize } from '@/game/empress'
+import type { DieSize } from '@/logic/empress'
 import * as React from 'react'
 import 'tailwindcss'
 

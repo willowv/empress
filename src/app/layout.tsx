@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import { Analytics } from '@vercel/analytics/next'
+import LeftLink from '@/ui/LeftLink'
+import RightLink from '@/ui/RightLink'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -27,7 +30,14 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <div>{children}</div>
+                <Analytics />
+                <div className="relative h-screen w-screen">
+                    <LeftLink />
+                    <RightLink />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        {children}
+                    </div>
+                </div>
             </body>
         </html>
     )

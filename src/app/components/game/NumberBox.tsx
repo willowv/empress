@@ -1,5 +1,5 @@
 import 'tailwindcss'
-import Person from '../svg/Person'
+import Person from '@/svg/Person'
 
 type NumberBoxState = 'default' | 'invalid' | 'accepted'
 
