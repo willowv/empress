@@ -25,7 +25,6 @@ export default function Swipeable(props: SwipeableProps) {
     const minSwipeDistance = 50
 
     function onTouchStart(e: React.TouchEvent<HTMLDivElement>) {
-        e.preventDefault()
         setTouchEndX(undefined)
         setTouchStartX(e.targetTouches[0].clientX)
 
@@ -34,13 +33,11 @@ export default function Swipeable(props: SwipeableProps) {
     }
 
     function onTouchMove(e: React.TouchEvent<HTMLDivElement>) {
-        e.preventDefault()
         setTouchEndX(e.targetTouches[0].clientX)
         setTouchEndY(e.targetTouches[0].clientY)
     }
 
-    function onTouchEnd(e: React.TouchEvent<HTMLDivElement>) {
-        e.preventDefault()
+    function onTouchEnd() {
         if (touchStartX && touchEndX) {
             const xDistance = touchStartX - touchEndX
             const yDistance = (touchStartY ?? 0) - (touchEndY ?? 0)
