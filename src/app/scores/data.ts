@@ -10,7 +10,6 @@ interface Score {
 }
 
 interface ScoreStats {
-    readonly id: number
     readonly count: number
     readonly min: number
     readonly max: number
