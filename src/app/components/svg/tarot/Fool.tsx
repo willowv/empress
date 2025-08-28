@@ -14,18 +14,9 @@ const Fool = (props: SVGProps<SVGSVGElement>) => (
             xmlSpace="preserve"
             x={349.006}
             y={538.731}
-            style={{
-                fontStyle: 'normal',
-                fontVariant: 'normal',
-                fontWeight: 700,
-                fontStretch: 'normal',
-                fontSize: 32,
-                fontFamily: '&quot',
-                textAlign: 'start',
-                direction: 'ltr',
-                textAnchor: 'start',
-                fill: '#000'
-            }}
+            fontFamily="'Andada Pro'"
+            fontSize={24}
+            fontWeight="bold"
             transform="translate(-154.188 -45.272)"
         >
             <tspan x={349.006} y={538.731}>
