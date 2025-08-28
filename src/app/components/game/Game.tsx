@@ -12,7 +12,6 @@ import Court from './locations/Court'
 import Bribe from './locations/Bribe'
 import Delay from './locations/Delay'
 import Influence from './locations/Influence'
-import Footer from './Footer'
 import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
 import { dateOnlyString } from 'app/util'
@@ -223,11 +222,26 @@ export default function Game({ date }: GameProps) {
                         handleAgentClick={handleAgentClick}
                         handleLocationClick={handleLocationClick}
                     />
-                    <Footer
-                        isPlannedTurnValid={isPlannedTurnValid}
-                        handleResetTurn={handleResetTurn}
-                        handleEndTurn={handleEndTurn}
-                    />
+                    <div className="flex basis-[100%] flex-row justify-between gap-2 sm:min-w-54 sm:basis-[10%]">
+                        <Button
+                            handleButtonPress={handleResetTurn}
+                            isDisabled={false}
+                        >
+                            {'Reset Turn'}
+                        </Button>
+                        <Button
+                            isDisabled={!isPlannedTurnValid}
+                            handleButtonPress={handleEndTurn}
+                        >
+                            <div className="flex flex-row items-center gap-1">
+                                <div>{'End Turn ('}</div>
+                                <div className="fill-gold size-2 -translate-y-1">
+                                    <Hourglass />
+                                </div>
+                                <div>{')'}</div>
+                            </div>
+                        </Button>
+                    </div>
                 </div>
             </div>
         </AnimationContext>
