@@ -19,7 +19,7 @@
     --animate-slidefromleft: slideFromLeft 1s;
     --animate-slidefromtop: slideFromTop 1s;
     --animate-slidefrombottom: slideFromBottom 1s;
-    --animate-fadein: fadeIn 5s;
+    --animate-fadein: fadeIn 1s;
     --animate-fadeout: fadeOut 1s;
     --color-background: var(--background);
     --color-foreground: var(--foreground);
