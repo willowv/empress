@@ -1,4 +1,4 @@
-import GameScreen from '@/screens/GameScreen'
+import GameScreen from './GameScreen'
 import { addYears, ensureValidDate, getTodayWithoutTime } from 'lib/util'
 import { notFound } from 'next/navigation'
 

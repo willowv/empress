@@ -2,7 +2,7 @@ import * as EG from '@/logic/empress'
 import 'tailwindcss'
 import Die from '@/svg/Die'
 import Lock from '@/svg/Lock'
-import { AnimationContext } from '@/screens/GameScreen'
+import { AnimationContext } from 'app/play/[date]/GameScreen'
 import { useContext } from 'react'
 import clsx from 'clsx'
 
