@@ -1,12 +1,8 @@
-'use client'
-
 import Empress from '@/svg/tarot/Empress'
-import Button from '@/ui/Button'
+import ButtonLink from '@/ui/ButtonLink'
 import SwipeNavigation from '@/ui/SwipeNavigation'
-import { useRouter } from 'next/navigation'
 
 export default function MainScreen() {
-    const router = useRouter()
     return (
         <div className="not-motion-reduce:animate-slidefromtop relative h-screen select-none">
             <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -19,9 +15,9 @@ export default function MainScreen() {
                 {'The Empress Returns'}
             </div>
             <div className="bg-background absolute bottom-5 left-1/2 -translate-x-1/2 rounded-xl">
-                <Button handleButtonPress={() => router.push('/story')}>
+                <ButtonLink href="/story">
                     <div className="m-1 text-center text-xs">Story</div>
-                </Button>
+                </ButtonLink>
             </div>
         </div>
     )

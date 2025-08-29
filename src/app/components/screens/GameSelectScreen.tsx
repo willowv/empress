@@ -1,19 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { addDays, addYears, getTodayWithoutTime } from 'lib/util'
+import {
+    addDays,
+    addYears,
+    dateOnlyString,
+    getTodayWithoutTime
+} from 'lib/util'
 import Chariot from '@/svg/tarot/Chariot'
-import Button from '@/ui/Button'
 import SwipeNavigation from '@/ui/SwipeNavigation'
 import DateSelector from '@/ui/DateSelector'
+import ButtonLink from '@/ui/ButtonLink'
 
-interface GameSelectScreenProps {
-    handlePlay: (selectedDate: Date) => void
-}
-
-export default function GameSelectScreen({
-    handlePlay
-}: GameSelectScreenProps) {
+export default function GameSelectScreen() {
     const [selectedDate, setSelectedDate] = useState<Date>(getTodayWithoutTime)
     const oneYearAgo = addYears(getTodayWithoutTime(), -1)
     return (
@@ -36,12 +35,9 @@ export default function GameSelectScreen({
                             setSelectedDate(addDays(selectedDate, 1))
                         }}
                     />
-                    <Button
-                        isDisabled={false}
-                        handleButtonPress={() => handlePlay(selectedDate)}
-                    >
+                    <ButtonLink href={`/play/${dateOnlyString(selectedDate)}`}>
                         {'Play'}
-                    </Button>
+                    </ButtonLink>
                 </div>
             </div>
         </div>

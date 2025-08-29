@@ -1,12 +1,8 @@
-'use client'
-
 import Fool from '@/svg/tarot/Fool'
-import Button from '@/ui/Button'
+import ButtonLink from '@/ui/ButtonLink'
 import SwipeNavigation from '@/ui/SwipeNavigation'
-import { useRouter } from 'next/navigation'
 
 export default function StoryScreen() {
-    const router = useRouter()
     return (
         <SwipeNavigation>
             <div className="not-motion-reduce:animate-slidefrombottom relative h-screen select-none">
@@ -14,9 +10,9 @@ export default function StoryScreen() {
                     <Fool />
                 </div>
                 <div className="bg-background absolute bottom-5 left-1/2 -translate-x-1/2 rounded-xl">
-                    <Button handleButtonPress={() => router.push('/')}>
+                    <ButtonLink href={'/'}>
                         <div className="m-1 text-center text-xs">Back</div>
-                    </Button>
+                    </ButtonLink>
                 </div>
                 <div className="absolute top-1/2 left-1/2 w-100 -translate-x-1/2 -translate-y-1/2">
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">

@@ -10,7 +10,6 @@ import Button from '@/ui/Button'
 import { dateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
-import { useRouter } from 'next/navigation'
 
 interface GameProps {
     readonly date: Date
@@ -33,7 +32,6 @@ export default function GameScreen({ date }: GameProps) {
         undefined
     )
     const [lastEndTurnAt, setLastEndTurnAt] = useState<Date>(new Date(0))
-    const router = useRouter()
 
     useLayoutEffect(() => {
         // For updating animation context
@@ -44,18 +42,8 @@ export default function GameScreen({ date }: GameProps) {
     const isFirstTurn = curSession.turnHistory.length == 0
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
 
-    function handlePlayAgain() {
-        router.push('/play')
-    }
-
     if (isGameOver) {
-        return (
-            <EndScreen
-                session={curSession}
-                date={date}
-                handlePlayAgain={handlePlayAgain}
-            />
-        )
+        return <EndScreen session={curSession} date={date} />
     }
 
     const plannedState = EG.applyTurn(curState, plannedTurn)
