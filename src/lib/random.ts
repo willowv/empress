@@ -31,6 +31,17 @@ export function random_splitmix32(seed: number): () => number {
     }
 }
 
+// Between 1 and Max
 export function randomRoll(maxValue: number, rand: () => number) {
     return Math.floor(rand() * maxValue) + 1
+}
+
+// Between Min and Max
+export function randomNum(
+    minValue: number,
+    maxValue: number,
+    rand: () => number
+) {
+    const diff = maxValue - minValue
+    return Math.round(rand() * diff) + minValue
 }
