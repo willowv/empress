@@ -28,14 +28,21 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} min-w-xs antialiased`}
             >
                 <Analytics />
-                <div className="relative h-screen w-screen">
-                    <LeftLink />
-                    <RightLink />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        {children}
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
+                    <div className="flex flex-row justify-between p-2 pb-1 sm:hidden">
+                        <LeftLink />
+                        <RightLink />
+                    </div>
+                    <div className="hidden sm:block">
+                        <LeftLink />
+                    </div>
+                    <div className="max-w-3xl">{children}</div>
+                    <div />
+                    <div className="hidden sm:block">
+                        <RightLink />
                     </div>
                 </div>
             </body>

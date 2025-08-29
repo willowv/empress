@@ -11,12 +11,10 @@ export default function LeftLink() {
     return (
         <Link
             href={prevPageHref}
-            className="pointer-events-auto absolute bottom-10 left-5 rounded-lg p-2 backdrop-blur-xl"
+            className="fill-foreground text-foreground hover:fill-gold hover:text-gold flex flex-row items-center gap-0.5 rounded-lg backdrop-blur-xl"
         >
-            <DoubleArrow className="fill-gold size-10 rotate-180" />
-            <div className="text-gold m-1 text-center text-xs">
-                {getPageName(prevPageHref)}
-            </div>
+            <DoubleArrow className="size-6 rotate-180" />
+            <div className="text-xs">{getPageName(prevPageHref)}</div>
         </Link>
     )
 }

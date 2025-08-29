@@ -20,7 +20,7 @@ export default function Court({
 }: CourtProps) {
     return (
         <div
-            className="border-gold relative min-h-43 basis-full border-2 p-2 pb-7 sm:w-xs sm:basis-[45%]"
+            className="border-gold flex grow flex-col items-center justify-between border-2 p-2"
             onClick={() => handleLocationClick('Court')}
         >
             <div className="text-foreground text-center text-lg font-bold">
@@ -29,7 +29,7 @@ export default function Court({
             <div className="text-foreground text-center text-xs">
                 {'Unassigned agents'}
             </div>
-            <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
+            <div className="m-2 flex flex-row flex-wrap justify-center gap-1 p-1">
                 {agents.map((agent, index) => {
                     const state =
                         agent.id === selectedAgentId
@@ -49,11 +49,9 @@ export default function Court({
                     )
                 })}
             </div>
-            <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
-                <div className="fill-gold size-2 -translate-y-0.5">
-                    <Hourglass />
-                </div>
-                <div className="text-foreground w-38 text-xs">
+            <div className="flex flex-row items-center gap-0.5 opacity-70">
+                <Hourglass className="fill-gold size-3" />
+                <div className="text-foreground text-xs text-nowrap">
                     {'- Agents here will be rerolled'}
                 </div>
             </div>

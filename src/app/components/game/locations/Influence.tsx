@@ -22,7 +22,7 @@ export default function Influence({
     const score = EG.getScore({ agents })
     const content =
         agents.length > 0 ? (
-            <div className="flex flex-row flex-wrap justify-center gap-1 p-1">
+            <div className="m-2 flex flex-row flex-wrap justify-center gap-1 p-1">
                 {agents.map((agent) => {
                     const state =
                         agent.id === selectedAgentId
@@ -41,30 +41,25 @@ export default function Influence({
                 })}
             </div>
         ) : (
-            <div className="fill-foreground absolute top-1/2 left-1/2 size-6 -translate-x-1/2 opacity-15">
+            <div className="fill-foreground m-6 size-6 opacity-15">
                 <Person />
             </div>
         )
     return (
         <div
-            className="border-gold relative min-h-43 basis-full border-2 p-2 sm:w-xs sm:basis-[45%]"
+            className="border-gold flex grow flex-col items-center justify-between border-2 p-2"
             onClick={() => handleLocationClick('Influence')}
         >
             <div className="text-foreground text-center text-lg font-bold">
                 Influence
             </div>
             <div className="text-foreground text-center text-xs">
-                {'Assign to score points'}
+                {score == 0 ? 'Assign to score points' : `Score: ${score}`}
             </div>
             {content}
-            <div className="text-foreground absolute right-1 bottom-1 text-center text-xs">
-                {'Score: ' + score}
-            </div>
-            <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
-                <div className="fill-gold size-2 -translate-y-0.5">
-                    <Hourglass />
-                </div>
-                <div className="text-foreground w-37 text-xs">
+            <div className="flex flex-row items-center gap-0.5 opacity-70">
+                <Hourglass className="fill-gold size-3" />
+                <div className="text-foreground text-xs text-nowrap">
                     {'- Agents here will be locked'}
                 </div>
             </div>
