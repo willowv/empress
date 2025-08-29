@@ -7,6 +7,7 @@ import {
 } from 'lib/random'
 
 export type Session = {
+    date: Date
     seed: string
     turnHistory: Turn[]
 }
@@ -20,24 +21,46 @@ export function appendTurn(session: Session, turn: Turn): Session {
 
 export type DieSize = 4 | 6 | 8 | 10 | 12 | 20
 const DIE_SIZES: DieSize[] = [4, 6, 8, 10, 12, 20]
-const DIE_BASE_WEIGHTS: number[] = [12, 12, 12, 6, 6, 6]
-const MIN_DICE_COUNT = 9
-const MAX_DICE_COUNT = 14
-const MIN_WEIGHT_CHANGE = -5
-const MAX_WEIGHT_CHANGE = 5
 
-export function getInitialState(rand: () => number): State {
+interface EmpressConfig {
+    readonly dieBaseWeights: number[]
+    readonly minDiceCount: number
+    readonly maxDiceCount: number
+    readonly minWeightChange: number
+    readonly maxWeightChange: number
+}
+
+const ORIGINAL_CONFIG = {
+    dieBaseWeights: [12, 12, 12, 6, 6, 6],
+    minDiceCount: 9,
+    maxDiceCount: 14,
+    minWeightChange: -5,
+    maxWeightChange: 5
+}
+
+const CONFIG_HISTORY = new Map<Date, EmpressConfig>([
+    [new Date(0), ORIGINAL_CONFIG]
+])
+
+// We need the date for this game so we know which config to use
+export function getInitialState(date: Date, rand: () => number): State {
+    // get the most recent config (assumes they are in chronological order)
+    let config
+    CONFIG_HISTORY.forEach((historicalConfig, historicalDate) => {
+        if (date >= historicalDate) config = historicalConfig
+    })
+    const {
+        dieBaseWeights,
+        minDiceCount,
+        maxDiceCount,
+        minWeightChange,
+        maxWeightChange
+    } = config ?? ORIGINAL_CONFIG
+
     const agents: Agent[] = []
-    // How many dice total? Between 9 and 14
-    const total = randomNum(MIN_DICE_COUNT, MAX_DICE_COUNT, rand)
-
-    // Assign base weights to the dice: e.g. 12, 12, 12, 6, 6, 6
-    // How big do we want the random effect to be?
-    // It'd probably be bad to have a game of all d4s, but who knows
-    // Let's apply + or - 5 to each
-    const finalWeights = DIE_BASE_WEIGHTS.map(
-        (weight) =>
-            weight + randomNum(MIN_WEIGHT_CHANGE, MAX_WEIGHT_CHANGE, rand)
+    const total = randomNum(minDiceCount, maxDiceCount, rand)
+    const finalWeights = dieBaseWeights.map(
+        (weight) => weight + randomNum(minWeightChange, maxWeightChange, rand)
     )
     const weightTotal = finalWeights.reduce(
         (weightTotal, weight) => weightTotal + weight
@@ -55,13 +78,12 @@ export function getInitialState(rand: () => number): State {
                 location: 'Court'
             })
     })
-    // Create all agents and assign them initial values
     return { agents }
 }
 
 export function getCurrentState(session: Session): State {
     const rand = random_splitmix32(hash_cyrb53(session.seed))
-    let curState = getInitialState(rand)
+    let curState = getInitialState(session.date, rand)
     session.turnHistory.forEach((turn) => {
         curState = endTurn(curState, turn, rand)
     })
