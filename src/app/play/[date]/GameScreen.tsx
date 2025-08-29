@@ -110,8 +110,8 @@ export default function GameScreen({ date }: GameProps) {
 
     return (
         <AnimationContext value={{ lastEndTurnAt }}>
-            <div className="select-none">
-                <div className="flex flex-row flex-wrap justify-between gap-2 sm:h-[91vh] sm:flex-col sm:content-center sm:justify-center">
+            <div className="flex flex-col justify-between gap-0.5 sm:gap-2">
+                <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
                     <Court
                         selectedAgentId={selectedAgentId}
                         agents={courtAgents}
@@ -126,6 +126,8 @@ export default function GameScreen({ date }: GameProps) {
                         handleLocationClick={handleLocationClick}
                         lockedAgentIds={lockedAgentIds}
                     />
+                </div>
+                <div className="flex flex-row gap-0.5 sm:gap-2">
                     <Delay
                         lockedAgent={prevDelayAgent}
                         agent={nextDelayAgent}
@@ -144,26 +146,26 @@ export default function GameScreen({ date }: GameProps) {
                         handleAgentClick={handleAgentClick}
                         handleLocationClick={handleLocationClick}
                     />
-                    <div className="flex basis-[100%] flex-row justify-between gap-2 sm:min-w-54 sm:basis-[10%]">
-                        <Button
-                            handleButtonPress={handleResetTurn}
-                            isDisabled={false}
-                        >
-                            {'Reset Turn'}
-                        </Button>
-                        <Button
-                            isDisabled={!isPlannedTurnValid}
-                            handleButtonPress={handleEndTurn}
-                        >
-                            <div className="flex flex-row items-center gap-1">
-                                <div>{'End Turn ('}</div>
-                                <div className="fill-gold size-2 -translate-y-1">
-                                    <Hourglass />
-                                </div>
-                                <div>{')'}</div>
+                </div>
+                <div className="flex flex-row justify-between">
+                    <Button
+                        handleButtonPress={handleResetTurn}
+                        isDisabled={false}
+                    >
+                        {'Reset Turn'}
+                    </Button>
+                    <Button
+                        isDisabled={!isPlannedTurnValid}
+                        handleButtonPress={handleEndTurn}
+                    >
+                        <div className="flex flex-row items-center gap-1">
+                            <div>{'End Turn ('}</div>
+                            <div className="fill-gold size-2 -translate-y-1">
+                                <Hourglass />
                             </div>
-                        </Button>
-                    </div>
+                            <div>{')'}</div>
+                        </div>
+                    </Button>
                 </div>
             </div>
         </AnimationContext>

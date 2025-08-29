@@ -3,6 +3,7 @@ import * as EG from '@/logic/empress'
 import Agent from '@/game/Agent'
 import NumberBox from '@/game/NumberBox'
 import Hourglass from '@/svg/Hourglass'
+import clsx from 'clsx'
 
 interface DelayProps {
     readonly lockedAgent: EG.Agent | undefined
@@ -54,13 +55,13 @@ export default function Delay({
 
     return (
         <div
-            className="border-gold relative basis-[48%] border-2 p-2 pb-7 sm:min-w-54 sm:basis-[20%]"
+            className="border-gold flex grow flex-col items-center justify-between border-2 p-2"
             onClick={() => handleLocationClick('Delay')}
         >
             <div className="text-foreground text-center text-lg font-bold">
                 Delay
             </div>
-            <div className="m-2 flex flex-col justify-center gap-2 sm:flex-row">
+            <div className="m-2 flex flex-col gap-2 sm:flex-row sm:gap-2">
                 <div className="flex flex-col items-center">
                     <div className="text-foreground text-center text-xs">
                         {'Number to beat'}
@@ -74,17 +75,16 @@ export default function Delay({
                     {nextSlot}
                 </div>
             </div>
-            <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-row items-center gap-1 opacity-70">
-                <div className="fill-gold size-2 -translate-y-0.5">
-                    <Hourglass />
-                </div>
-                <div className="text-foreground w-21 text-xs">
+            <div className="flex flex-row items-center gap-0.5 opacity-70">
+                <Hourglass className="fill-gold size-3" />
+                <div className="text-foreground text-xs text-nowrap">
                     {'- The game will '}
                 </div>
                 <div
-                    className={
-                        'text-xs ' + (isValid ? 'text-green' : 'text-red')
-                    }
+                    className={clsx('ml-0.5 text-xs text-nowrap', {
+                        'text-green': isValid,
+                        'text-red': !isValid
+                    })}
                 >
                     {isValid ? 'continue' : 'END'}
                 </div>

@@ -29,8 +29,8 @@ export default function EndScreen({ session, date }: EndScreenProps) {
     const finalScore = getScore(getCurrentState(session))
     const numTurns = session.turnHistory.length
     return (
-        <div className="not-motion-reduce:animate-slidefrombottom relative h-screen select-none">
-            <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="not-motion-reduce:animate-slidefromtop relative flex flex-col items-center select-none">
+            <div className="fill-gold bg-background max-h-screen">
                 <SwipeNavigation>
                     <Chariot />
                 </SwipeNavigation>

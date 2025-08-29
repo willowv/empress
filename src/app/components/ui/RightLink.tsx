@@ -11,12 +11,10 @@ export default function RightLink() {
     return (
         <Link
             href={nextPageHref}
-            className="pointer-events-auto absolute right-5 bottom-10 rounded-lg p-2 backdrop-blur-xl"
+            className="fill-foreground text-foreground hover:fill-gold hover:text-gold flex flex-row items-center gap-0.5 rounded-lg backdrop-blur-xl"
         >
-            <DoubleArrow className="fill-gold size-10" />
-            <div className="text-gold m-1 text-center text-xs">
-                {getPageName(nextPageHref)}
-            </div>
+            <DoubleArrow className="order-2 size-6" />
+            <div className="order-1 text-xs">{getPageName(nextPageHref)}</div>
         </Link>
     )
 }
