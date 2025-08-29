@@ -42,6 +42,8 @@ export function randomNum(
     maxValue: number,
     rand: () => number
 ) {
+    if (minValue == maxValue) return minValue
+
     const diff = maxValue - minValue
     // We want an even distribution of probability for each integer; using Round would result
     // in the min and max being less likely. Floor of +1 gives every integer outcome an even

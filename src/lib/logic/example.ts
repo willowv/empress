@@ -1,7 +1,8 @@
 import { State, Turn, Location, Session, getCurrentState } from './empress'
 
 const seed: string = 'test'
-const sessionInitial: Session = { seed: seed, turnHistory: [] }
+const date: Date = new Date(0)
+const sessionInitial: Session = { date, seed, turnHistory: [] }
 export const stateInitial: State = getCurrentState(sessionInitial)
 export const turn1Valid: Turn = {
     agentId_location: new Map<number, Location>([
@@ -12,7 +13,8 @@ export const turn1Valid: Turn = {
     ])
 }
 const sessionAfterTurn1: Session = {
-    seed: seed,
+    date,
+    seed,
     turnHistory: [turn1Valid]
 }
 export const stateAfterTurn1: State = getCurrentState(sessionAfterTurn1)
@@ -30,7 +32,8 @@ const turn1Endgame: Turn = {
     ])
 }
 const sessionEnded: Session = {
-    seed: seed,
+    date,
+    seed,
     turnHistory: [turn1Endgame]
 }
 export const stateEnded: State = getCurrentState(sessionEnded)
@@ -38,7 +41,8 @@ const turn2Invalid: Turn = {
     agentId_location: new Map<number, Location>([[5, 'Bribe']])
 }
 export const sessionInvalid: Session = {
-    seed: seed,
+    date,
+    seed,
     turnHistory: [turn1Valid, turn2Invalid]
 }
 const turn2Valid: Turn = {
@@ -50,7 +54,8 @@ const turn2Valid: Turn = {
     ])
 }
 export const sessionAfterTurn2: Session = {
-    seed: seed,
+    date,
+    seed,
     turnHistory: [turn1Valid, turn2Valid]
 }
 export const stateAfterTurn2: State = getCurrentState(sessionAfterTurn2)
