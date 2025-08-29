@@ -2,10 +2,11 @@ import Hourglass from '@/svg/Hourglass'
 import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
 import SwipeNavigation from '@/ui/SwipeNavigation'
-import { dateOnlyString } from 'app/util'
+import { dateOnlyString } from 'lib/util'
 import { startTransition, useActionState } from 'react'
 import { getCurrentState, getScore, Session } from '@/logic/empress'
-import { SubmissionState, submitScore } from 'app/scores/actions'
+import { SubmissionState, submitScore } from 'lib/actions'
+import ButtonLink from '@/ui/ButtonLink'
 
 const mpSubmissionState_Content = {
     initial: 'Submit Score',
@@ -16,14 +17,9 @@ const mpSubmissionState_Content = {
 interface EndScreenProps {
     readonly session: Session
     readonly date: Date
-    readonly handlePlayAgain: () => void
 }
 
-export default function EndScreen({
-    session,
-    date,
-    handlePlayAgain
-}: EndScreenProps) {
+export default function EndScreen({ session, date }: EndScreenProps) {
     const [submissionState, submitAction, isSubmissionPending] =
         useActionState<SubmissionState>(
             (previousState) => submitScore(previousState, session, date),
@@ -51,12 +47,7 @@ export default function EndScreen({
                         {`${finalScore} in ${numTurns} turns`}
                     </div>
                     <div className="flex flex-row justify-between gap-2">
-                        <Button
-                            isDisabled={false}
-                            handleButtonPress={handlePlayAgain}
-                        >
-                            {'Play Again'}
-                        </Button>
+                        <ButtonLink href="/play">{'Play Again'}</ButtonLink>
                         <Button
                             isDisabled={
                                 submissionState !== 'initial' || finalScore == 0

@@ -1,14 +1,12 @@
 'use client'
 
-import { notFound, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import DoubleArrow from '@/svg/DoubleArrow'
 import Link from 'next/link'
-import { getPageName, pages, prevPage } from 'app/util'
+import { getPageName, prevPage } from 'lib/util'
 
 export default function LeftLink() {
     const currentPage = usePathname()
-    if (!pages.includes(currentPage)) notFound()
-
     const prevPageHref = prevPage(currentPage)
     return (
         <Link

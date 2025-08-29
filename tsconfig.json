@@ -23,7 +23,7 @@
             "@/svg/*": ["app/components/svg/*"],
             "@/ui/*": ["app/components/ui/*"],
             "@/game/*": ["app/components/game/*"],
-            "@/logic/*": ["game/*"]
+            "@/logic/*": ["lib/logic/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

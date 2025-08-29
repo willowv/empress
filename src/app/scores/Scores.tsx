@@ -1,22 +1,28 @@
-import { dateOnlyString, getTodayWithoutTime } from 'app/util'
-import * as Data from './data'
+import ButtonLink from '@/ui/ButtonLink'
+import * as Data from 'lib/data'
+import { dateOnlyString } from 'lib/util'
 
-export default async function Scores() {
+interface ScoresProps {
+    readonly date: Date
+}
+
+export default async function Scores({ date }: ScoresProps) {
     // Different display based on number of scores for this day
     // >10 scores: histogram
     // <10 scores: current top 10
     // No scores: 'there are no scores yet! be the first'
     // Get count of scores for this date
-    const date = getTodayWithoutTime()
     const [count, min, max] = await Data.getScoreStatsByDate(date)
     if (count == 0)
         return (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col items-center gap-2">
                 <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                    {dateOnlyString(date)}
+                    {'There are no scores recorded yet for this day.'}
                 </div>
-                <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                    {'There are no scores recorded yet for today!'}
+                <div className="w-30">
+                    <ButtonLink href={`/play/${dateOnlyString(date)}`}>
+                        {'Add one!'}
+                    </ButtonLink>
                 </div>
             </div>
         )
@@ -27,9 +33,6 @@ export default async function Scores() {
         const scores = await Data.getTopNScoresByDate(date, 5)
         return (
             <div className="flex flex-col gap-2">
-                <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                    {dateOnlyString(date)}
-                </div>
                 <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                     {'Top 5 Scores'}
                 </div>
@@ -51,9 +54,6 @@ export default async function Scores() {
     const bucketIncrement = (max - min) / 5
     return (
         <div className="flex flex-col gap-2">
-            <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                {dateOnlyString(date)}
-            </div>
             <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                 {"Today's Scores"}
             </div>

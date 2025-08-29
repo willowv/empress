@@ -1,4 +1,4 @@
-import { dateOnlyString } from 'app/util'
+import { dateOnlyString } from 'lib/util'
 import postgres from 'postgres'
 
 interface Score {

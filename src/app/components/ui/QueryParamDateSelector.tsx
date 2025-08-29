@@ -1,0 +1,45 @@
+'use client'
+
+import {
+    addDays,
+    dateOnlyString,
+    ensureValidDate,
+    getTodayWithoutTime
+} from 'lib/util'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import DateSelector from './DateSelector'
+
+interface QueryParamDateSelector {
+    readonly min?: Date
+    readonly max?: Date
+}
+
+export default function QueryParamDateSelector({
+    min,
+    max
+}: QueryParamDateSelector) {
+    const searchParams = useSearchParams()
+    const pathname = usePathname()
+    const router = useRouter()
+    const currentDateString = searchParams.get('date')?.toString()
+    const currentDate = ensureValidDate(
+        currentDateString,
+        getTodayWithoutTime()
+    )
+
+    function handleNewDate(date: Date) {
+        const params = new URLSearchParams(searchParams)
+        params.set('date', dateOnlyString(date))
+        router.replace(`${pathname}?${params.toString()}`)
+    }
+
+    return (
+        <DateSelector
+            current={currentDate}
+            handleNext={() => handleNewDate(addDays(currentDate, 1))}
+            handlePrev={() => handleNewDate(addDays(currentDate, -1))}
+            min={min}
+            max={max}
+        />
+    )
+}
