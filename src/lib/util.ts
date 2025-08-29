@@ -1,9 +1,7 @@
+import _ from 'lodash'
+
 export function getTodayWithoutTime(): Date {
-    const todayWithTime: Date = new Date()
-    const day: number = todayWithTime.getUTCDate()
-    const month: number = todayWithTime.getUTCMonth()
-    const year: number = todayWithTime.getUTCFullYear()
-    return new Date(year, month, day)
+    return getDateWithoutTime(new Date())
 }
 
 export function dateOnlyString(date: Date) {
@@ -30,4 +28,23 @@ export function getPageName(href: string) {
         case '/scores':
             return 'Scores'
     }
+}
+
+export function addDays(date: Date, n: number): Date {
+    const newDate = _.cloneDeep(date)
+    newDate.setDate(newDate.getDate() + n)
+    return newDate
+}
+
+export function addYears(date: Date, n: number): Date {
+    const newDate = _.cloneDeep(date)
+    newDate.setFullYear(newDate.getFullYear() + n)
+    return newDate
+}
+
+export function getDateWithoutTime(date: Date): Date {
+    const day: number = date.getUTCDate()
+    const month: number = date.getUTCMonth()
+    const year: number = date.getUTCFullYear()
+    return new Date(year, month, day)
 }

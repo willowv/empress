@@ -1,8 +1,7 @@
 'use client'
 
-import _ from 'lodash'
 import { useState } from 'react'
-import { getTodayWithoutTime } from 'lib/util'
+import { addDays, addYears, getTodayWithoutTime } from 'lib/util'
 import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
 import SwipeNavigation from '@/ui/SwipeNavigation'
@@ -16,8 +15,7 @@ export default function GameSelectScreen({
     handlePlay
 }: GameSelectScreenProps) {
     const [selectedDate, setSelectedDate] = useState<Date>(getTodayWithoutTime)
-    const oneYearAgo = getTodayWithoutTime()
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+    const oneYearAgo = addYears(getTodayWithoutTime(), -1)
     return (
         <div className="not-motion-reduce:animate-slidefromtop relative h-screen select-none">
             <div className="fill-gold bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -31,15 +29,11 @@ export default function GameSelectScreen({
                         current={selectedDate}
                         max={getTodayWithoutTime()}
                         min={oneYearAgo}
-                        handlePrev={() => {
-                            const prevDate = _.cloneDeep(selectedDate)
-                            prevDate.setDate(prevDate.getDate() - 1)
-                            setSelectedDate(prevDate)
-                        }}
+                        handlePrev={() =>
+                            setSelectedDate(addDays(selectedDate, -1))
+                        }
                         handleNext={() => {
-                            const nextDate = _.cloneDeep(selectedDate)
-                            nextDate.setDate(nextDate.getDate() + 1)
-                            setSelectedDate(nextDate)
+                            setSelectedDate(addDays(selectedDate, 1))
                         }}
                     />
                     <Button
