@@ -3,12 +3,10 @@
 import { usePathname } from 'next/navigation'
 import DoubleArrow from '@/svg/DoubleArrow'
 import Link from 'next/link'
-import { getPageName, pages, nextPage } from 'lib/util'
+import { getPageName, nextPage } from 'lib/util'
 
 export default function RightLink() {
-    let currentPage = usePathname()
-    if (!pages.includes(currentPage)) currentPage = '/'
-
+    const currentPage = usePathname()
     const nextPageHref = nextPage(currentPage)
     return (
         <Link

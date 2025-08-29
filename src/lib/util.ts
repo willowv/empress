@@ -10,12 +10,19 @@ export function dateOnlyString(date: Date) {
 
 export const pages: string[] = ['/', '/play', '/scores']
 
-export function nextPage(page: string): string {
-    return pages[(pages.indexOf(page) + 1) % pages.length]
+export function nextPage(pathname: string): string {
+    const pageIndex = pages.findLastIndex((page) => {
+        return pathname.includes(page)
+    })
+    // Shouldn't be possible for this find to fail but the result would be root
+    return pages[(pageIndex + 1) % pages.length]
 }
 
-export function prevPage(page: string): string {
-    const prevIndex = pages.indexOf(page) - 1
+export function prevPage(pathname: string): string {
+    const pageIndex = pages.findLastIndex((page) => {
+        return pathname.includes(page)
+    })
+    const prevIndex = pageIndex < 0 ? 0 : pageIndex - 1
     return pages[prevIndex < 0 ? pages.length - 1 : prevIndex]
 }
 

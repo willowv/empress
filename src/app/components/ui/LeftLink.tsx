@@ -3,12 +3,10 @@
 import { usePathname } from 'next/navigation'
 import DoubleArrow from '@/svg/DoubleArrow'
 import Link from 'next/link'
-import { getPageName, pages, prevPage } from 'lib/util'
+import { getPageName, prevPage } from 'lib/util'
 
 export default function LeftLink() {
-    let currentPage = usePathname()
-    if (!pages.includes(currentPage)) currentPage = '/'
-
+    const currentPage = usePathname()
     const prevPageHref = prevPage(currentPage)
     return (
         <Link
