@@ -17,7 +17,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: 'The Empress Returns',
-    description: 'A dice game inspired by Tarot.'
+    description: 'A dice game inspired by Tarot.',
+    other: {
+        version: `${process.env.npm_package_version}`
+    }
 }
 
 export default function RootLayout({
