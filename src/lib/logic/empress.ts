@@ -1,7 +1,13 @@
 import _ from 'lodash'
-import { hash_cyrb53, random_splitmix32, randomRoll } from 'lib/random'
+import {
+    hash_cyrb53,
+    random_splitmix32,
+    randomNum,
+    randomRoll
+} from 'lib/random'
 
 export type Session = {
+    date: Date
     seed: string
     turnHistory: Turn[]
 }
@@ -14,25 +20,70 @@ export function appendTurn(session: Session, turn: Turn): Session {
 }
 
 export type DieSize = 4 | 6 | 8 | 10 | 12 | 20
-const AGENT_MAX_VALUES: DieSize[] = [4, 4, 6, 6, 8, 8, 10, 12, 20]
+const DIE_SIZES: DieSize[] = [4, 6, 8, 10, 12, 20]
 
-export function getInitialState(rand: () => number): State {
-    // Create all agents and assign them initial values
-    return {
-        agents: AGENT_MAX_VALUES.map((maxValue, index) => {
-            return {
-                id: index,
-                curValue: randomRoll(maxValue, rand), // should give a roll between 1 and maxValue
-                maxValue: maxValue,
+interface EmpressConfig {
+    readonly dieBaseWeights: number[]
+    readonly minDiceCount: number
+    readonly maxDiceCount: number
+    readonly minWeightChange: number
+    readonly maxWeightChange: number
+}
+
+const ORIGINAL_CONFIG = {
+    dieBaseWeights: [12, 12, 12, 6, 6, 6],
+    minDiceCount: 9,
+    maxDiceCount: 14,
+    minWeightChange: -5,
+    maxWeightChange: 5
+}
+
+const CONFIG_HISTORY = new Map<Date, EmpressConfig>([
+    [new Date(0), ORIGINAL_CONFIG]
+])
+
+// We need the date for this game so we know which config to use
+export function getInitialState(date: Date, rand: () => number): State {
+    // get the most recent config (assumes they are in chronological order)
+    let config
+    CONFIG_HISTORY.forEach((historicalConfig, historicalDate) => {
+        if (date >= historicalDate) config = historicalConfig
+    })
+    const {
+        dieBaseWeights,
+        minDiceCount,
+        maxDiceCount,
+        minWeightChange,
+        maxWeightChange
+    } = config ?? ORIGINAL_CONFIG
+
+    const agents: Agent[] = []
+    const total = randomNum(minDiceCount, maxDiceCount, rand)
+    const finalWeights = dieBaseWeights.map(
+        (weight) => weight + randomNum(minWeightChange, maxWeightChange, rand)
+    )
+    const weightTotal = finalWeights.reduce(
+        (weightTotal, weight) => weightTotal + weight
+    )
+
+    // Use the total and the weights to calculate a number for each die size
+    // Add that many agents of that size to agents
+    finalWeights.forEach((weight, index) => {
+        const diceCount = Math.floor((weight / weightTotal) * (total + 1))
+        for (let i = 0; i < diceCount; i++)
+            agents.push({
+                id: agents.length,
+                curValue: randomRoll(DIE_SIZES[index], rand),
+                maxValue: DIE_SIZES[index],
                 location: 'Court'
-            }
-        })
-    }
+            })
+    })
+    return { agents }
 }
 
 export function getCurrentState(session: Session): State {
     const rand = random_splitmix32(hash_cyrb53(session.seed))
-    let curState = getInitialState(rand)
+    let curState = getInitialState(session.date, rand)
     session.turnHistory.forEach((turn) => {
         curState = endTurn(curState, turn, rand)
     })

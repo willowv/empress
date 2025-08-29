@@ -25,7 +25,7 @@ export const AnimationContext = createContext<AnimationContextProps>({
 
 export default function GameScreen({ date }: GameProps) {
     const [curSession, setSession] = useState<EG.Session>(() => {
-        return { seed: dateOnlyString(date), turnHistory: [] }
+        return { date: date, seed: dateOnlyString(date), turnHistory: [] }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
     const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
