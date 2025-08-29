@@ -48,3 +48,14 @@ export function getDateWithoutTime(date: Date): Date {
     const year: number = date.getUTCFullYear()
     return new Date(year, month, day)
 }
+
+const ISO_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/
+
+export function ensureValidDate(
+    dateString: string | undefined,
+    fallbackDate: Date
+): Date {
+    if (!dateString || !ISO_DATE_REGEX.test(dateString)) return fallbackDate
+
+    return getDateWithoutTime(new Date(dateString))
+}

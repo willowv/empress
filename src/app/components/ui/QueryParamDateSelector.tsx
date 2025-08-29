@@ -3,7 +3,7 @@
 import {
     addDays,
     dateOnlyString,
-    getDateWithoutTime,
+    ensureValidDate,
     getTodayWithoutTime
 } from 'lib/util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -21,13 +21,11 @@ export default function QueryParamDateSelector({
     const searchParams = useSearchParams()
     const pathname = usePathname()
     const router = useRouter()
-    let currentDateString = searchParams.get('date')?.toString()
-
-    const iSODateRegex = /^\d{4}-\d{2}-\d{2}$/
-    if (!currentDateString || !iSODateRegex.test(currentDateString))
-        currentDateString = dateOnlyString(getTodayWithoutTime())
-
-    const currentDate = getDateWithoutTime(new Date(currentDateString))
+    const currentDateString = searchParams.get('date')?.toString()
+    const currentDate = ensureValidDate(
+        currentDateString,
+        getTodayWithoutTime()
+    )
 
     function handleNewDate(date: Date) {
         const params = new URLSearchParams(searchParams)
