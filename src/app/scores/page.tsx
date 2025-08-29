@@ -1,5 +1,5 @@
 import Fortune from '@/svg/tarot/Fortune'
-import DateSelectorURL from '@/ui/DateSelectorURL'
+import QueryParamDateSelector from '@/ui/QueryParamDateSelector'
 import SwipeNavigation from '@/ui/SwipeNavigation'
 import {
     dateOnlyString,
@@ -29,7 +29,7 @@ export default async function Page(props: {
                 </SwipeNavigation>
             </div>
             <div className="absolute top-20 left-1/2 w-90 -translate-x-1/2 justify-items-center">
-                <DateSelectorURL max={getTodayWithoutTime()} />
+                <QueryParamDateSelector max={getTodayWithoutTime()} />
                 <Suspense>
                     <Scores date={currentDate} />
                 </Suspense>
