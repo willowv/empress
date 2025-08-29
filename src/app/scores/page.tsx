@@ -14,7 +14,7 @@ export default async function Page(props: {
     const dateString = searchParams?.date
     const date = ensureValidDate(dateString, getTodayWithoutTime())
     return (
-        <div className="not-motion-reduce:animate-slidefromtop relative flex flex-col items-center select-none">
+        <div className="not-motion-reduce:animate-slidefromleft relative flex flex-col items-center select-none">
             <div className="fill-gold bg-background max-h-screen">
                 <SwipeNavigation>
                     <Fortune />

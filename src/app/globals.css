@@ -51,18 +51,22 @@
 
     @keyframes slideFromLeft {
         from {
+            filter: opacity(0%);
             transform: translateX(-100%);
         }
         to {
+            filter: opacity(100%);
             transform: translateX(0%);
         }
     }
 
     @keyframes slideFromRight {
         from {
+            filter: opacity(0%);
             transform: translateX(100%);
         }
         to {
+            filter: opacity(100%);
             transform: translateX(0%);
         }
     }
