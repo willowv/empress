@@ -20,7 +20,7 @@ export default function Court({
 }: CourtProps) {
     return (
         <div
-            className="border-gold flex grow flex-col items-center justify-between border-2 p-2"
+            className="border-gold flex grow flex-col items-center justify-between rounded-t-2xl border-2 p-2 sm:rounded-tr-none"
             onClick={() => handleLocationClick('Court')}
         >
             <div className="text-foreground text-center text-lg font-bold">

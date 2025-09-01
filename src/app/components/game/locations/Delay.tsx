@@ -55,22 +55,22 @@ export default function Delay({
 
     return (
         <div
-            className="border-gold flex grow flex-col items-center justify-between border-2 p-2"
+            className="border-gold flex grow flex-col items-center justify-between rounded-bl-2xl border-2 p-2"
             onClick={() => handleLocationClick('Delay')}
         >
             <div className="text-foreground text-center text-lg font-bold">
                 Delay
             </div>
             <div className="m-2 flex flex-col gap-2 sm:flex-row sm:gap-2">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center gap-1">
                     <div className="text-foreground text-center text-xs">
-                        {'Number to beat'}
+                        {'Previous Delay'}
                     </div>
                     {prevSlot}
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center gap-1">
                     <div className="text-foreground text-center text-xs">
-                        {'Assign to continue play'}
+                        {'Add a Turn'}
                     </div>
                     {nextSlot}
                 </div>
