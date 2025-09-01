@@ -45,7 +45,7 @@ export default function Agent({
     const animDelay = 100 * (animRollOrder ?? 0) // milliseconds
     return (
         <div
-            key={agent.id}
+            id={`agent-${agent.id}`}
             className={clsx(
                 'relative size-12 transition-all select-none' +
                     mapState_agentCss[state],

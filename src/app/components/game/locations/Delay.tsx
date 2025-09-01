@@ -30,7 +30,6 @@ export default function Delay({
     if (lockedAgent)
         prevSlot = (
             <Agent
-                key={`agent-${lockedAgent.id}`}
                 agent={lockedAgent}
                 state={'locked'}
                 handleAgentClick={handleAgentClick}
@@ -44,7 +43,6 @@ export default function Delay({
     else
         nextSlot = (
             <Agent
-                key={`agent-${agent.id}`}
                 agent={agent}
                 state={
                     isAgentSelected
@@ -77,7 +75,7 @@ export default function Delay({
                     <div className="text-foreground text-center text-xs">
                         {'Add a Turn'}
                     </div>
-                    {nextSlot}
+                    <div id="assign-target">{nextSlot}</div>
                 </div>
             </div>
             <div className="flex flex-row items-center gap-0.5 opacity-70">

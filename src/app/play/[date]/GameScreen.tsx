@@ -10,6 +10,7 @@ import Button from '@/ui/Button'
 import { dateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
+import { useNextStep } from 'nextstepjs'
 
 interface GameProps {
     readonly date: Date
@@ -24,6 +25,7 @@ export const AnimationContext = createContext<AnimationContextProps>({
 })
 
 export default function GameScreen({ date }: GameProps) {
+    const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
         return { date: date, seed: dateOnlyString(date), turnHistory: [] }
     })
@@ -149,12 +151,18 @@ export default function GameScreen({ date }: GameProps) {
                 </div>
                 <div className="flex flex-row justify-between">
                     <Button
+                        id="button-reset-turn"
                         handleButtonPress={handleResetTurn}
-                        isDisabled={false}
                     >
                         {'Reset Turn'}
                     </Button>
                     <Button
+                        handleButtonPress={() => startNextStep('game-tutorial')}
+                    >
+                        {'How to Play'}
+                    </Button>
+                    <Button
+                        id="button-end-turn"
                         isDisabled={!isPlannedTurnValid}
                         handleButtonPress={handleEndTurn}
                     >
