@@ -103,7 +103,7 @@ export default function RootLayout({
                         </div>
                     ),
                     selector: '#assign-target',
-                    side: 'left',
+                    side: 'top-left',
                     pointerRadius: 5,
                     pointerPadding: 5,
                     viewportID: 'scrollable-viewport'
@@ -212,6 +212,7 @@ export default function RootLayout({
                         cardComponent={TutorialCard}
                         shadowOpacity="0.7"
                         shadowRgb="74,85,101"
+                        cardTransition={{ duration: 1, type: 'spring' }}
                     >
                         <Analytics />
                         <div className="flex min-h-screen flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
