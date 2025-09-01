@@ -28,19 +28,23 @@ export default function Delay({
     // We don't really need 'agents' or 'lockedAgentIds', we just need the two relevant agents
     let prevSlot
     if (lockedAgent)
-        prevSlot = Agent({
-            agent: lockedAgent,
-            state: 'locked',
-            handleAgentClick: handleAgentClick
-        })
-    else prevSlot = NumberBox({ num: 0 })
+        prevSlot = (
+            <Agent
+                key={`agent-${lockedAgent.id}`}
+                agent={lockedAgent}
+                state={'locked'}
+                handleAgentClick={handleAgentClick}
+            />
+        )
+    else prevSlot = <NumberBox num={0} />
 
     let nextSlot
     const isValid = (agent?.curValue ?? 0) > (lockedAgent?.curValue ?? 0)
-    if (!agent) nextSlot = NumberBox({ num: undefined })
+    if (!agent) nextSlot = <NumberBox num={undefined} />
     else
         nextSlot = (
             <Agent
+                key={`agent-${agent.id}`}
                 agent={agent}
                 state={
                     isAgentSelected
@@ -55,6 +59,7 @@ export default function Delay({
 
     return (
         <div
+            id="location-delay"
             className="border-gold flex grow flex-col items-center justify-between rounded-bl-2xl border-2 p-2"
             onClick={() => handleLocationClick('Delay')}
         >

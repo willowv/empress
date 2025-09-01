@@ -42,6 +42,7 @@ export default function Bribe({
 
     return (
         <div
+            id="location-bribe"
             className="border-gold flex grow flex-col items-center justify-between rounded-br-2xl border-2 p-2"
             onClick={() => handleLocationClick('Bribe')}
         >

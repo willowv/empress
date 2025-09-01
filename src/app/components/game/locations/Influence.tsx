@@ -22,6 +22,7 @@ export default function Influence({
     const score = EG.getScore({ agents })
     return (
         <div
+            id="location-influence"
             className="border-gold flex grow flex-col items-center justify-between border-2 p-2 sm:rounded-tr-2xl"
             onClick={() => handleLocationClick('Influence')}
         >
@@ -41,7 +42,7 @@ export default function Influence({
                               : 'default'
                     return (
                         <Agent
-                            key={agent.id}
+                            key={`agent-${agent.id}`}
                             agent={agent}
                             state={state}
                             handleAgentClick={handleAgentClick}
