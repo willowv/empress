@@ -27,7 +27,7 @@ export default function DateSelector({
                 className={clsx(
                     'fill-foreground hover:fill-gold size-6 rotate-180',
                     {
-                        'fill-gray-600 hover:fill-gray-600': !isPrevDateValid
+                        'fill-gray hover:fill-gray': !isPrevDateValid
                     }
                 )}
                 onClick={() => {
@@ -40,7 +40,7 @@ export default function DateSelector({
             </div>
             <Arrow
                 className={clsx('fill-foreground hover:fill-gold size-6', {
-                    'fill-gray-600 hover:fill-gray-600': !isNextDateValid
+                    'fill-gray hover:fill-gray': !isNextDateValid
                 })}
                 onClick={() => {
                     if (!isNextDateValid) return
