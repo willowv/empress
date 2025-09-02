@@ -62,7 +62,7 @@ export default function Agent({
             }}
         >
             <div
-                className={clsx('', {
+                className={clsx({
                     'not-motion-reduce:animate-dieroll': shouldDoRollAnimation,
                     'animate-none': !shouldDoRollAnimation
                 })}
