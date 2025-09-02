@@ -2,7 +2,7 @@ import 'tailwindcss'
 import Person from '@/svg/Person'
 import clsx from 'clsx'
 
-type AssignTargetState = 'default' | 'invalid' | 'accepted'
+type AssignTargetState = 'default' | 'invalid' | 'valid'
 
 interface AssignTargetProps {
     readonly state?: AssignTargetState
@@ -22,7 +22,7 @@ export default function AssignTarget({
             className={clsx(
                 'border-foreground relative size-12 rounded-lg border-1 border-dashed select-none',
                 {
-                    'border-green': state === 'accepted',
+                    'border-green': state === 'valid',
                     'border-red': state === 'invalid'
                 }
             )}

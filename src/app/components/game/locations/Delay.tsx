@@ -9,7 +9,7 @@ import AssignTarget from '../AssignTarget'
 interface DelayProps {
     readonly lockedAgent: EG.Agent | undefined
     readonly agent: EG.Agent | undefined
-    readonly isAgentSelected: boolean
+    readonly selectedAgent: EG.Agent | undefined
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
 }
@@ -17,7 +17,7 @@ interface DelayProps {
 export default function Delay({
     lockedAgent,
     agent,
-    isAgentSelected,
+    selectedAgent,
     handleLocationClick,
     handleAgentClick
 }: DelayProps) {
@@ -39,20 +39,22 @@ export default function Delay({
     else prevSlot = <NumberBox num={0} />
 
     let nextSlot
-    const isValid = (agent?.curValue ?? 0) > (lockedAgent?.curValue ?? 0)
+    const isValid =
+        (selectedAgent?.curValue ?? 0) > (lockedAgent?.curValue ?? 0)
     if (!agent)
-        nextSlot = <AssignTarget onClick={() => handleLocationClick('Delay')} />
+        nextSlot = (
+            <AssignTarget
+                state={
+                    !selectedAgent ? 'default' : isValid ? 'valid' : 'invalid'
+                }
+                onClick={() => handleLocationClick('Delay')}
+            />
+        )
     else
         nextSlot = (
             <Agent
                 agent={agent}
-                state={
-                    isAgentSelected
-                        ? 'selected'
-                        : isValid
-                          ? 'accepted'
-                          : 'invalid'
-                }
+                state={agent === selectedAgent ? 'selected' : 'accepted'}
                 handleAgentClick={handleAgentClick}
             />
         )
@@ -83,15 +85,20 @@ export default function Delay({
             <div className="flex flex-row items-center gap-0.5 opacity-70">
                 <Hourglass className="fill-gold size-3" />
                 <div className="text-foreground text-xs text-nowrap">
-                    {'- The game will '}
+                    {'- The game '}
                 </div>
                 <div
                     className={clsx('ml-0.5 text-xs text-nowrap', {
-                        'text-green': isValid,
-                        'text-red': !isValid
+                        'text-green': agent,
+                        'text-red': !agent && !isValid,
+                        'text-purple': !agent && isValid
                     })}
                 >
-                    {isValid ? 'continue' : 'END'}
+                    {agent
+                        ? 'will continue'
+                        : isValid
+                          ? 'would continue'
+                          : 'will END'}
                 </div>
             </div>
         </div>

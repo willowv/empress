@@ -8,7 +8,7 @@ import AssignTarget from '../AssignTarget'
 interface BribeProps {
     readonly agent: EG.Agent | undefined
     readonly numAssignments: number
-    readonly isAgentSelected: boolean
+    readonly selectedAgent: EG.Agent | undefined
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
 }
@@ -16,16 +16,19 @@ interface BribeProps {
 export default function Bribe({
     agent,
     numAssignments,
-    isAgentSelected,
+    selectedAgent,
     handleLocationClick,
     handleAgentClick
 }: BribeProps) {
-    const isValid = (agent?.curValue ?? 0) >= numAssignments
+    const isValid =
+        (agent?.curValue ?? selectedAgent?.curValue ?? 0) >= numAssignments
     let assignmentSlot
     if (!agent)
         assignmentSlot = (
             <AssignTarget
-                state={isValid ? 'accepted' : 'invalid'}
+                state={
+                    !selectedAgent ? 'default' : isValid ? 'valid' : 'invalid'
+                }
                 onClick={() => handleLocationClick('Bribe')}
             />
         )
@@ -34,7 +37,7 @@ export default function Bribe({
             <Agent
                 agent={agent}
                 state={
-                    isAgentSelected
+                    agent === selectedAgent
                         ? 'selected'
                         : isValid
                           ? 'accepted'

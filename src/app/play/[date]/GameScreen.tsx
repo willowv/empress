@@ -86,30 +86,37 @@ export default function GameScreen({ date }: GameProps) {
         (agent) => agent.location === 'Influence'
     )
 
+    const selectedAgent =
+        selectedAgentId == undefined
+            ? undefined
+            : plannedState.agents[selectedAgentId]
+
     function handleAgentClick(id: number) {
         if (lockedAgentIds.includes(id)) return
 
         if (selectedAgentId === id)
             // clicking selected agent
             setSelectedAgentId(undefined)
-        else if (selectedAgentId === undefined) setSelectedAgentId(id)
+        else if (selectedAgent === undefined) setSelectedAgentId(id)
         // Tapping another assigned agent should swap them
         else {
-            const selectedAgent = plannedState.agents[selectedAgentId]
             const targetAgent = plannedState.agents[id]
             // If they're in the same location, change selection
             if (selectedAgent.location === targetAgent.location)
                 setSelectedAgentId(id)
             // If the target location is Delay, check whether a swap is a valid move
             else if (
-                targetAgent.location === 'Delay' &&
-                (prevDelayAgent?.curValue ?? 0) >= selectedAgent.curValue
+                (targetAgent.location === 'Delay' &&
+                    (prevDelayAgent?.curValue ?? 0) >=
+                        selectedAgent.curValue) ||
+                (selectedAgent.location === 'Delay' &&
+                    (prevDelayAgent?.curValue ?? 0) >= targetAgent.curValue)
             ) {
                 //TODO: trigger a red shaking animation to show it can't go there
                 return
             } else {
                 const move1 = {
-                    agentId: selectedAgentId,
+                    agentId: selectedAgent.id,
                     location: targetAgent.location
                 }
                 const move2 = {
@@ -127,10 +134,7 @@ export default function GameScreen({ date }: GameProps) {
     }
 
     function handleLocationClick(location: EG.Location) {
-        if (selectedAgentId == undefined) return
-
-        const selectedAgent = plannedState.agents[selectedAgentId]
-
+        if (selectedAgent == undefined) return
         if (selectedAgent.location === location) {
             setSelectedAgentId(undefined)
             return
@@ -146,7 +150,7 @@ export default function GameScreen({ date }: GameProps) {
         setSelectedAgentId(undefined)
         setPlannedTurn(
             EG.updateTurnWithMove(plannedTurn, {
-                agentId: selectedAgentId,
+                agentId: selectedAgent.id,
                 location
             })
         )
@@ -175,17 +179,13 @@ export default function GameScreen({ date }: GameProps) {
                     <Delay
                         lockedAgent={prevDelayAgent}
                         agent={nextDelayAgent}
-                        isAgentSelected={
-                            (nextDelayAgent?.id ?? -1) === selectedAgentId
-                        }
+                        selectedAgent={selectedAgent}
                         handleAgentClick={handleAgentClick}
                         handleLocationClick={handleLocationClick}
                     />
                     <Bribe
                         agent={bribeAgent}
-                        isAgentSelected={
-                            (bribeAgent?.id ?? -1) === selectedAgentId
-                        }
+                        selectedAgent={selectedAgent}
                         numAssignments={numAssignments}
                         handleAgentClick={handleAgentClick}
                         handleLocationClick={handleLocationClick}
