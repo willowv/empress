@@ -10,6 +10,7 @@ import Button from '@/ui/Button'
 import { dateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
+import { useNextStep } from 'nextstepjs'
 
 interface GameProps {
     readonly date: Date
@@ -24,6 +25,7 @@ export const AnimationContext = createContext<AnimationContextProps>({
 })
 
 export default function GameScreen({ date }: GameProps) {
+    const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
         return { date: date, seed: dateOnlyString(date), turnHistory: [] }
     })
@@ -57,30 +59,6 @@ export default function GameScreen({ date }: GameProps) {
 
     const numAssignments = EG.numNonBribeAssignments(curState, plannedTurn)
 
-    function handleAgentClick(id: number) {
-        if (lockedAgentIds.includes(id)) return
-
-        if (selectedAgentId === id)
-            // clicking selected agent
-            setSelectedAgentId(undefined)
-        else setSelectedAgentId(id)
-    }
-
-    function handleLocationClick(location: EG.Location) {
-        if (
-            selectedAgentId != undefined &&
-            plannedState.agents[selectedAgentId].location != location
-        ) {
-            setSelectedAgentId(undefined)
-            setPlannedTurn(
-                EG.updateTurnWithMove(plannedTurn, {
-                    agentId: selectedAgentId,
-                    location
-                })
-            )
-        }
-    }
-
     function handleEndTurn() {
         setSession(EG.appendTurn(curSession, plannedTurn))
         setPlannedTurn(EG.getEmptyTurn)
@@ -108,6 +86,76 @@ export default function GameScreen({ date }: GameProps) {
         (agent) => agent.location === 'Influence'
     )
 
+    const selectedAgent =
+        selectedAgentId == undefined
+            ? undefined
+            : plannedState.agents[selectedAgentId]
+
+    function handleAgentClick(id: number) {
+        if (lockedAgentIds.includes(id)) return
+
+        if (selectedAgentId === id)
+            // clicking selected agent
+            setSelectedAgentId(undefined)
+        else if (selectedAgent === undefined) setSelectedAgentId(id)
+        // Tapping another assigned agent should swap them
+        else {
+            const targetAgent = plannedState.agents[id]
+            // If they're in the same location, change selection
+            if (selectedAgent.location === targetAgent.location)
+                setSelectedAgentId(id)
+            // If the target location is Delay, check whether a swap is a valid move
+            else if (
+                (targetAgent.location === 'Delay' &&
+                    (prevDelayAgent?.curValue ?? 0) >=
+                        selectedAgent.curValue) ||
+                (selectedAgent.location === 'Delay' &&
+                    (prevDelayAgent?.curValue ?? 0) >= targetAgent.curValue)
+            ) {
+                //TODO: trigger a red shaking animation to show it can't go there
+                return
+            } else {
+                const move1 = {
+                    agentId: selectedAgent.id,
+                    location: targetAgent.location
+                }
+                const move2 = {
+                    agentId: targetAgent.id,
+                    location: selectedAgent.location
+                }
+                const updatedTurn = EG.updateTurnWithMove(
+                    EG.updateTurnWithMove(plannedTurn, move1),
+                    move2
+                )
+                setSelectedAgentId(undefined)
+                setPlannedTurn(updatedTurn)
+            }
+        }
+    }
+
+    function handleLocationClick(location: EG.Location) {
+        if (selectedAgent == undefined) return
+        if (selectedAgent.location === location) {
+            setSelectedAgentId(undefined)
+            return
+        }
+        if (
+            location === 'Delay' &&
+            (prevDelayAgent?.curValue ?? 0) >= selectedAgent.curValue
+        ) {
+            //TODO: trigger a red shaking animation to show it can't go there
+            return
+        }
+
+        setSelectedAgentId(undefined)
+        setPlannedTurn(
+            EG.updateTurnWithMove(plannedTurn, {
+                agentId: selectedAgent.id,
+                location
+            })
+        )
+    }
+
     return (
         <AnimationContext value={{ lastEndTurnAt }}>
             <div className="flex flex-col justify-between gap-0.5 sm:gap-2">
@@ -131,17 +179,13 @@ export default function GameScreen({ date }: GameProps) {
                     <Delay
                         lockedAgent={prevDelayAgent}
                         agent={nextDelayAgent}
-                        isAgentSelected={
-                            (nextDelayAgent?.id ?? -1) === selectedAgentId
-                        }
+                        selectedAgent={selectedAgent}
                         handleAgentClick={handleAgentClick}
                         handleLocationClick={handleLocationClick}
                     />
                     <Bribe
                         agent={bribeAgent}
-                        isAgentSelected={
-                            (bribeAgent?.id ?? -1) === selectedAgentId
-                        }
+                        selectedAgent={selectedAgent}
                         numAssignments={numAssignments}
                         handleAgentClick={handleAgentClick}
                         handleLocationClick={handleLocationClick}
@@ -149,12 +193,18 @@ export default function GameScreen({ date }: GameProps) {
                 </div>
                 <div className="flex flex-row justify-between">
                     <Button
+                        id="button-reset-turn"
                         handleButtonPress={handleResetTurn}
-                        isDisabled={false}
                     >
                         {'Reset Turn'}
                     </Button>
                     <Button
+                        handleButtonPress={() => startNextStep('game-tutorial')}
+                    >
+                        {'How to Play'}
+                    </Button>
+                    <Button
+                        id="button-end-turn"
                         isDisabled={!isPlannedTurnValid}
                         handleButtonPress={handleEndTurn}
                     >

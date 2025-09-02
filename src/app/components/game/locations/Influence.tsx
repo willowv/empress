@@ -2,7 +2,7 @@
 import * as EG from '@/logic/empress'
 import Agent from '@/game/Agent'
 import Hourglass from '@/svg/Hourglass'
-import NumberBox from '../NumberBox'
+import AssignTarget from '../AssignTarget'
 
 interface InfluenceProps {
     readonly selectedAgentId: number | undefined
@@ -22,6 +22,7 @@ export default function Influence({
     const score = EG.getScore({ agents })
     return (
         <div
+            id="location-influence"
             className="border-gold flex grow flex-col items-center justify-between border-2 p-2 sm:rounded-tr-2xl"
             onClick={() => handleLocationClick('Influence')}
         >
@@ -41,7 +42,7 @@ export default function Influence({
                               : 'default'
                     return (
                         <Agent
-                            key={agent.id}
+                            key={`agent-${agent.id}`}
                             agent={agent}
                             state={state}
                             handleAgentClick={handleAgentClick}
@@ -49,7 +50,9 @@ export default function Influence({
                     )
                 })}
                 <div className="mx-2">
-                    <NumberBox />
+                    <AssignTarget
+                        onClick={() => handleLocationClick('Influence')}
+                    />
                 </div>
             </div>
             <div className="flex flex-row items-center gap-0.5 opacity-70">

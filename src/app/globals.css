@@ -2,12 +2,12 @@
 
 :root {
     --background: hsl(40, 70%, 95%);
-    --foreground: hsl(40, 70%, 15%);
+    --foreground: hsl(40, 70%, 10%);
     --gold: hsla(40, 70%, 40%, 70%);
     --red: hsl(358, 100%, 38%);
     --green: hsl(144, 100%, 25%);
     --purple: hsl(273, 100%, 64%);
-    --gray: hsla(216, 10%, 70%, 0.7);
+    --gray: rgba(171, 177, 186, 0.7);
 }
 
 @font-face {
@@ -181,7 +181,7 @@
         --red: oklch(50.5% 0.213 27.518);
         --green: oklch(52.7% 0.154 150.069);
         --purple: oklch(62.7% 0.265 303.9);
-        --gray: oklch(44.6% 0.03 256.802);
+        --gray: rgb(74, 85, 101);
     }
 }
 

@@ -20,6 +20,7 @@ export default function Court({
 }: CourtProps) {
     return (
         <div
+            id="location-court"
             className="border-gold flex grow flex-col items-center justify-between rounded-t-2xl border-2 p-2 sm:rounded-tr-none"
             onClick={() => handleLocationClick('Court')}
         >
@@ -40,7 +41,7 @@ export default function Court({
 
                     return (
                         <Agent
-                            key={agent.id}
+                            key={`agent-${agent.id}`}
                             agent={agent}
                             state={state}
                             handleAgentClick={handleAgentClick}

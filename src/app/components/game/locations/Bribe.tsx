@@ -3,11 +3,12 @@ import * as EG from '@/logic/empress'
 import Agent from '@/game/Agent'
 import NumberBox from '@/game/NumberBox'
 import Hourglass from '@/svg/Hourglass'
+import AssignTarget from '../AssignTarget'
 
 interface BribeProps {
     readonly agent: EG.Agent | undefined
     readonly numAssignments: number
-    readonly isAgentSelected: boolean
+    readonly selectedAgent: EG.Agent | undefined
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
 }
@@ -15,22 +16,28 @@ interface BribeProps {
 export default function Bribe({
     agent,
     numAssignments,
-    isAgentSelected,
+    selectedAgent,
     handleLocationClick,
     handleAgentClick
 }: BribeProps) {
-    const isValid = (agent?.curValue ?? 0) >= numAssignments
+    const isValid =
+        (agent?.curValue ?? selectedAgent?.curValue ?? 0) >= numAssignments
     let assignmentSlot
     if (!agent)
-        assignmentSlot = NumberBox({
-            state: isValid ? 'accepted' : 'invalid'
-        })
+        assignmentSlot = (
+            <AssignTarget
+                state={
+                    !selectedAgent ? 'default' : isValid ? 'valid' : 'invalid'
+                }
+                onClick={() => handleLocationClick('Bribe')}
+            />
+        )
     else
         assignmentSlot = (
             <Agent
                 agent={agent}
                 state={
-                    isAgentSelected
+                    agent === selectedAgent
                         ? 'selected'
                         : isValid
                           ? 'accepted'
@@ -42,6 +49,7 @@ export default function Bribe({
 
     return (
         <div
+            id="location-bribe"
             className="border-gold flex grow flex-col items-center justify-between rounded-br-2xl border-2 p-2"
             onClick={() => handleLocationClick('Bribe')}
         >

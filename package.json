@@ -16,7 +16,9 @@
     "@vercel/analytics": "^1.5.0",
     "clsx": "^2.1.1",
     "lodash": "^4.17.21",
-    "next": "15.4.6",
+    "motion": "^12.23.12",
+    "next": "^15.5.2",
+    "nextstepjs": "^2.1.2",
     "postgres": "^3.4.7",
     "react": "19.1.0",
     "react-dom": "19.1.0"
