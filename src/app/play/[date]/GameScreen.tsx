@@ -59,49 +59,6 @@ export default function GameScreen({ date }: GameProps) {
 
     const numAssignments = EG.numNonBribeAssignments(curState, plannedTurn)
 
-    function handleAgentClick(id: number) {
-        if (lockedAgentIds.includes(id)) return
-
-        if (selectedAgentId === id)
-            // clicking selected agent
-            setSelectedAgentId(undefined)
-        else if (selectedAgentId === undefined) setSelectedAgentId(id)
-        // Tapping another assigned agent should swap them
-        else {
-            const selectedAgent = plannedState.agents[selectedAgentId]
-            const targetAgent = plannedState.agents[id]
-            const move1 = {
-                agentId: selectedAgentId,
-                location: targetAgent.location
-            }
-            const move2 = {
-                agentId: targetAgent.id,
-                location: selectedAgent.location
-            }
-            const updatedTurn = EG.updateTurnWithMove(
-                EG.updateTurnWithMove(plannedTurn, move1),
-                move2
-            )
-            setSelectedAgentId(undefined)
-            setPlannedTurn(updatedTurn)
-        }
-    }
-
-    function handleLocationClick(location: EG.Location) {
-        if (
-            selectedAgentId != undefined &&
-            plannedState.agents[selectedAgentId].location != location
-        ) {
-            setSelectedAgentId(undefined)
-            setPlannedTurn(
-                EG.updateTurnWithMove(plannedTurn, {
-                    agentId: selectedAgentId,
-                    location
-                })
-            )
-        }
-    }
-
     function handleEndTurn() {
         setSession(EG.appendTurn(curSession, plannedTurn))
         setPlannedTurn(EG.getEmptyTurn)
@@ -128,6 +85,72 @@ export default function GameScreen({ date }: GameProps) {
     const influenceAgents = plannedState.agents.filter(
         (agent) => agent.location === 'Influence'
     )
+
+    function handleAgentClick(id: number) {
+        if (lockedAgentIds.includes(id)) return
+
+        if (selectedAgentId === id)
+            // clicking selected agent
+            setSelectedAgentId(undefined)
+        else if (selectedAgentId === undefined) setSelectedAgentId(id)
+        // Tapping another assigned agent should swap them
+        else {
+            const selectedAgent = plannedState.agents[selectedAgentId]
+            const targetAgent = plannedState.agents[id]
+            // If they're in the same location, change selection
+            if (selectedAgent.location === targetAgent.location)
+                setSelectedAgentId(id)
+            // If the target location is Delay, check whether a swap is a valid move
+            else if (
+                targetAgent.location === 'Delay' &&
+                (prevDelayAgent?.curValue ?? 0) >= selectedAgent.curValue
+            ) {
+                //TODO: trigger a red shaking animation to show it can't go there
+                return
+            } else {
+                const move1 = {
+                    agentId: selectedAgentId,
+                    location: targetAgent.location
+                }
+                const move2 = {
+                    agentId: targetAgent.id,
+                    location: selectedAgent.location
+                }
+                const updatedTurn = EG.updateTurnWithMove(
+                    EG.updateTurnWithMove(plannedTurn, move1),
+                    move2
+                )
+                setSelectedAgentId(undefined)
+                setPlannedTurn(updatedTurn)
+            }
+        }
+    }
+
+    function handleLocationClick(location: EG.Location) {
+        if (selectedAgentId == undefined) return
+
+        const selectedAgent = plannedState.agents[selectedAgentId]
+
+        if (selectedAgent.location === location) {
+            setSelectedAgentId(undefined)
+            return
+        }
+        if (
+            location === 'Delay' &&
+            (prevDelayAgent?.curValue ?? 0) >= selectedAgent.curValue
+        ) {
+            //TODO: trigger a red shaking animation to show it can't go there
+            return
+        }
+
+        setSelectedAgentId(undefined)
+        setPlannedTurn(
+            EG.updateTurnWithMove(plannedTurn, {
+                agentId: selectedAgentId,
+                location
+            })
+        )
+    }
 
     return (
         <AnimationContext value={{ lastEndTurnAt }}>
