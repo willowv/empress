@@ -5,6 +5,7 @@ import NumberBox from '@/game/NumberBox'
 import Hourglass from '@/svg/Hourglass'
 import clsx from 'clsx'
 import AssignTarget from '../AssignTarget'
+import { useDroppable } from '@dnd-kit/core'
 
 interface DelayProps {
     readonly lockedAgent: EG.Agent | undefined
@@ -26,6 +27,7 @@ export default function Delay({
     // Players should be aware that if they end turn without assigning a new agent here, game ends
     // Players should be aware that the new agent needs to have a higher value than the previous one
 
+    const { setNodeRef } = useDroppable({ id: 'location-delay' })
     // We don't really need 'agents' or 'lockedAgentIds', we just need the two relevant agents
     let prevSlot
     if (lockedAgent)
@@ -61,6 +63,7 @@ export default function Delay({
 
     return (
         <div
+            ref={setNodeRef}
             id="location-delay"
             className="border-gold flex grow flex-col items-center justify-between rounded-bl-2xl border-2 p-2"
             onClick={() => handleLocationClick('Delay')}

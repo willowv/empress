@@ -11,6 +11,15 @@ import { dateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
 import { useNextStep } from 'nextstepjs'
+import {
+    DndContext,
+    DragOverlay,
+    MouseSensor,
+    TouchSensor,
+    useSensor,
+    useSensors
+} from '@dnd-kit/core'
+import Agent from '@/game/Agent'
 
 interface GameProps {
     readonly date: Date
@@ -39,6 +48,21 @@ export default function GameScreen({ date }: GameProps) {
         // For updating animation context
         setLastEndTurnAt(new Date())
     }, [curSession])
+
+    const mouseSensor = useSensor(MouseSensor, {
+        // Require the mouse to move by 10 pixels before activating
+        activationConstraint: {
+            distance: 10
+        }
+    })
+    const touchSensor = useSensor(TouchSensor, {
+        // Press delay of 250ms, with tolerance of 5px of movement
+        activationConstraint: {
+            delay: 250,
+            tolerance: 5
+        }
+    })
+    const sensors = useSensors(mouseSensor, touchSensor)
 
     const curState = EG.getCurrentState(curSession)
     const isFirstTurn = curSession.turnHistory.length == 0
@@ -156,68 +180,97 @@ export default function GameScreen({ date }: GameProps) {
         )
     }
 
+    const mpId_Location: Record<string, EG.Location> = {
+        'location-bribe': 'Bribe',
+        'location-court': 'Court',
+        'location-delay': 'Delay',
+        'location-influence': 'Influence'
+    }
     return (
-        <AnimationContext value={{ lastEndTurnAt }}>
-            <div className="flex flex-col justify-between gap-0.5 sm:gap-2">
-                <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
-                    <Court
-                        selectedAgentId={selectedAgentId}
-                        agents={courtAgents}
-                        handleAgentClick={handleAgentClick}
-                        handleLocationClick={handleLocationClick}
-                        lockedAgentIds={lockedAgentIds}
+        <DndContext
+            sensors={sensors}
+            onDragStart={(e) => {
+                const agentId = e.active.id.toString().split('-')[1]
+                setSelectedAgentId(parseInt(agentId))
+            }}
+            onDragEnd={(e) => {
+                if (!e.over) return
+                handleLocationClick(mpId_Location[e.over.id])
+            }}
+        >
+            <DragOverlay>
+                {selectedAgent && (
+                    <Agent
+                        agent={selectedAgent}
+                        handleAgentClick={() => {}}
+                        state="selected"
                     />
-                    <Influence
-                        selectedAgentId={selectedAgentId}
-                        agents={influenceAgents}
-                        handleAgentClick={handleAgentClick}
-                        handleLocationClick={handleLocationClick}
-                        lockedAgentIds={lockedAgentIds}
-                    />
-                </div>
-                <div className="flex flex-row gap-0.5 sm:gap-2">
-                    <Delay
-                        lockedAgent={prevDelayAgent}
-                        agent={nextDelayAgent}
-                        selectedAgent={selectedAgent}
-                        handleAgentClick={handleAgentClick}
-                        handleLocationClick={handleLocationClick}
-                    />
-                    <Bribe
-                        agent={bribeAgent}
-                        selectedAgent={selectedAgent}
-                        numAssignments={numAssignments}
-                        handleAgentClick={handleAgentClick}
-                        handleLocationClick={handleLocationClick}
-                    />
-                </div>
-                <div className="flex flex-row justify-between">
-                    <Button
-                        id="button-reset-turn"
-                        handleButtonPress={handleResetTurn}
-                    >
-                        {'Reset Turn'}
-                    </Button>
-                    <Button
-                        handleButtonPress={() => startNextStep('game-tutorial')}
-                    >
-                        {'How to Play'}
-                    </Button>
-                    <Button
-                        id="button-end-turn"
-                        isDisabled={!isPlannedTurnValid}
-                        handleButtonPress={handleEndTurn}
-                    >
-                        <div className="flex flex-row items-center gap-1">
-                            <div>{'End Turn ('}</div>
-                            <div className="fill-gold size-2 -translate-y-1">
-                                <Hourglass />
+                )}
+            </DragOverlay>
+            <AnimationContext value={{ lastEndTurnAt }}>
+                <div className="flex flex-col justify-between gap-0.5 sm:gap-2">
+                    <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
+                        <Court
+                            selectedAgentId={selectedAgentId}
+                            agents={courtAgents}
+                            handleAgentClick={handleAgentClick}
+                            handleLocationClick={handleLocationClick}
+                            lockedAgentIds={lockedAgentIds}
+                        />
+                        <Influence
+                            selectedAgentId={selectedAgentId}
+                            agents={influenceAgents}
+                            handleAgentClick={handleAgentClick}
+                            handleLocationClick={handleLocationClick}
+                            lockedAgentIds={lockedAgentIds}
+                        />
+                    </div>
+                    <div className="flex flex-row gap-0.5 sm:gap-2">
+                        <Delay
+                            lockedAgent={prevDelayAgent}
+                            agent={nextDelayAgent}
+                            selectedAgent={selectedAgent}
+                            handleAgentClick={handleAgentClick}
+                            handleLocationClick={handleLocationClick}
+                        />
+                        <Bribe
+                            agent={bribeAgent}
+                            selectedAgent={selectedAgent}
+                            numAssignments={numAssignments}
+                            handleAgentClick={handleAgentClick}
+                            handleLocationClick={handleLocationClick}
+                        />
+                    </div>
+                    <div className="flex flex-row justify-between">
+                        <Button
+                            id="button-reset-turn"
+                            handleButtonPress={handleResetTurn}
+                        >
+                            {'Reset Turn'}
+                        </Button>
+                        <Button
+                            handleButtonPress={() =>
+                                startNextStep('game-tutorial')
+                            }
+                        >
+                            {'How to Play'}
+                        </Button>
+                        <Button
+                            id="button-end-turn"
+                            isDisabled={!isPlannedTurnValid}
+                            handleButtonPress={handleEndTurn}
+                        >
+                            <div className="flex flex-row items-center gap-1">
+                                <div>{'End Turn ('}</div>
+                                <div className="fill-gold size-2 -translate-y-1">
+                                    <Hourglass />
+                                </div>
+                                <div>{')'}</div>
                             </div>
-                            <div>{')'}</div>
-                        </div>
-                    </Button>
+                        </Button>
+                    </div>
                 </div>
-            </div>
-        </AnimationContext>
+            </AnimationContext>
+        </DndContext>
     )
 }

@@ -3,6 +3,7 @@ import * as EG from '@/logic/empress'
 import Agent from '@/game/Agent'
 import Hourglass from '@/svg/Hourglass'
 import AssignTarget from '../AssignTarget'
+import { useDroppable } from '@dnd-kit/core'
 
 interface InfluenceProps {
     readonly selectedAgentId: number | undefined
@@ -19,9 +20,11 @@ export default function Influence({
     handleAgentClick,
     lockedAgentIds
 }: InfluenceProps) {
+    const { setNodeRef } = useDroppable({ id: 'location-influence' })
     const score = EG.getScore({ agents })
     return (
         <div
+            ref={setNodeRef}
             id="location-influence"
             className="border-gold flex grow flex-col items-center justify-between border-2 p-2 sm:rounded-tr-2xl"
             onClick={() => handleLocationClick('Influence')}

@@ -4,6 +4,7 @@ import Agent from '@/game/Agent'
 import NumberBox from '@/game/NumberBox'
 import Hourglass from '@/svg/Hourglass'
 import AssignTarget from '../AssignTarget'
+import { useDroppable } from '@dnd-kit/core'
 
 interface BribeProps {
     readonly agent: EG.Agent | undefined
@@ -20,6 +21,7 @@ export default function Bribe({
     handleLocationClick,
     handleAgentClick
 }: BribeProps) {
+    const { setNodeRef } = useDroppable({ id: 'location-bribe' })
     const isValid =
         (agent?.curValue ?? selectedAgent?.curValue ?? 0) >= numAssignments
     let assignmentSlot
@@ -49,6 +51,7 @@ export default function Bribe({
 
     return (
         <div
+            ref={setNodeRef}
             id="location-bribe"
             className="border-gold flex grow flex-col items-center justify-between rounded-br-2xl border-2 p-2"
             onClick={() => handleLocationClick('Bribe')}
