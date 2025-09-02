@@ -66,7 +66,7 @@ export default function RootLayout({
                         </div>
                     ),
                     selector: '#agent-0',
-                    side: 'right',
+                    side: 'bottom-left',
                     pointerRadius: 5,
                     pointerPadding: 5,
                     viewportID: 'scrollable-viewport'

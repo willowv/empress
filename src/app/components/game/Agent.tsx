@@ -5,6 +5,7 @@ import Lock from '@/svg/Lock'
 import { AnimationContext } from 'app/play/[date]/GameScreen'
 import { useContext } from 'react'
 import clsx from 'clsx'
+import { useDraggable } from '@dnd-kit/core'
 
 type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
 
@@ -21,20 +22,9 @@ export default function Agent({
     handleAgentClick,
     animRollOrder
 }: AgentProps) {
-    const mapState_dieColorCss = {
-        default: 'fill-foreground',
-        locked: 'fill-gold',
-        selected: 'fill-purple',
-        accepted: 'fill-green',
-        invalid: 'fill-red'
-    }
-    const mapState_agentCss = {
-        default: '',
-        locked: '',
-        selected: ' scale-110',
-        accepted: '',
-        invalid: ''
-    }
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+        id: `agent-${agent.id}`
+    })
 
     // If the last end turn was within 1.5 seconds, add the animation class
     const { lastEndTurnAt } = useContext(AnimationContext)
@@ -45,14 +35,21 @@ export default function Agent({
     const animDelay = 100 * (animRollOrder ?? 0) // milliseconds
     return (
         <div
+            ref={setNodeRef}
+            {...listeners}
+            {...attributes}
             id={`agent-${agent.id}`}
             className={clsx(
-                'relative size-12 transition-all select-none' +
-                    mapState_agentCss[state],
+                'fill-foreground transition-color relative size-12 select-none',
                 {
                     'not-motion-reduce:animate-diebounce':
                         shouldDoRollAnimation,
-                    'animate-none': !shouldDoRollAnimation
+                    'animate-none': !shouldDoRollAnimation,
+                    'fill-purple scale-110': state === 'selected',
+                    'fill-gold': state === 'locked',
+                    'fill-green': state === 'accepted',
+                    'fill-red': state === 'invalid',
+                    invisible: transform
                 }
             )}
             style={{
@@ -65,7 +62,7 @@ export default function Agent({
             }}
         >
             <div
-                className={clsx(mapState_dieColorCss[state], {
+                className={clsx('', {
                     'not-motion-reduce:animate-dieroll': shouldDoRollAnimation,
                     'animate-none': !shouldDoRollAnimation
                 })}
