@@ -4,6 +4,7 @@ import Agent from '@/game/Agent'
 import NumberBox from '@/game/NumberBox'
 import Hourglass from '@/svg/Hourglass'
 import clsx from 'clsx'
+import AssignTarget from '../AssignTarget'
 
 interface DelayProps {
     readonly lockedAgent: EG.Agent | undefined
@@ -39,7 +40,8 @@ export default function Delay({
 
     let nextSlot
     const isValid = (agent?.curValue ?? 0) > (lockedAgent?.curValue ?? 0)
-    if (!agent) nextSlot = <NumberBox num={undefined} />
+    if (!agent)
+        nextSlot = <AssignTarget onClick={() => handleLocationClick('Delay')} />
     else
         nextSlot = (
             <Agent

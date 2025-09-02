@@ -65,7 +65,26 @@ export default function GameScreen({ date }: GameProps) {
         if (selectedAgentId === id)
             // clicking selected agent
             setSelectedAgentId(undefined)
-        else setSelectedAgentId(id)
+        else if (selectedAgentId === undefined) setSelectedAgentId(id)
+        // Tapping another assigned agent should swap them
+        else {
+            const selectedAgent = plannedState.agents[selectedAgentId]
+            const targetAgent = plannedState.agents[id]
+            const move1 = {
+                agentId: selectedAgentId,
+                location: targetAgent.location
+            }
+            const move2 = {
+                agentId: targetAgent.id,
+                location: selectedAgent.location
+            }
+            const updatedTurn = EG.updateTurnWithMove(
+                EG.updateTurnWithMove(plannedTurn, move1),
+                move2
+            )
+            setSelectedAgentId(undefined)
+            setPlannedTurn(updatedTurn)
+        }
     }
 
     function handleLocationClick(location: EG.Location) {

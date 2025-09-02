@@ -3,6 +3,7 @@ import * as EG from '@/logic/empress'
 import Agent from '@/game/Agent'
 import NumberBox from '@/game/NumberBox'
 import Hourglass from '@/svg/Hourglass'
+import AssignTarget from '../AssignTarget'
 
 interface BribeProps {
     readonly agent: EG.Agent | undefined
@@ -22,9 +23,12 @@ export default function Bribe({
     const isValid = (agent?.curValue ?? 0) >= numAssignments
     let assignmentSlot
     if (!agent)
-        assignmentSlot = NumberBox({
-            state: isValid ? 'accepted' : 'invalid'
-        })
+        assignmentSlot = (
+            <AssignTarget
+                state={isValid ? 'accepted' : 'invalid'}
+                onClick={() => handleLocationClick('Bribe')}
+            />
+        )
     else
         assignmentSlot = (
             <Agent

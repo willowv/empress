@@ -2,7 +2,7 @@
 import * as EG from '@/logic/empress'
 import Agent from '@/game/Agent'
 import Hourglass from '@/svg/Hourglass'
-import NumberBox from '../NumberBox'
+import AssignTarget from '../AssignTarget'
 
 interface InfluenceProps {
     readonly selectedAgentId: number | undefined
@@ -50,7 +50,9 @@ export default function Influence({
                     )
                 })}
                 <div className="mx-2">
-                    <NumberBox />
+                    <AssignTarget
+                        onClick={() => handleLocationClick('Influence')}
+                    />
                 </div>
             </div>
             <div className="flex flex-row items-center gap-0.5 opacity-70">

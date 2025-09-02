@@ -59,8 +59,9 @@ export default function Agent({
                 animationDuration: '1s',
                 animationDelay: `${animDelay}ms`
             }}
-            onClick={() => {
+            onClick={(e) => {
                 handleAgentClick(agent.id)
+                e.stopPropagation()
             }}
         >
             <div
