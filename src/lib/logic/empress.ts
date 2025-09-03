@@ -42,22 +42,25 @@ const CONFIG_HISTORY = new Map<Date, EmpressConfig>([
     [new Date(0), ORIGINAL_CONFIG]
 ])
 
-// We need the date for this game so we know which config to use
-export function getInitialState(date: Date, rand: () => number): State {
-    // get the most recent config (assumes they are in chronological order)
+function getConfig(date: Date): EmpressConfig {
     let config
     CONFIG_HISTORY.forEach((historicalConfig, historicalDate) => {
         if (date >= historicalDate) config = historicalConfig
     })
+    return config ?? ORIGINAL_CONFIG
+}
+
+export function getDiceCounts(
+    session: Session
+): [Map<DieSize, number>, () => number] {
+    const rand = random_splitmix32(hash_cyrb53(session.seed))
     const {
         dieBaseWeights,
         minDiceCount,
         maxDiceCount,
         minWeightChange,
         maxWeightChange
-    } = config ?? ORIGINAL_CONFIG
-
-    const agents: Agent[] = []
+    } = getConfig(session.date)
     const total = randomNum(minDiceCount, maxDiceCount, rand)
     const finalWeights = dieBaseWeights.map(
         (weight) => weight + randomNum(minWeightChange, maxWeightChange, rand)
@@ -68,33 +71,42 @@ export function getInitialState(date: Date, rand: () => number): State {
 
     // Use the total and the weights to calculate a number for each die size
     // Add that many agents of that size to agents
+    const mpDieSize_Count = new Map<DieSize, number>()
     finalWeights.forEach((weight, index) => {
         const diceCount = Math.floor((weight / weightTotal) * (total + 1))
-        for (let i = 0; i < diceCount; i++)
+        mpDieSize_Count.set(DIE_SIZES[index], diceCount)
+    })
+
+    return [mpDieSize_Count, rand]
+}
+
+// We need the date for this game so we know which config to use
+function getInitialState(session: Session): [State, () => number] {
+    const [mpDieSize_Count, rand] = getDiceCounts(session)
+    const agents: Agent[] = []
+    mpDieSize_Count.entries().forEach(([dieSize, count]) => {
+        for (let i = 0; i < count; i++) {
             agents.push({
                 id: agents.length,
-                curValue: randomRoll(DIE_SIZES[index], rand),
-                maxValue: DIE_SIZES[index],
+                curValue: randomRoll(dieSize, rand),
+                maxValue: dieSize,
                 location: 'Court'
             })
+        }
     })
-    return { agents }
+    return [{ agents }, rand]
 }
 
 export function getCurrentState(session: Session): State {
-    const rand = random_splitmix32(hash_cyrb53(session.seed))
-    let curState = getInitialState(session.date, rand)
+    const [initialState, rand] = getInitialState(session)
+    let curState = _.cloneDeep(initialState)
     session.turnHistory.forEach((turn) => {
         curState = endTurn(curState, turn, rand)
     })
     return curState
 }
 
-export function endTurn(
-    curState: State,
-    turn: Turn,
-    rand: () => number
-): State {
+function endTurn(curState: State, turn: Turn, rand: () => number): State {
     // If turn is valid, execute end of turn effects and return the new state
     if (isTurnValid(curState, turn)) {
         const { agents: prevAgents } = curState

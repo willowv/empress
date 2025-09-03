@@ -6,7 +6,7 @@ import {
 } from 'lib/util'
 import SwipeNavigation from '@/ui/SwipeNavigation'
 import ButtonLink from '@/ui/ButtonLink'
-import { DieSize, getCurrentState } from '@/logic/empress'
+import { getDiceCounts } from '@/logic/empress'
 import Scores from 'app/play/Scores'
 import QueryParamDateSelector from '@/ui/QueryParamDateSelector'
 import AgentPreview from '@/game/AgentPreview'
@@ -21,21 +21,15 @@ export default async function Page(props: {
     const dateString = searchParams?.date
     const selectedDate = ensureValidDate(dateString, getTodayWithoutTime())
     const oneYearAgo = addYears(getTodayWithoutTime(), -1)
-    const statePreview = getCurrentState({
+    const [mpDieSize_Count] = getDiceCounts({
         date: selectedDate,
         seed: dateOnlyString(selectedDate),
         turnHistory: []
     })
-    const mpDieSize_Count = new Map<DieSize, number>()
-    statePreview.agents.forEach((agent) => {
-        mpDieSize_Count.set(
-            agent.maxValue,
-            (mpDieSize_Count.get(agent.maxValue) ?? 0) + 1
-        )
-    })
     const previewDice = mpDieSize_Count
         .entries()
         .map(([dieSize, count], index) => {
+            if (count == 0) return
             return (
                 <div
                     key={`preview-${index}`}
