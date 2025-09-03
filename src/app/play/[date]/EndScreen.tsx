@@ -6,7 +6,6 @@ import { dateOnlyString } from 'lib/util'
 import { startTransition, useActionState } from 'react'
 import { getCurrentState, getScore, Session } from '@/logic/empress'
 import { SubmissionState, submitScore } from 'lib/actions'
-import ButtonLink from '@/ui/ButtonLink'
 
 const mpSubmissionState_Content = {
     initial: 'Submit Score',
@@ -17,9 +16,14 @@ const mpSubmissionState_Content = {
 interface EndScreenProps {
     readonly session: Session
     readonly date: Date
+    readonly handleTryAgain: () => void
 }
 
-export default function EndScreen({ session, date }: EndScreenProps) {
+export default function EndScreen({
+    session,
+    date,
+    handleTryAgain
+}: EndScreenProps) {
     const [submissionState, submitAction, isSubmissionPending] =
         useActionState<SubmissionState>(
             (previousState) => submitScore(previousState, session, date),
@@ -40,14 +44,19 @@ export default function EndScreen({ session, date }: EndScreenProps) {
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                         {dateOnlyString(date)}
                     </div>
-                    <div className="text-foreground m-2 rounded-lg p-2 text-center text-lg backdrop-blur-xl">
-                        {'GAME OVER'}
+                    <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                        {'The Empress has returned'}
                     </div>
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                         {`${finalScore} in ${numTurns} turns`}
                     </div>
                     <div className="flex flex-row justify-between gap-2">
-                        <ButtonLink href="/play">{'Play Again'}</ButtonLink>
+                        <Button
+                            isDisabled={submissionState !== 'initial'}
+                            handleButtonPress={handleTryAgain}
+                        >
+                            {'Try Again'}
+                        </Button>
                         <Button
                             isDisabled={
                                 submissionState !== 'initial' || finalScore == 0

@@ -69,7 +69,15 @@ export default function GameScreen({ date }: GameProps) {
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
 
     if (isGameOver) {
-        return <EndScreen session={curSession} date={date} />
+        return (
+            <EndScreen
+                session={curSession}
+                date={date}
+                handleTryAgain={() =>
+                    setSession({ ...curSession, turnHistory: [] })
+                }
+            />
+        )
     }
 
     const plannedState = EG.applyTurn(curState, plannedTurn)
