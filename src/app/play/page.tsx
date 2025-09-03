@@ -47,7 +47,10 @@ export default async function Page(props: {
             )
         })
     return (
-        <div className="not-motion-reduce:animate-slidefromright relative flex flex-col items-center select-none">
+        <div
+            id="play-screen"
+            className="not-motion-reduce:animate-slidefromright relative flex flex-col items-center select-none"
+        >
             <div className="fill-gold bg-background max-h-screen">
                 <SwipeNavigation>
                     <Fortune />
@@ -59,7 +62,10 @@ export default async function Page(props: {
                         max={getTodayWithoutTime()}
                         min={oneYearAgo}
                     />
-                    <div className="flex flex-col items-center gap-2 rounded-lg p-2 backdrop-blur-xl">
+                    <div
+                        id="dice-preview"
+                        className="flex flex-col items-center gap-2 rounded-lg p-2 backdrop-blur-xl"
+                    >
                         <div className="text-foreground text-md text-center">
                             {'Dice Preview'}
                         </div>
@@ -67,10 +73,15 @@ export default async function Page(props: {
                             {[...previewDice]}
                         </div>
                     </div>
-                    <Scores date={selectedDate} />
+                    <div id="scores">
+                        <Scores date={selectedDate} />
+                    </div>
                 </div>
             </div>
-            <div className="absolute bottom-15 left-1/2 -translate-x-1/2">
+            <div
+                id="button-play"
+                className="absolute bottom-15 left-1/2 -translate-x-1/2"
+            >
                 <ButtonLink href={`/play/${dateOnlyString(selectedDate)}`}>
                     {'Play'}
                 </ButtonLink>
