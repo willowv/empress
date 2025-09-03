@@ -21,7 +21,7 @@ export default function TutorialCard({
             </div>
 
             <div className="text-xs">{step.content}</div>
-            <div className="flex flex-row justify-between gap-1">
+            <div className="mt-2 flex flex-row justify-between gap-1">
                 {currentStep !== 0 && (
                     <Button handleButtonPress={() => prevStep()}>
                         Previous

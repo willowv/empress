@@ -16,7 +16,7 @@ interface ScoreStats {
 }
 
 interface Bucket {
-    readonly bucketNumber: number
+    readonly bucket_number: number
     readonly frequency: number
 }
 
@@ -63,5 +63,5 @@ FROM
 GROUP BY
     bucket_number
 ORDER BY
-    bucket_number;`
+    bucket_number DESC;`
 }

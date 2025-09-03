@@ -20,6 +20,7 @@ import {
     useSensors
 } from '@dnd-kit/core'
 import Agent from '@/game/Agent'
+import ButtonLink from '@/ui/ButtonLink'
 
 interface GameProps {
     readonly date: Date
@@ -34,9 +35,10 @@ export const AnimationContext = createContext<AnimationContextProps>({
 })
 
 export default function GameScreen({ date }: GameProps) {
+    const dateString = dateOnlyString(date)
     const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
-        return { date: date, seed: dateOnlyString(date), turnHistory: [] }
+        return { date: date, seed: dateString, turnHistory: [] }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
     const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
@@ -69,7 +71,15 @@ export default function GameScreen({ date }: GameProps) {
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
 
     if (isGameOver) {
-        return <EndScreen session={curSession} date={date} />
+        return (
+            <EndScreen
+                session={curSession}
+                date={date}
+                handleTryAgain={() =>
+                    setSession({ ...curSession, turnHistory: [] })
+                }
+            />
+        )
     }
 
     const plannedState = EG.applyTurn(curState, plannedTurn)
@@ -248,6 +258,9 @@ export default function GameScreen({ date }: GameProps) {
                         >
                             {'Reset Turn'}
                         </Button>
+                        <ButtonLink href={`/play?date=${dateString}`}>
+                            {'Quit Game'}
+                        </ButtonLink>
                         <Button
                             handleButtonPress={() =>
                                 startNextStep('game-tutorial')

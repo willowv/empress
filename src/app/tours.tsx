@@ -2,6 +2,128 @@ import { Tour } from 'nextstepjs'
 
 const ONBOARDING_STEPS: Tour[] = [
     {
+        tour: 'site-tutorial',
+        steps: [
+            {
+                icon: null,
+                title: 'Welcome!',
+                content: (
+                    <div className="flex flex-col gap-2">
+                        <div>Welcome to the Empress Returns!</div>
+                        <div>
+                            This is a solitaire dice game inspired by tarot,
+                            specifically my interpretation of The Empress,
+                            Reversed.
+                        </div>
+                    </div>
+                ),
+                nextRoute: '/play'
+            },
+            {
+                icon: null,
+                title: 'Welcome!',
+                content: (
+                    <div className="flex flex-col gap-2">
+                        <div>This is the Play page.</div>
+                        <div>
+                            Here you can view puzzles and their high scores by
+                            day. Each day a new puzzle is released.
+                        </div>
+                        <div>
+                            All attempts on a specific puzzle will use the same
+                            seed for random number generation, meaning that the
+                            dice provided and the rolls will be the same.
+                        </div>
+                    </div>
+                ),
+                prevRoute: '/'
+            },
+            {
+                icon: null,
+                title: 'Welcome!',
+                content: (
+                    <div className="flex flex-col gap-2">
+                        <div>
+                            Use the Date Selector to navigate between puzzles.
+                        </div>
+                        <div>
+                            You can view and play puzzles up to a year in the
+                            past.
+                        </div>
+                    </div>
+                ),
+                selector: '#date-selector',
+                side: 'bottom',
+                pointerRadius: 5,
+                pointerPadding: 5,
+                viewportID: 'scrollable-viewport'
+            },
+            {
+                icon: null,
+                title: 'Welcome!',
+                content: (
+                    <div className="flex flex-col gap-2">
+                        <div>
+                            This Dice Preview shows what dice will be used in
+                            the puzzle for the day you have selected.
+                        </div>
+                    </div>
+                ),
+                selector: '#dice-preview',
+                side: 'bottom',
+                pointerRadius: 5,
+                pointerPadding: 5,
+                viewportID: 'scrollable-viewport'
+            },
+            {
+                icon: null,
+                title: 'Welcome!',
+                content: (
+                    <div className="flex flex-col gap-2">
+                        <div>
+                            Scores for this day&apos;s puzzle are shown here.
+                        </div>
+                        <div>
+                            If there are fewer than 10 scores, it shows the top
+                            5.
+                        </div>
+                        <div>
+                            If there are more than 10 scores, it shows the
+                            distribution of different scores across all players.
+                        </div>
+                    </div>
+                ),
+                selector: '#scores',
+                side: 'top',
+                pointerRadius: 5,
+                pointerPadding: 5,
+                viewportID: 'scrollable-viewport'
+            },
+            {
+                icon: null,
+                title: 'Welcome!',
+                content: (
+                    <div className="flex flex-col gap-2">
+                        <div>
+                            Press this button to make an attempt on this
+                            day&apos;s puzzle.
+                        </div>
+                        <div>
+                            Try not to submit more than one score for the same
+                            day.
+                        </div>
+                        <div>Have fun!</div>
+                    </div>
+                ),
+                selector: '#button-play',
+                side: 'top',
+                pointerRadius: 5,
+                pointerPadding: 5,
+                viewportID: 'scrollable-viewport'
+            }
+        ]
+    },
+    {
         tour: 'game-tutorial',
         steps: [
             {
