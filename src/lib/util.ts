@@ -8,7 +8,7 @@ export function dateOnlyString(date: Date) {
     return date.toISOString().split('T')[0]
 }
 
-export const pages: string[] = ['/', '/play', '/scores']
+export const pages: string[] = ['/', '/play', '/story']
 
 export function nextPage(pathname: string): string {
     const pageIndex = pages.findLastIndex((page) => {
@@ -32,8 +32,8 @@ export function getPageName(href: string) {
             return 'Main'
         case '/play':
             return 'Play'
-        case '/scores':
-            return 'Scores'
+        case '/story':
+            return 'Story'
     }
 }
 

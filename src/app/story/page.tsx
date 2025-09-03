@@ -1,5 +1,4 @@
 import Fool from '@/svg/tarot/Fool'
-import ButtonLink from '@/ui/ButtonLink'
 import SwipeNavigation from '@/ui/SwipeNavigation'
 
 export default function StoryScreen() {
@@ -24,11 +23,6 @@ export default function StoryScreen() {
                         {
                             'You will bring to bear all the intrigue and trickery that brought the Empress to power, sending your agents across the capital to forge alliances and build the influence you will one day need to rule. As long as you can delay the Empress’s return, there is still time. Good luck.'
                         }
-                    </div>
-                    <div className="bg-background rounded-xl">
-                        <ButtonLink href={'/'}>
-                            <div className="m-1 text-center text-xs">Back</div>
-                        </ButtonLink>
                     </div>
                 </div>
             </div>

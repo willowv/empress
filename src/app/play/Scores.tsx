@@ -1,6 +1,4 @@
-import ButtonLink from '@/ui/ButtonLink'
 import * as Data from 'lib/data'
-import { dateOnlyString } from 'lib/util'
 
 interface ScoresProps {
     readonly date: Date
@@ -17,12 +15,7 @@ export default async function Scores({ date }: ScoresProps) {
         return (
             <div className="flex flex-col items-center gap-2">
                 <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                    {'There are no scores recorded yet for this day.'}
-                </div>
-                <div className="w-30">
-                    <ButtonLink href={`/play/${dateOnlyString(date)}`}>
-                        {'Add one!'}
-                    </ButtonLink>
+                    {'No scores yet!'}
                 </div>
             </div>
         )
@@ -32,15 +25,15 @@ export default async function Scores({ date }: ScoresProps) {
         // What are the current top 5 scores?
         const scores = await Data.getTopNScoresByDate(date, 5)
         return (
-            <div className="flex flex-col gap-2">
-                <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+            <div className="flex flex-col gap-1 rounded-lg p-2 backdrop-blur-xl">
+                <div className="text-foreground text-md text-center">
                     {'Top 5 Scores'}
                 </div>
                 {scores.map((score, index) => {
                     return (
                         <div
                             key={index}
-                            className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl"
+                            className="text-foreground text-md text-center"
                         >
                             {`#${index + 1} | ${score.score} in ${score.numturns} turns`}
                         </div>
@@ -52,25 +45,30 @@ export default async function Scores({ date }: ScoresProps) {
 
     const buckets = await Data.getScoreBucketsByDate(date, min, max, 5)
     const bucketIncrement = (max - min) / 5
-    return (
-        <div className="flex flex-col gap-2">
-            <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                {"Today's Scores"}
+    const bucketElements = buckets.map((bucket, index) => {
+        const bucketMin = Math.round(
+            min + bucketIncrement * (bucket.bucket_number - 1)
+        )
+        const bucketMax = Math.round(bucketMin + (bucketIncrement - 1))
+        const range: string =
+            bucketMin == bucketMax
+                ? `${bucketMin}`
+                : `${bucketMax}-${bucketMin}`
+        return (
+            <div
+                key={`score-${index}`}
+                className="text-foreground text-md text-right"
+            >
+                {`${range} | ${bucket.frequency} players`}
             </div>
-            {buckets.map((bucket, index) => {
-                const bucketMin = Math.floor(min + bucketIncrement * index)
-                const bucketMax = Math.floor(
-                    min + bucketIncrement * (index + 1) - 1
-                )
-                return (
-                    <div
-                        key={index}
-                        className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl"
-                    >
-                        {`${bucketMin}-${bucketMax} | ${bucket.frequency} players`}
-                    </div>
-                )
-            })}
+        )
+    })
+    return (
+        <div className="flex flex-col gap-1 rounded-lg p-2 backdrop-blur-xl">
+            <div className="text-foreground text-md text-center">
+                {'Scores'}
+            </div>
+            {bucketElements}
         </div>
     )
 }
