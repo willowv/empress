@@ -6,6 +6,7 @@ import { dateOnlyString } from 'lib/util'
 import { startTransition, useActionState } from 'react'
 import { getCurrentState, getScore, Session } from '@/logic/empress'
 import { SubmissionState, submitScore } from 'lib/actions'
+import ButtonLink from '@/ui/ButtonLink'
 
 const mpSubmissionState_Content = {
     initial: 'Submit Score',
@@ -32,6 +33,7 @@ export default function EndScreen({
 
     const finalScore = getScore(getCurrentState(session))
     const numTurns = session.turnHistory.length
+    const dateString = dateOnlyString(date)
     return (
         <div className="not-motion-reduce:animate-slidefromtop relative flex flex-col items-center select-none">
             <div className="fill-gold bg-background max-h-screen">
@@ -42,7 +44,7 @@ export default function EndScreen({
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <div className="flex flex-col gap-2">
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                        {dateOnlyString(date)}
+                        {dateString}
                     </div>
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                         {'GAME OVER'}
@@ -73,6 +75,11 @@ export default function EndScreen({
                         </Button>
                     </div>
                 </div>
+            </div>
+            <div className="absolute bottom-15 left-1/2 -translate-x-1/2">
+                <ButtonLink href={`/play?date=${dateString}`}>
+                    {'Back'}
+                </ButtonLink>
             </div>
         </div>
     )
