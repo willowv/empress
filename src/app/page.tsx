@@ -8,7 +8,7 @@ import { useNextStep } from 'nextstepjs'
 export default function Home() {
     const { startNextStep } = useNextStep()
     return (
-        <div className="not-motion-reduce:animate-slidefromtop relative flex flex-col items-center select-none">
+        <div className="not-motion-reduce:animate-slidefromright relative flex flex-col items-center select-none">
             <div className="fill-gold bg-background max-h-screen">
                 <SwipeNavigation>
                     <Empress />

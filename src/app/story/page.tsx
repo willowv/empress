@@ -4,7 +4,7 @@ import SwipeNavigation from '@/ui/SwipeNavigation'
 export default function StoryScreen() {
     return (
         <SwipeNavigation>
-            <div className="not-motion-reduce:animate-slidefrombottom relative flex flex-col items-center select-none">
+            <div className="not-motion-reduce:animate-slidefromright relative flex flex-col items-center select-none">
                 <div className="fill-gold bg-background max-h-screen">
                     <Fool />
                 </div>
