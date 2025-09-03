@@ -43,13 +43,22 @@ export default async function Scores({ date }: ScoresProps) {
         )
     }
 
-    const buckets = await Data.getScoreBucketsByDate(date, min, max, 5)
-    const bucketIncrement = (max - min) / 5
+    const NUM_BUCKETS = 5
+    const adjustedMax = max + 1 // This ensures that the top bucket includes our max score
+    const bucketIncrement = Math.ceil((adjustedMax - min) / NUM_BUCKETS)
+    const adjustedMin = adjustedMax - bucketIncrement * NUM_BUCKETS
+    const buckets = await Data.getScoreBucketsByDate(
+        date,
+        adjustedMin,
+        adjustedMax,
+        NUM_BUCKETS
+    )
+
     const bucketElements = buckets.map((bucket, index) => {
         const bucketMin = Math.round(
-            min + bucketIncrement * (bucket.bucket_number - 1)
+            adjustedMin + bucketIncrement * (bucket.bucket_number - 1)
         )
-        const bucketMax = Math.round(bucketMin + (bucketIncrement - 1))
+        const bucketMax = Math.round(bucketMin + bucketIncrement - 1)
         const range: string =
             bucketMin == bucketMax
                 ? `${bucketMin}`

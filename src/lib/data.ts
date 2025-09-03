@@ -51,7 +51,7 @@ export async function getScoreBucketsByDate(
 ) {
     return await sql<Bucket[]>`
   WITH buckets_cte AS (
-    SELECT WIDTH_BUCKET(score, ${min}, ${max + 1}, ${numBuckets}) AS bucket_number
+    SELECT WIDTH_BUCKET(score, ${min}, ${max}, ${numBuckets}) AS bucket_number
     FROM scores
     WHERE date = ${dateOnlyString(date)}
 )
