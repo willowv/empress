@@ -39,13 +39,13 @@ export default function EndScreen({
                     <Chariot />
                 </SwipeNavigation>
             </div>
-            <div className="absolute top-1/2 left-1/2 w-100 -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <div className="flex flex-col gap-2">
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                         {dateOnlyString(date)}
                     </div>
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                        {'The Empress has returned'}
+                        {'GAME OVER'}
                     </div>
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
                         {`${finalScore} in ${numTurns} turns`}
