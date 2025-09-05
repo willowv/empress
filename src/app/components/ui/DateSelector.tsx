@@ -3,6 +3,8 @@
 import Arrow from '@/svg/Arrow'
 import clsx from 'clsx'
 import { dateOnlyString } from 'lib/util'
+import React, { useLayoutEffect, useState } from 'react'
+import { animated, useTransition, useReducedMotion } from '@react-spring/web'
 
 interface DateSelectorProps {
     readonly current: Date
@@ -12,6 +14,8 @@ interface DateSelectorProps {
     readonly handlePrev: () => void
 }
 
+type Direction = 'left' | 'right'
+
 export default function DateSelector({
     current,
     min,
@@ -19,8 +23,23 @@ export default function DateSelector({
     handleNext,
     handlePrev
 }: DateSelectorProps) {
+    useReducedMotion()
+    const [direction, setDirection] = useState<Direction | undefined>(undefined)
+    const [transitions, springApi] = useTransition(current, () => ({
+        initial: { opacity: 1, x: 0 },
+        from: () => ({ opacity: 0, x: direction === 'left' ? -50 : 50 }),
+        enter: { opacity: 1, x: 0 },
+        leave: () => ({ opacity: 0, x: direction === 'left' ? 50 : -50 }),
+        exitBeforeEnter: true,
+        config: { duration: 200 }
+    }))
+    useLayoutEffect(() => {
+        springApi.start()
+    }, [current])
+
     const isNextDateValid = max ? current < max : true
     const isPrevDateValid = min ? current > min : true
+    // const dateString = dateOnlyString(current)
     return (
         <div
             id="date-selector"
@@ -35,19 +54,30 @@ export default function DateSelector({
                 )}
                 onClick={() => {
                     if (!isPrevDateValid) return
-                    else handlePrev()
+                    else {
+                        setDirection('left')
+                        handlePrev()
+                    }
                 }}
             />
-            <div className="text-foreground text-md w-30 text-center">
-                {dateOnlyString(current)}
-            </div>
+            {transitions((springs, item) => (
+                <animated.div
+                    className={'text-foreground text-md w-30 text-center'}
+                    style={springs}
+                >
+                    {dateOnlyString(item)}
+                </animated.div>
+            ))}
             <Arrow
                 className={clsx('fill-foreground hover:fill-gold size-6', {
                     'fill-gray hover:fill-gray': !isNextDateValid
                 })}
                 onClick={() => {
                     if (!isNextDateValid) return
-                    else handleNext()
+                    else {
+                        setDirection('right')
+                        handleNext()
+                    }
                 }}
             />
         </div>
