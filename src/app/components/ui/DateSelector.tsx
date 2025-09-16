@@ -22,7 +22,10 @@ export default function DateSelector({
     const isNextDateValid = max ? current < max : true
     const isPrevDateValid = min ? current > min : true
     return (
-        <div className="flex flex-row items-center gap-1 rounded-lg p-2 backdrop-blur-xl">
+        <div
+            id="date-selector"
+            className="flex flex-row items-center gap-1 rounded-lg p-2 backdrop-blur-xl"
+        >
             <Arrow
                 className={clsx(
                     'fill-foreground hover:fill-gold size-6 rotate-180',

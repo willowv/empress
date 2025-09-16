@@ -11,6 +11,16 @@ import { dateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
 import { useNextStep } from 'nextstepjs'
+import {
+    DndContext,
+    DragOverlay,
+    MouseSensor,
+    TouchSensor,
+    useSensor,
+    useSensors
+} from '@dnd-kit/core'
+import Agent from '@/game/Agent'
+import ButtonLink from '@/ui/ButtonLink'
 
 interface GameProps {
     readonly date: Date
@@ -25,9 +35,10 @@ export const AnimationContext = createContext<AnimationContextProps>({
 })
 
 export default function GameScreen({ date }: GameProps) {
+    const dateString = dateOnlyString(date)
     const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
-        return { date: date, seed: dateOnlyString(date), turnHistory: [] }
+        return { date: date, seed: dateString, turnHistory: [] }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
     const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
@@ -40,12 +51,35 @@ export default function GameScreen({ date }: GameProps) {
         setLastEndTurnAt(new Date())
     }, [curSession])
 
+    const mouseSensor = useSensor(MouseSensor, {
+        // Require the mouse to move by 10 pixels before activating
+        activationConstraint: {
+            distance: 10
+        }
+    })
+    const touchSensor = useSensor(TouchSensor, {
+        // Press delay of 250ms, with tolerance of 5px of movement
+        activationConstraint: {
+            delay: 250,
+            tolerance: 5
+        }
+    })
+    const sensors = useSensors(mouseSensor, touchSensor)
+
     const curState = EG.getCurrentState(curSession)
     const isFirstTurn = curSession.turnHistory.length == 0
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
 
     if (isGameOver) {
-        return <EndScreen session={curSession} date={date} />
+        return (
+            <EndScreen
+                session={curSession}
+                date={date}
+                handleTryAgain={() =>
+                    setSession({ ...curSession, turnHistory: [] })
+                }
+            />
+        )
     }
 
     const plannedState = EG.applyTurn(curState, plannedTurn)
@@ -156,68 +190,100 @@ export default function GameScreen({ date }: GameProps) {
         )
     }
 
+    const mpId_Location: Record<string, EG.Location> = {
+        'location-bribe': 'Bribe',
+        'location-court': 'Court',
+        'location-delay': 'Delay',
+        'location-influence': 'Influence'
+    }
     return (
-        <AnimationContext value={{ lastEndTurnAt }}>
-            <div className="flex flex-col justify-between gap-0.5 sm:gap-2">
-                <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
-                    <Court
-                        selectedAgentId={selectedAgentId}
-                        agents={courtAgents}
-                        handleAgentClick={handleAgentClick}
-                        handleLocationClick={handleLocationClick}
-                        lockedAgentIds={lockedAgentIds}
+        <DndContext
+            sensors={sensors}
+            onDragStart={(e) => {
+                const agentId = e.active.id.toString().split('-')[1]
+                setSelectedAgentId(parseInt(agentId))
+            }}
+            onDragEnd={(e) => {
+                if (!e.over) return
+                handleLocationClick(mpId_Location[e.over.id])
+            }}
+        >
+            <DragOverlay>
+                {selectedAgent && (
+                    <Agent
+                        agent={selectedAgent}
+                        handleAgentClick={() => {}}
+                        state="selected"
                     />
-                    <Influence
-                        selectedAgentId={selectedAgentId}
-                        agents={influenceAgents}
-                        handleAgentClick={handleAgentClick}
-                        handleLocationClick={handleLocationClick}
-                        lockedAgentIds={lockedAgentIds}
-                    />
-                </div>
-                <div className="flex flex-row gap-0.5 sm:gap-2">
-                    <Delay
-                        lockedAgent={prevDelayAgent}
-                        agent={nextDelayAgent}
-                        selectedAgent={selectedAgent}
-                        handleAgentClick={handleAgentClick}
-                        handleLocationClick={handleLocationClick}
-                    />
-                    <Bribe
-                        agent={bribeAgent}
-                        selectedAgent={selectedAgent}
-                        numAssignments={numAssignments}
-                        handleAgentClick={handleAgentClick}
-                        handleLocationClick={handleLocationClick}
-                    />
-                </div>
-                <div className="flex flex-row justify-between">
-                    <Button
-                        id="button-reset-turn"
-                        handleButtonPress={handleResetTurn}
-                    >
-                        {'Reset Turn'}
-                    </Button>
-                    <Button
-                        handleButtonPress={() => startNextStep('game-tutorial')}
-                    >
-                        {'How to Play'}
-                    </Button>
-                    <Button
-                        id="button-end-turn"
-                        isDisabled={!isPlannedTurnValid}
-                        handleButtonPress={handleEndTurn}
-                    >
-                        <div className="flex flex-row items-center gap-1">
-                            <div>{'End Turn ('}</div>
-                            <div className="fill-gold size-2 -translate-y-1">
-                                <Hourglass />
+                )}
+            </DragOverlay>
+            <AnimationContext value={{ lastEndTurnAt }}>
+                <div className="flex flex-col justify-between gap-0.5 sm:gap-2">
+                    <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
+                        <Court
+                            selectedAgentId={selectedAgentId}
+                            agents={courtAgents}
+                            handleAgentClick={handleAgentClick}
+                            handleLocationClick={handleLocationClick}
+                            lockedAgentIds={lockedAgentIds}
+                        />
+                        <Influence
+                            selectedAgentId={selectedAgentId}
+                            agents={influenceAgents}
+                            handleAgentClick={handleAgentClick}
+                            handleLocationClick={handleLocationClick}
+                            lockedAgentIds={lockedAgentIds}
+                        />
+                    </div>
+                    <div className="flex flex-row gap-0.5 sm:gap-2">
+                        <Delay
+                            lockedAgent={prevDelayAgent}
+                            agent={nextDelayAgent}
+                            selectedAgent={selectedAgent}
+                            handleAgentClick={handleAgentClick}
+                            handleLocationClick={handleLocationClick}
+                        />
+                        <Bribe
+                            agent={bribeAgent}
+                            selectedAgent={selectedAgent}
+                            numAssignments={numAssignments}
+                            handleAgentClick={handleAgentClick}
+                            handleLocationClick={handleLocationClick}
+                        />
+                    </div>
+                    <div className="flex flex-row justify-between">
+                        <Button
+                            id="button-reset-turn"
+                            handleButtonPress={handleResetTurn}
+                        >
+                            {'Reset Turn'}
+                        </Button>
+                        <ButtonLink href={`/play?date=${dateString}`}>
+                            {'Quit Game'}
+                        </ButtonLink>
+                        <Button
+                            handleButtonPress={() =>
+                                startNextStep('game-tutorial')
+                            }
+                        >
+                            {'How to Play'}
+                        </Button>
+                        <Button
+                            id="button-end-turn"
+                            isDisabled={!isPlannedTurnValid}
+                            handleButtonPress={handleEndTurn}
+                        >
+                            <div className="flex flex-row items-center gap-1">
+                                <div>{'End Turn ('}</div>
+                                <div className="fill-gold size-2 -translate-y-1">
+                                    <Hourglass />
+                                </div>
+                                <div>{')'}</div>
                             </div>
-                            <div>{')'}</div>
-                        </div>
-                    </Button>
+                        </Button>
+                    </div>
                 </div>
-            </div>
-        </AnimationContext>
+            </AnimationContext>
+        </DndContext>
     )
 }
