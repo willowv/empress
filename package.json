@@ -21,7 +21,7 @@
     "next": "^15.5.2",
     "nextstepjs": "^2.1.2",
     "postgres": "^3.4.7",
-    "react": "19.1.0",
+    "react": "19.1.1",
     "react-dom": "19.1.0"
   },
   "devDependencies": {
