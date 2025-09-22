@@ -29,7 +29,7 @@ export default function DateSelector({
         enter: { opacity: 1, x: 0 },
         leave: () => ({ opacity: 0, x: direction === 'left' ? 50 : -50 }),
         exitBeforeEnter: true,
-        config: { duration: 200 }
+        config: { duration: 150 }
     }))
     useLayoutEffect(() => {
         springApi.start()
