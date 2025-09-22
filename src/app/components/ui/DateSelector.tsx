@@ -2,7 +2,7 @@
 
 import Arrow from '@/svg/Arrow'
 import clsx from 'clsx'
-import { dateOnlyString } from 'lib/util'
+import { dateOnlyString, Direction } from 'lib/util'
 import React, { useLayoutEffect, useState } from 'react'
 import { animated, useTransition, useReducedMotion } from '@react-spring/web'
 
@@ -13,8 +13,6 @@ interface DateSelectorProps {
     readonly handleNext: () => void
     readonly handlePrev: () => void
 }
-
-type Direction = 'left' | 'right'
 
 export default function DateSelector({
     current,

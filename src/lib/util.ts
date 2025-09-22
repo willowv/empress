@@ -1,5 +1,7 @@
 import _ from 'lodash'
 
+export type Direction = 'left' | 'right' | 'top' | 'none'
+
 export function getTodayWithoutTime(): Date {
     return getDateWithoutTime(new Date())
 }
@@ -10,7 +12,9 @@ export function dateOnlyString(date: Date) {
 
 export const pages: string[] = ['/', '/play', '/story']
 
-export function nextPage(pathname: string): string {
+export function nextPage(pathname: string): string | undefined {
+    if (!pages.includes(pathname)) return undefined
+
     const pageIndex = pages.findLastIndex((page) => {
         return pathname.includes(page)
     })
@@ -18,12 +22,31 @@ export function nextPage(pathname: string): string {
     return pages[(pageIndex + 1) % pages.length]
 }
 
-export function prevPage(pathname: string): string {
+export function prevPage(pathname: string): string | undefined {
+    if (!pages.includes(pathname)) return undefined
+
     const pageIndex = pages.findLastIndex((page) => {
         return pathname.includes(page)
     })
     const prevIndex = pageIndex < 0 ? 0 : pageIndex - 1
     return pages[prevIndex < 0 ? pages.length - 1 : prevIndex]
+}
+
+export function navigationDirection(
+    thisPage: string,
+    lastPage: string | undefined
+): Direction {
+    if (thisPage === lastPage) return 'none'
+    const nextPageHref = nextPage(thisPage)
+    const prevPageHref = prevPage(thisPage)
+    const navDirection =
+        nextPageHref === lastPage
+            ? 'left'
+            : prevPageHref === lastPage
+              ? 'right'
+              : 'top'
+
+    return navDirection
 }
 
 export function getPageName(href: string) {

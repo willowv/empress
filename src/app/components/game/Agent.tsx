@@ -2,10 +2,10 @@ import * as EG from '@/logic/empress'
 import 'tailwindcss'
 import Die from '@/svg/Die'
 import Lock from '@/svg/Lock'
-import { AnimationContext } from 'app/play/[date]/GameScreen'
 import { useContext } from 'react'
 import clsx from 'clsx'
 import { useDraggable } from '@dnd-kit/core'
+import { AnimationContext } from '@/ui/Contexts'
 
 type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
 

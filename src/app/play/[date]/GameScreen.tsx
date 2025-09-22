@@ -1,7 +1,7 @@
 'use client'
 
 import * as EG from '@/logic/empress'
-import { createContext, useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import Court from '@/game/locations/Court'
 import Bribe from '@/game/locations/Bribe'
 import Delay from '@/game/locations/Delay'
@@ -21,18 +21,11 @@ import {
 } from '@dnd-kit/core'
 import Agent from '@/game/Agent'
 import ButtonLink from '@/ui/ButtonLink'
+import { AnimationContext } from '@/ui/Contexts'
 
 interface GameProps {
     readonly date: Date
 }
-
-interface AnimationContextProps {
-    readonly lastEndTurnAt: Date | undefined
-}
-
-export const AnimationContext = createContext<AnimationContextProps>({
-    lastEndTurnAt: new Date(0)
-})
 
 export default function GameScreen({ date }: GameProps) {
     const dateString = dateOnlyString(date)
@@ -218,7 +211,7 @@ export default function GameScreen({ date }: GameProps) {
                 )}
             </DragOverlay>
             <AnimationContext value={{ lastEndTurnAt }}>
-                <div className="flex flex-col justify-between gap-0.5 sm:gap-2">
+                <div className="not-motion-reduce:animate-slidefromtop flex flex-col justify-between gap-0.5 sm:gap-2">
                     <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
                         <Court
                             selectedAgentId={selectedAgentId}
@@ -259,7 +252,7 @@ export default function GameScreen({ date }: GameProps) {
                             {'Reset Turn'}
                         </Button>
                         <ButtonLink href={`/play?date=${dateString}`}>
-                            {'Quit Game'}
+                            {'Quit'}
                         </ButtonLink>
                         <Button
                             handleButtonPress={() =>

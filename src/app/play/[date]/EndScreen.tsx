@@ -1,7 +1,6 @@
 import Hourglass from '@/svg/Hourglass'
 import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
-import SwipeNavigation from '@/ui/SwipeNavigation'
 import { dateOnlyString } from 'lib/util'
 import { startTransition, useActionState } from 'react'
 import { getCurrentState, getScore, Session } from '@/logic/empress'
@@ -37,9 +36,7 @@ export default function EndScreen({
     return (
         <div className="not-motion-reduce:animate-slidefromtop relative flex flex-col items-center select-none">
             <div className="fill-gold bg-background max-h-screen">
-                <SwipeNavigation>
-                    <Chariot />
-                </SwipeNavigation>
+                <Chariot />
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <div className="flex flex-col gap-2">

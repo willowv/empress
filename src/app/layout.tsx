@@ -2,11 +2,10 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next'
-import LeftLink from '@/ui/LeftLink'
-import RightLink from '@/ui/RightLink'
 import { NextStepProvider, NextStep } from 'nextstepjs'
 import TutorialCard from '@/ui/TutorialCard'
 import ONBOARDING_STEPS from './tours'
+import PageNavigation from '@/ui/PageNavigation'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -46,20 +45,7 @@ export default function RootLayout({
                         cardTransition={{ duration: 1, type: 'spring' }}
                     >
                         <Analytics />
-                        <div className="flex min-h-screen flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
-                            <div className="flex flex-row justify-between p-2 pb-1 sm:hidden">
-                                <LeftLink />
-                                <RightLink />
-                            </div>
-                            <div className="hidden sm:block">
-                                <LeftLink />
-                            </div>
-                            <div className="max-w-3xl">{children}</div>
-                            <div />
-                            <div className="hidden sm:block">
-                                <RightLink />
-                            </div>
-                        </div>
+                        <PageNavigation>{children}</PageNavigation>
                     </NextStep>
                 </NextStepProvider>
             </body>

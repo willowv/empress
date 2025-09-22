@@ -1,10 +1,12 @@
+'use client'
+
 import Fool from '@/svg/tarot/Fool'
-import SwipeNavigation from '@/ui/SwipeNavigation'
+import NavAnimator from '@/ui/NavAnimator'
 
 export default function StoryScreen() {
     return (
-        <SwipeNavigation>
-            <div className="not-motion-reduce:animate-slidefromright relative flex flex-col items-center select-none">
+        <NavAnimator thisPage="/story">
+            <div className="relative flex flex-col items-center select-none">
                 <div className="fill-gold bg-background max-h-screen">
                     <Fool />
                 </div>
@@ -26,6 +28,6 @@ export default function StoryScreen() {
                     </div>
                 </div>
             </div>
-        </SwipeNavigation>
+        </NavAnimator>
     )
 }
