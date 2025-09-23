@@ -7,7 +7,7 @@ interface DicePreviewProps {
 }
 
 export default function DicePreview({ date }: DicePreviewProps) {
-    const [mpDieSize_Count] = getDiceCounts({
+    const mpDieSize_Count = getDiceCounts({
         date: date,
         seed: dateOnlyString(date),
         turnHistory: []

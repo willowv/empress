@@ -3,8 +3,10 @@ import {
     hash_cyrb53,
     random_splitmix32,
     randomNum,
-    randomRoll
+    randomRoll,
+    weightedSelect
 } from 'lib/random'
+import { dateOnlyString } from 'lib/util'
 
 export type Session = {
     date: Date
@@ -50,10 +52,9 @@ function getConfig(date: Date): EmpressConfig {
     return config ?? ORIGINAL_CONFIG
 }
 
-export function getDiceCounts(
-    session: Session
-): [Map<DieSize, number>, () => number] {
-    const rand = random_splitmix32(hash_cyrb53(session.seed))
+export function getDiceCounts(session: Session): Map<DieSize, number> {
+    // Dice counts are based just on the date, whereas the rolls are based on the session's full seed.
+    const rand = random_splitmix32(hash_cyrb53(dateOnlyString(session.date)))
     const {
         dieBaseWeights,
         minDiceCount,
@@ -65,24 +66,28 @@ export function getDiceCounts(
     const finalWeights = dieBaseWeights.map(
         (weight) => weight + randomNum(minWeightChange, maxWeightChange, rand)
     )
-    const weightTotal = finalWeights.reduce(
-        (weightTotal, weight) => weightTotal + weight
-    )
 
-    // Use the total and the weights to calculate a number for each die size
-    // Add that many agents of that size to agents
-    const mpDieSize_Count = new Map<DieSize, number>()
-    finalWeights.forEach((weight, index) => {
-        const diceCount = Math.floor((weight / weightTotal) * (total + 1))
-        mpDieSize_Count.set(DIE_SIZES[index], diceCount)
-    })
+    const mpDieSize_Count = new Map<DieSize, number>([
+        [4, 0],
+        [6, 0],
+        [8, 0],
+        [10, 0],
+        [12, 0],
+        [20, 0]
+    ])
+    for (let i = 0; i < total; i++) {
+        // For each die in our total, randomly select from our weight table
+        const dieSize = DIE_SIZES[weightedSelect(finalWeights, rand)]
+        mpDieSize_Count.set(dieSize, (mpDieSize_Count.get(dieSize) ?? 0) + 1)
+    }
 
-    return [mpDieSize_Count, rand]
+    return mpDieSize_Count
 }
 
 // We need the date for this game so we know which config to use
 function getInitialState(session: Session): [State, () => number] {
-    const [mpDieSize_Count, rand] = getDiceCounts(session)
+    const rand = random_splitmix32(hash_cyrb53(session.seed))
+    const mpDieSize_Count = getDiceCounts(session)
     const agents: Agent[] = []
     mpDieSize_Count.entries().forEach(([dieSize, count]) => {
         for (let i = 0; i < count; i++) {
