@@ -1,5 +1,5 @@
 import AgentPreview from '@/game/AgentPreview'
-import { getDiceCounts } from '@/logic/empress'
+import { calculateTargetScore, getDiceCounts } from '@/logic/empress'
 import { dateOnlyString } from 'lib/util'
 
 interface DicePreviewProps {
@@ -7,7 +7,7 @@ interface DicePreviewProps {
 }
 
 export default function DicePreview({ date }: DicePreviewProps) {
-    const [mpDieSize_Count] = getDiceCounts({
+    const mpDieSize_Count = getDiceCounts({
         date: date,
         seed: dateOnlyString(date),
         turnHistory: []
@@ -26,6 +26,7 @@ export default function DicePreview({ date }: DicePreviewProps) {
                 </div>
             )
         })
+    const targetScore = calculateTargetScore(mpDieSize_Count)
     return (
         <div
             id="dice-preview"
@@ -37,6 +38,7 @@ export default function DicePreview({ date }: DicePreviewProps) {
             <div className="flex min-w-64 flex-row flex-wrap items-center justify-center gap-2">
                 {[...previewDice]}
             </div>
+            <div className="text-foreground text-center text-sm">{`Success: ${targetScore}`}</div>
         </div>
     )
 }

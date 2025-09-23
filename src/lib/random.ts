@@ -36,7 +36,7 @@ export function randomRoll(maxValue: number, rand: () => number) {
     return randomNum(1, maxValue, rand)
 }
 
-// Between Min and Max
+// Between Min and Max inclusive
 export function randomNum(
     minValue: number,
     maxValue: number,
@@ -49,4 +49,17 @@ export function randomNum(
     // in the min and max being less likely. Floor of +1 gives every integer outcome an even
     // chance
     return Math.floor(rand() * (diff + 1)) + minValue
+}
+
+// Returns the index of the weights array that is randomly chosen
+export function weightedSelect(weights: number[], rand: () => number): number {
+    const weightTotal = weights.reduce(
+        (weightTotal, weight) => weightTotal + weight,
+        0
+    )
+    let selectValue = randomNum(1, weightTotal, rand)
+    return weights.findIndex((weight) => {
+        selectValue -= weight
+        return selectValue <= 0
+    })
 }

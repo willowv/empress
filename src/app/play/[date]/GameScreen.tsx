@@ -31,7 +31,7 @@ export default function GameScreen({ date }: GameProps) {
     const dateString = dateOnlyString(date)
     const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
-        return { date: date, seed: dateString, turnHistory: [] }
+        return { date: date, seed: Date.now().toString(), turnHistory: [] }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
     const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
@@ -59,6 +59,7 @@ export default function GameScreen({ date }: GameProps) {
     })
     const sensors = useSensors(mouseSensor, touchSensor)
 
+    const targetScore = EG.calculateTargetScore(EG.getDiceCounts(curSession))
     const curState = EG.getCurrentState(curSession)
     const isFirstTurn = curSession.turnHistory.length == 0
     const isGameOver = EG.hasGameEnded(isFirstTurn, curState)
@@ -226,6 +227,7 @@ export default function GameScreen({ date }: GameProps) {
                             handleAgentClick={handleAgentClick}
                             handleLocationClick={handleLocationClick}
                             lockedAgentIds={lockedAgentIds}
+                            targetScore={targetScore}
                         />
                     </div>
                     <div className="flex flex-row gap-0.5 sm:gap-2">

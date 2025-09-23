@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     description: 'A dice game inspired by Tarot.',
     other: {
         version: `${process.env.npm_package_version}`
+    },
+    appleWebApp: {
+        title: 'The Empress Returns',
+        statusBarStyle: 'black-translucent'
     }
 }
 
