@@ -1,7 +1,6 @@
 'use server'
 
 import * as EG from '@/logic/empress'
-import { dateOnlyString } from 'lib/util'
 import postgres from 'postgres'
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' })
@@ -15,8 +14,7 @@ export async function submitScore(
 ) {
     if (previousState !== 'initial') return previousState // only send score once
 
-    // validate that seed is correct for date
-    if (session.seed !== dateOnlyString(date)) return 'failure' // invalid seed
+    if (!EG.isSessionValid(session)) return 'failure'
 
     // calculate score and number of turns
     try {

@@ -11,6 +11,7 @@ interface InfluenceProps {
     readonly handleLocationClick: (location: EG.Location) => void
     readonly handleAgentClick: (id: number) => void
     readonly lockedAgentIds: number[]
+    readonly targetScore: number
 }
 
 export default function Influence({
@@ -18,7 +19,8 @@ export default function Influence({
     agents,
     handleLocationClick,
     handleAgentClick,
-    lockedAgentIds
+    lockedAgentIds,
+    targetScore
 }: InfluenceProps) {
     const { setNodeRef } = useDroppable({ id: 'location-influence' })
     const score = EG.getScore({ agents })
@@ -33,7 +35,9 @@ export default function Influence({
                 Influence
             </div>
             <div className="text-foreground text-center text-xs">
-                {score == 0 ? 'Score points' : `Score: ${score}`}
+                {score == 0
+                    ? 'Score points'
+                    : `Score: ${score} (target ${targetScore})`}
             </div>
             <div className="m-2 flex flex-row flex-wrap justify-center gap-1 p-1">
                 {agents.map((agent) => {

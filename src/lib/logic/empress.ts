@@ -6,7 +6,7 @@ import {
     randomRoll,
     weightedSelect
 } from 'lib/random'
-import { dateOnlyString } from 'lib/util'
+import { addDays, dateOnlyString } from 'lib/util'
 
 export type Session = {
     date: Date
@@ -23,6 +23,14 @@ export function appendTurn(session: Session, turn: Turn): Session {
 
 export type DieSize = 4 | 6 | 8 | 10 | 12 | 20
 const DIE_SIZES: DieSize[] = [4, 6, 8, 10, 12, 20]
+const EXPECTED_VALUES: Record<DieSize, number> = {
+    4: 2.5,
+    6: 3.5,
+    8: 4.5,
+    10: 5.5,
+    12: 6.5,
+    20: 10.5
+}
 
 interface EmpressConfig {
     readonly dieBaseWeights: number[]
@@ -82,6 +90,25 @@ export function getDiceCounts(session: Session): Map<DieSize, number> {
     }
 
     return mpDieSize_Count
+}
+
+export function calculateTargetScore(diceCounts: Map<DieSize, number>) {
+    return Math.ceil(
+        diceCounts
+            .entries()
+            .reduce<number>((target: number, [dieSize, count]) => {
+                return target + count * EXPECTED_VALUES[dieSize]
+            }, 0)
+    )
+}
+
+export function isSessionValid(session: Session) {
+    // validate that seed is correct for date
+    // The seed is Date.now().toString(), so it should lie between the epoch time of date and the next date
+    const epochDate = session.date.valueOf()
+    const epochNextDate = addDays(session.date, 1).valueOf()
+    const epochSeed = parseInt(session.seed)
+    return epochSeed >= epochDate && epochSeed < epochNextDate
 }
 
 // We need the date for this game so we know which config to use

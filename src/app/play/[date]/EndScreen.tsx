@@ -3,7 +3,13 @@ import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
 import { dateOnlyString } from 'lib/util'
 import { startTransition, useActionState } from 'react'
-import { getCurrentState, getScore, Session } from '@/logic/empress'
+import {
+    calculateTargetScore,
+    getCurrentState,
+    getDiceCounts,
+    getScore,
+    Session
+} from '@/logic/empress'
 import { SubmissionState, submitScore } from 'lib/actions'
 import ButtonLink from '@/ui/ButtonLink'
 
@@ -31,6 +37,7 @@ export default function EndScreen({
         )
 
     const finalScore = getScore(getCurrentState(session))
+    const targetScore = calculateTargetScore(getDiceCounts(session))
     const numTurns = session.turnHistory.length
     const dateString = dateOnlyString(date)
     return (
@@ -44,10 +51,15 @@ export default function EndScreen({
                         {dateString}
                     </div>
                     <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                        {'GAME OVER'}
+                        {finalScore >= targetScore ? 'SUCCESS' : 'GAME OVER'}
                     </div>
-                    <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                        {`${finalScore} in ${numTurns} turns`}
+                    <div className="m-2 flex flex-col gap-1 rounded-lg p-2 backdrop-blur-xl">
+                        <div className="text-foreground text-md text-center">
+                            {`${finalScore} in ${numTurns} turns`}
+                        </div>
+                        <div className="text-foreground text-center text-xs">
+                            {`(target ${targetScore})`}
+                        </div>
                     </div>
                     <div className="flex flex-row justify-between gap-2">
                         <Button
@@ -58,7 +70,8 @@ export default function EndScreen({
                         </Button>
                         <Button
                             isDisabled={
-                                submissionState !== 'initial' || finalScore == 0
+                                submissionState !== 'initial' ||
+                                finalScore < targetScore
                             }
                             handleButtonPress={() =>
                                 startTransition(submitAction)
