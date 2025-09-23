@@ -8,35 +8,6 @@ export function dateOnlyString(date: Date) {
     return date.toISOString().split('T')[0]
 }
 
-export const pages: string[] = ['/', '/play', '/story']
-
-export function nextPage(pathname: string): string {
-    const pageIndex = pages.findLastIndex((page) => {
-        return pathname.includes(page)
-    })
-    // Shouldn't be possible for this find to fail but the result would be root
-    return pages[(pageIndex + 1) % pages.length]
-}
-
-export function prevPage(pathname: string): string {
-    const pageIndex = pages.findLastIndex((page) => {
-        return pathname.includes(page)
-    })
-    const prevIndex = pageIndex < 0 ? 0 : pageIndex - 1
-    return pages[prevIndex < 0 ? pages.length - 1 : prevIndex]
-}
-
-export function getPageName(href: string) {
-    switch (href) {
-        case '/':
-            return 'Main'
-        case '/play':
-            return 'Play'
-        case '/story':
-            return 'Story'
-    }
-}
-
 export function addDays(date: Date, n: number): Date {
     const newDate = _.cloneDeep(date)
     newDate.setDate(newDate.getDate() + n)

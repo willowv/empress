@@ -12,9 +12,5 @@ export default async function Page({
     const oneYearAgo = addYears(getTodayWithoutTime(), -1)
     if (date < oneYearAgo) notFound()
 
-    return (
-        <div className="not-motion-reduce:animate-slidefrombottom">
-            <GameScreen date={date} />
-        </div>
-    )
+    return <GameScreen date={date} />
 }
