@@ -1,0 +1,14 @@
+{
+    "short_name": "Empress",
+    "name": "The Empress Returns",
+    "description": "A dice game inspired by tarot",
+    "icons": [
+        {
+            "src": "/apple-icon.png",
+            "sizes": "any",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "display": "fullscreen"
+}
