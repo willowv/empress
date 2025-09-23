@@ -1,9 +1,9 @@
 'use client'
 
 import { ReactNode, useContext } from 'react'
-import { NavigationContext } from './Contexts'
-import { navigationDirection } from 'lib/util'
+import { navigationDirection } from './util'
 import clsx from 'clsx'
+import { NavigationContext } from './NavigationContext'
 
 interface NavAnimatorProps {
     readonly children: ReactNode

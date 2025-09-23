@@ -5,7 +5,7 @@ import Lock from '@/svg/Lock'
 import { useContext } from 'react'
 import clsx from 'clsx'
 import { useDraggable } from '@dnd-kit/core'
-import { AnimationContext } from '@/ui/Contexts'
+import { AnimationContext } from '@/ui/AnimationContext'
 
 type State = 'default' | 'locked' | 'invalid' | 'accepted' | 'selected'
 

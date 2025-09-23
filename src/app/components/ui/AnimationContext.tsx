@@ -7,11 +7,3 @@ interface AnimationContextProps {
 export const AnimationContext = createContext<AnimationContextProps>({
     lastEndTurnAt: new Date(0)
 })
-
-interface NavigationContextProps {
-    readonly lastPage: string | undefined
-}
-
-export const NavigationContext = createContext<NavigationContextProps>({
-    lastPage: undefined
-})

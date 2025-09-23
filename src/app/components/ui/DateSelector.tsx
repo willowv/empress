@@ -2,7 +2,7 @@
 
 import Arrow from '@/svg/Arrow'
 import clsx from 'clsx'
-import { dateOnlyString, Direction } from 'lib/util'
+import { dateOnlyString } from 'lib/util'
 import React, { useLayoutEffect, useState } from 'react'
 import { animated, useTransition, useReducedMotion } from '@react-spring/web'
 
@@ -22,12 +22,12 @@ export default function DateSelector({
     handlePrev
 }: DateSelectorProps) {
     useReducedMotion()
-    const [direction, setDirection] = useState<Direction | undefined>(undefined)
+    const [lastDate, setLastDate] = useState<Date>(current)
     const [transitions, springApi] = useTransition(current, () => ({
         initial: { opacity: 1, x: 0 },
-        from: () => ({ opacity: 0, x: direction === 'left' ? -50 : 50 }),
+        from: () => ({ opacity: 0, x: current < lastDate ? -50 : 50 }),
         enter: { opacity: 1, x: 0 },
-        leave: () => ({ opacity: 0, x: direction === 'left' ? 50 : -50 }),
+        leave: () => ({ opacity: 0, x: current < lastDate ? 50 : -50 }),
         exitBeforeEnter: true,
         config: { duration: 150 }
     }))
@@ -37,7 +37,6 @@ export default function DateSelector({
 
     const isNextDateValid = max ? current < max : true
     const isPrevDateValid = min ? current > min : true
-    // const dateString = dateOnlyString(current)
     return (
         <div
             id="date-selector"
@@ -53,19 +52,24 @@ export default function DateSelector({
                 onClick={() => {
                     if (!isPrevDateValid) return
                     else {
-                        setDirection('left')
+                        setLastDate(current)
                         handlePrev()
                     }
                 }}
             />
-            {transitions((springs, item) => (
-                <animated.div
-                    className={'text-foreground text-md w-30 text-center'}
-                    style={springs}
-                >
-                    {dateOnlyString(item)}
-                </animated.div>
-            ))}
+            {
+                /*  This allows the transitions we set up above to run on changes to the current date.
+                    Using 'item' here allows the old value and the new value to exist at the same time
+                    for animation purposes. */
+                transitions((springs, item) => (
+                    <animated.div
+                        className={'text-foreground text-md w-30 text-center'}
+                        style={springs}
+                    >
+                        {dateOnlyString(item)}
+                    </animated.div>
+                ))
+            }
             <Arrow
                 className={clsx('fill-foreground hover:fill-gold size-6', {
                     'fill-gray hover:fill-gray': !isNextDateValid
@@ -73,7 +77,7 @@ export default function DateSelector({
                 onClick={() => {
                     if (!isNextDateValid) return
                     else {
-                        setDirection('right')
+                        setLastDate(current)
                         handleNext()
                     }
                 }}

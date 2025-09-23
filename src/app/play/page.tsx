@@ -9,7 +9,7 @@ import Scores from 'app/play/Scores'
 import QueryParamDateSelector from '@/ui/QueryParamDateSelector'
 import Fortune from '@/svg/tarot/Fortune'
 import DicePreview from './DicePreview'
-import NavAnimator from '@/ui/NavAnimator'
+import NavAnimator from 'app/components/navigation/NavAnimator'
 
 export default async function Page(props: {
     searchParams?: Promise<{

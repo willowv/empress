@@ -5,7 +5,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { NextStepProvider, NextStep } from 'nextstepjs'
 import TutorialCard from '@/ui/TutorialCard'
 import ONBOARDING_STEPS from './tours'
-import PageNavigation from '@/ui/PageNavigation'
+import PageNavigation from 'app/components/navigation/PageNavigation'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',

@@ -21,7 +21,7 @@ import {
 } from '@dnd-kit/core'
 import Agent from '@/game/Agent'
 import ButtonLink from '@/ui/ButtonLink'
-import { AnimationContext } from '@/ui/Contexts'
+import { AnimationContext } from '@/ui/AnimationContext'
 
 interface GameProps {
     readonly date: Date
@@ -211,7 +211,7 @@ export default function GameScreen({ date }: GameProps) {
                 )}
             </DragOverlay>
             <AnimationContext value={{ lastEndTurnAt }}>
-                <div className="not-motion-reduce:animate-slidefromtop flex flex-col justify-between gap-0.5 sm:gap-2">
+                <div className="not-motion-reduce:animate-slidefrombottom flex flex-col justify-between gap-0.5 sm:gap-2">
                     <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
                         <Court
                             selectedAgentId={selectedAgentId}

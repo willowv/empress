@@ -2,11 +2,11 @@
 
 import Swipeable from '@/ui/Swipeable'
 import { usePathname, useRouter } from 'next/navigation'
-import { getPageName, nextPage, prevPage } from 'lib/util'
+import { getPageName, nextPage, prevPage } from './util'
 import React, { ReactNode, useState } from 'react'
 import DoubleArrow from '@/svg/DoubleArrow'
 import Link from 'next/link'
-import { NavigationContext } from './Contexts'
+import { NavigationContext } from './NavigationContext'
 
 interface PageNavigationProps {
     children: ReactNode

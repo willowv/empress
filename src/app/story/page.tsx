@@ -1,7 +1,7 @@
 'use client'
 
 import Fool from '@/svg/tarot/Fool'
-import NavAnimator from '@/ui/NavAnimator'
+import NavAnimator from 'app/components/navigation/NavAnimator'
 
 export default function StoryScreen() {
     return (
