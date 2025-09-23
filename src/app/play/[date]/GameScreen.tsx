@@ -7,7 +7,7 @@ import Bribe from '@/game/locations/Bribe'
 import Delay from '@/game/locations/Delay'
 import Influence from '@/game/locations/Influence'
 import Button from '@/ui/Button'
-import { dateOnlyString } from 'lib/util'
+import { dateOnlyString, getDateWithoutTime } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
 import { useNextStep } from 'nextstepjs'
@@ -29,9 +29,14 @@ interface GameProps {
 
 export default function GameScreen({ date }: GameProps) {
     const dateString = dateOnlyString(date)
+    const justTheTime = Date.now() - getDateWithoutTime(new Date()).valueOf()
     const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
-        return { date: date, seed: Date.now().toString(), turnHistory: [] }
+        return {
+            date: date,
+            seed: (date.valueOf() + justTheTime).toString(),
+            turnHistory: []
+        }
     })
     const [plannedTurn, setPlannedTurn] = useState<EG.Turn>(EG.getEmptyTurn())
     const [selectedAgentId, setSelectedAgentId] = useState<number | undefined>(
