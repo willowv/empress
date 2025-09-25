@@ -14,7 +14,7 @@ export default async function Scores({ date }: ScoresProps) {
     if (count == 0)
         return (
             <div className="flex flex-col items-center gap-2">
-                <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                <div className="text-foreground m-2 rounded-lg p-2 text-center text-base backdrop-blur-xl">
                     {'No scores yet!'}
                 </div>
             </div>
@@ -26,14 +26,14 @@ export default async function Scores({ date }: ScoresProps) {
         const scores = await Data.getTopNScoresByDate(date, 5)
         return (
             <div className="flex flex-col gap-1 rounded-lg p-2 backdrop-blur-xl">
-                <div className="text-foreground text-md text-center">
+                <div className="text-foreground text-center text-base sm:text-lg">
                     {'Top 5 Scores'}
                 </div>
                 {scores.map((score, index) => {
                     return (
                         <div
                             key={index}
-                            className="text-foreground text-md text-center"
+                            className="text-foreground text-center text-sm sm:text-base"
                         >
                             {`#${index + 1} | ${score.score} in ${score.numturns} turns`}
                         </div>
@@ -66,7 +66,7 @@ export default async function Scores({ date }: ScoresProps) {
         return (
             <div
                 key={`score-${index}`}
-                className="text-foreground text-md text-right"
+                className="text-foreground text-right text-sm sm:text-base"
             >
                 {`${range} | ${bucket.frequency} players`}
             </div>
@@ -74,7 +74,7 @@ export default async function Scores({ date }: ScoresProps) {
     })
     return (
         <div className="flex flex-col gap-1 rounded-lg p-2 backdrop-blur-xl">
-            <div className="text-foreground text-md text-center">
+            <div className="text-foreground text-center text-base">
                 {'Scores'}
             </div>
             {bucketElements}

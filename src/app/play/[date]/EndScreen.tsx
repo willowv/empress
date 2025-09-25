@@ -42,19 +42,19 @@ export default function EndScreen({
     const dateString = dateOnlyString(date)
     return (
         <div className="not-motion-reduce:animate-slidefromtop relative flex flex-col items-center select-none">
-            <div className="fill-gold bg-background max-h-screen">
+            <div className="fill-gold bg-background h-full">
                 <Chariot />
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <div className="flex flex-col gap-2">
-                    <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                    <div className="text-foreground m-2 rounded-lg p-2 text-center text-base backdrop-blur-xl">
                         {dateString}
                     </div>
-                    <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
+                    <div className="text-foreground m-2 rounded-lg p-2 text-center text-base backdrop-blur-xl">
                         {finalScore >= targetScore ? 'SUCCESS' : 'GAME OVER'}
                     </div>
                     <div className="m-2 flex flex-col gap-1 rounded-lg p-2 backdrop-blur-xl">
-                        <div className="text-foreground text-md text-center">
+                        <div className="text-foreground text-center text-base">
                             {`${finalScore} in ${numTurns} turns`}
                         </div>
                         <div className="text-foreground text-center text-xs">

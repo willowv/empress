@@ -24,30 +24,27 @@ export default async function Page(props: {
         <NavAnimator thisPage="/play">
             <div
                 id="play-screen"
-                className="relative flex flex-col items-center select-none"
+                className="relative flex h-full shrink-0 flex-col items-center select-none"
             >
-                <div className="fill-gold bg-background max-h-screen">
+                <div className="fill-gold bg-background absolute z-0 h-full">
                     <Fortune />
                 </div>
-                <div className="absolute top-15 left-1/2 -translate-x-1/2">
-                    <div className="flex flex-col items-center gap-2">
-                        <QueryParamDateSelector
-                            max={getTodayWithoutTime()}
-                            min={oneYearAgo}
-                        />
-                        <DicePreview date={selectedDate} />
-                        <div id="scores">
-                            <Scores date={selectedDate} />
-                        </div>
+                <div className="z-10 flex h-full max-w-120 flex-col items-center justify-center gap-2 p-5">
+                    <QueryParamDateSelector
+                        max={getTodayWithoutTime()}
+                        min={oneYearAgo}
+                    />
+                    <DicePreview date={selectedDate} />
+                    <div id="scores" className="max-h-50 grow sm:max-h-60">
+                        <Scores date={selectedDate} />
                     </div>
-                </div>
-                <div
-                    id="button-play"
-                    className="absolute bottom-15 left-1/2 -translate-x-1/2"
-                >
-                    <ButtonLink href={`/play/${dateOnlyString(selectedDate)}`}>
-                        {'Play'}
-                    </ButtonLink>
+                    <div id="button-play" className="z-20">
+                        <ButtonLink
+                            href={`/play/${dateOnlyString(selectedDate)}`}
+                        >
+                            {'Play'}
+                        </ButtonLink>
+                    </div>
                 </div>
             </div>
         </NavAnimator>

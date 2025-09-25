@@ -88,7 +88,7 @@ export default function Delay({
             <div className="flex flex-row items-center gap-0.5 opacity-70">
                 <Hourglass className="fill-gold size-3" />
                 <div className="text-foreground text-xs text-nowrap">
-                    {'- The game '}
+                    {'- Game '}
                 </div>
                 <div
                     className={clsx('ml-0.5 text-xs text-nowrap', {
@@ -100,7 +100,7 @@ export default function Delay({
                     {agent
                         ? 'will continue'
                         : isValid
-                          ? 'would continue'
+                          ? 'will continue'
                           : 'will END'}
                 </div>
             </div>

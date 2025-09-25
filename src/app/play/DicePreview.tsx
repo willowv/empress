@@ -21,7 +21,7 @@ export default function DicePreview({ date }: DicePreviewProps) {
                     key={`preview-${index}`}
                     className="flex flex-row items-center gap-1"
                 >
-                    <div className="text-foreground text-md">{`${count} x`}</div>
+                    <div className="text-foreground text-base">{`${count} x`}</div>
                     <AgentPreview dieSize={dieSize} />
                 </div>
             )
@@ -30,15 +30,15 @@ export default function DicePreview({ date }: DicePreviewProps) {
     return (
         <div
             id="dice-preview"
-            className="flex flex-col items-center gap-2 rounded-lg p-2 backdrop-blur-xl"
+            className="flex flex-col items-center gap-2 rounded-lg p-2 backdrop-blur-xl sm:gap-4"
         >
-            <div className="text-foreground text-md text-center">
+            <div className="text-foreground text-center text-base sm:text-lg">
                 {'Dice Preview'}
             </div>
-            <div className="flex min-w-64 flex-row flex-wrap items-center justify-center gap-2">
+            <div className="flex w-60 flex-row flex-wrap items-center justify-center gap-2 sm:w-80">
                 {[...previewDice]}
             </div>
-            <div className="text-foreground text-center text-sm">{`Success: ${targetScore}`}</div>
+            <div className="text-foreground text-center text-sm sm:text-base">{`Success | ${targetScore}+`}</div>
         </div>
     )
 }

@@ -16,6 +16,7 @@
 }
 
 @theme inline {
+    --breakpoint-sm: 32rem;
     --animate-diebounce: diebounce 1s;
     --animate-dieroll: dieroll 1s;
     --animate-numberblur: numberblur 1s;
@@ -189,5 +190,5 @@ body {
     background: var(--background);
     font-family: Arial, Helvetica, sans-serif;
     overscroll-behavior: none;
-    overflow: hidden;
+    overflow-x: hidden;
 }

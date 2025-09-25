@@ -15,7 +15,7 @@ export default function NavAnimator({ children, thisPage }: NavAnimatorProps) {
     const navDirection = navigationDirection(thisPage, lastPage)
     return (
         <div
-            className={clsx('relative flex flex-col items-center select-none', {
+            className={clsx('h-full', {
                 'not-motion-reduce:animate-slidefromtop':
                     navDirection === 'top',
                 'not-motion-reduce:animate-slidefromleft':

@@ -217,7 +217,7 @@ export default function GameScreen({ date }: GameProps) {
                 )}
             </DragOverlay>
             <AnimationContext value={{ lastEndTurnAt }}>
-                <div className="not-motion-reduce:animate-slidefrombottom flex flex-col justify-between gap-0.5 sm:gap-2">
+                <div className="not-motion-reduce:animate-slidefrombottom flex h-full flex-col justify-center gap-0.5 pt-5 sm:gap-2 sm:pt-0">
                     <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
                         <Court
                             selectedAgentId={selectedAgentId}
@@ -251,7 +251,7 @@ export default function GameScreen({ date }: GameProps) {
                             handleLocationClick={handleLocationClick}
                         />
                     </div>
-                    <div className="flex flex-row justify-between">
+                    <div className="flex flex-row flex-wrap items-center justify-center gap-2">
                         <Button
                             id="button-reset-turn"
                             handleButtonPress={handleResetTurn}
@@ -261,13 +261,6 @@ export default function GameScreen({ date }: GameProps) {
                         <ButtonLink href={`/play?date=${dateString}`}>
                             {'Quit'}
                         </ButtonLink>
-                        <Button
-                            handleButtonPress={() =>
-                                startNextStep('game-tutorial')
-                            }
-                        >
-                            {'How to Play'}
-                        </Button>
                         <Button
                             id="button-end-turn"
                             isDisabled={!isPlannedTurnValid}
@@ -280,6 +273,13 @@ export default function GameScreen({ date }: GameProps) {
                                 </div>
                                 <div>{')'}</div>
                             </div>
+                        </Button>
+                        <Button
+                            handleButtonPress={() =>
+                                startNextStep('game-tutorial')
+                            }
+                        >
+                            {'How to Play'}
                         </Button>
                     </div>
                 </div>

@@ -4,8 +4,9 @@ const Empress = (props: SVGProps<SVGSVGElement>) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlSpace="preserve"
-        width={406}
-        height={624}
+        width="100%"
+        height="auto"
+        viewBox="0 0 406 624"
         style={{ rotate: '180deg' }}
         {...props}
     >
