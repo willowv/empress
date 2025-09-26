@@ -22,20 +22,10 @@ import {
 import Agent from '@/game/Agent'
 import ButtonLink from '@/ui/ButtonLink'
 import { AnimationContext } from '@/ui/AnimationContext'
-import _ from 'lodash'
+import { generateSeed } from 'lib/random'
 
 interface GameProps {
     readonly date: Date
-}
-
-function getSeed(date: Date): number {
-    const currentDateTime = new Date()
-    const seedDate = _.cloneDeep(date)
-    seedDate.setHours(currentDateTime.getUTCHours())
-    seedDate.setMinutes(currentDateTime.getUTCMinutes())
-    seedDate.setSeconds(currentDateTime.getUTCSeconds())
-    seedDate.setMilliseconds(currentDateTime.getUTCMilliseconds())
-    return seedDate.valueOf()
 }
 
 export default function GameScreen({ date }: GameProps) {
@@ -44,7 +34,7 @@ export default function GameScreen({ date }: GameProps) {
     const [curSession, setSession] = useState<EG.Session>(() => {
         return {
             date: date,
-            seed: getSeed(date).toString(),
+            seed: generateSeed(date).toString(),
             turnHistory: []
         }
     })

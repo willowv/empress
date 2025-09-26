@@ -1,3 +1,6 @@
+import _ from 'lodash'
+import { addDays } from './util'
+
 /*
     cyrb53 (c) 2018 bryc (github.com/bryc)
     License: Public domain (or MIT if needed). Attribution appreciated.
@@ -62,4 +65,23 @@ export function weightedSelect(weights: number[], rand: () => number): number {
         selectValue -= weight
         return selectValue <= 0
     })
+}
+
+export function generateSeed(date: Date): number {
+    const currentDateTime = new Date()
+    const seedDate = _.cloneDeep(date)
+    seedDate.setHours(currentDateTime.getUTCHours())
+    seedDate.setMinutes(currentDateTime.getUTCMinutes())
+    seedDate.setSeconds(currentDateTime.getUTCSeconds())
+    seedDate.setMilliseconds(currentDateTime.getUTCMilliseconds())
+    return seedDate.valueOf()
+}
+
+export function validateSeed(date: Date, seed: string) {
+    // validate that seed is correct for date
+    // The seed is Date.now().toString(), so it should lie between the epoch time of date and the next date
+    const epochDate = date.valueOf()
+    const epochNextDate = addDays(date, 1).valueOf()
+    const epochSeed = parseInt(seed)
+    return epochSeed >= epochDate && epochSeed < epochNextDate
 }

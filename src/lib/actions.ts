@@ -2,6 +2,7 @@
 
 import * as EG from '@/logic/empress'
 import postgres from 'postgres'
+import { validateSeed } from './random'
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' })
 
@@ -14,7 +15,7 @@ export async function submitScore(
 ) {
     if (previousState !== 'initial') return previousState // only send score once
 
-    if (!EG.isSessionValid(session)) return 'failure'
+    if (!validateSeed(session.date, session.seed)) return 'failure'
 
     // calculate score and number of turns
     try {
