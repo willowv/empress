@@ -63,7 +63,9 @@ export default function DateSelector({
                     for animation purposes. */
                 transitions((springs, item) => (
                     <animated.div
-                        className={'text-foreground text-md w-30 text-center'}
+                        className={
+                            'text-foreground w-30 text-center text-base sm:w-40 sm:text-xl'
+                        }
                         style={springs}
                     >
                         {dateOnlyString(item)}

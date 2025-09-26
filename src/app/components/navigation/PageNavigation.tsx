@@ -54,13 +54,16 @@ export default function PageNavigation({ children }: PageNavigationProps) {
                     router.push(prevPageHref)
                 }}
             >
-                <div className="flex min-h-screen flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
-                    <div className="mr-5 hidden sm:block">{leftLink}</div>
-                    <div key={currentPage} className="max-w-3xl">
+                <div className="flex h-screen flex-col justify-center gap-2 sm:flex-row sm:items-center">
+                    <div className="m-5 hidden sm:block">{leftLink}</div>
+                    <div
+                        key={currentPage}
+                        className="h-full max-w-lg items-center sm:grow"
+                    >
                         {children}
                     </div>
-                    <div className="ml-5 hidden sm:block">{rightLink}</div>
-                    <div className="flex flex-row justify-between p-2 pb-1 sm:hidden">
+                    <div className="m-5 hidden sm:block">{rightLink}</div>
+                    <div className="m-5 flex flex-row justify-between sm:hidden">
                         {leftLink}
                         {rightLink}
                     </div>

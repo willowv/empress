@@ -6,7 +6,7 @@ import {
     randomRoll,
     weightedSelect
 } from 'lib/random'
-import { addDays, dateOnlyString } from 'lib/util'
+import { dateOnlyString } from 'lib/util'
 
 export type Session = {
     date: Date
@@ -100,15 +100,6 @@ export function calculateTargetScore(diceCounts: Map<DieSize, number>) {
                 return target + count * EXPECTED_VALUES[dieSize]
             }, 0)
     )
-}
-
-export function isSessionValid(session: Session) {
-    // validate that seed is correct for date
-    // The seed is Date.now().toString(), so it should lie between the epoch time of date and the next date
-    const epochDate = session.date.valueOf()
-    const epochNextDate = addDays(session.date, 1).valueOf()
-    const epochSeed = parseInt(session.seed)
-    return epochSeed >= epochDate && epochSeed < epochNextDate
 }
 
 // We need the date for this game so we know which config to use

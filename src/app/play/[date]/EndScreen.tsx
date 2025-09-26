@@ -41,52 +41,48 @@ export default function EndScreen({
     const numTurns = session.turnHistory.length
     const dateString = dateOnlyString(date)
     return (
-        <div className="not-motion-reduce:animate-slidefromtop relative flex flex-col items-center select-none">
-            <div className="fill-gold bg-background max-h-screen">
+        <div className="relative flex h-full shrink-0 flex-col items-center select-none">
+            <div className="fill-gold bg-background absolute z-0 h-full">
                 <Chariot />
             </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="flex flex-col gap-2">
-                    <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                        {dateString}
+            <div className="z-10 flex h-full max-w-120 flex-col items-center justify-center gap-2 p-5">
+                <div className="text-foreground m-2 rounded-lg p-2 text-center text-base backdrop-blur-xl">
+                    {dateString}
+                </div>
+                <div className="text-foreground m-2 rounded-lg p-2 text-center text-base backdrop-blur-xl">
+                    {finalScore >= targetScore ? 'SUCCESS' : 'GAME OVER'}
+                </div>
+                <div className="m-2 flex flex-col gap-1 rounded-lg p-2 backdrop-blur-xl">
+                    <div className="text-foreground text-center text-base">
+                        {`${finalScore} in ${numTurns} turns`}
                     </div>
-                    <div className="text-foreground text-md m-2 rounded-lg p-2 text-center backdrop-blur-xl">
-                        {finalScore >= targetScore ? 'SUCCESS' : 'GAME OVER'}
-                    </div>
-                    <div className="m-2 flex flex-col gap-1 rounded-lg p-2 backdrop-blur-xl">
-                        <div className="text-foreground text-md text-center">
-                            {`${finalScore} in ${numTurns} turns`}
-                        </div>
-                        <div className="text-foreground text-center text-xs">
-                            {`(target ${targetScore})`}
-                        </div>
-                    </div>
-                    <div className="flex flex-row justify-between gap-2">
-                        <Button
-                            isDisabled={submissionState !== 'initial'}
-                            handleButtonPress={handleTryAgain}
-                        >
-                            {'Try Again'}
-                        </Button>
-                        <Button
-                            isDisabled={
-                                submissionState !== 'initial' ||
-                                finalScore < targetScore
-                            }
-                            handleButtonPress={() =>
-                                startTransition(submitAction)
-                            }
-                        >
-                            {isSubmissionPending ? (
-                                <Hourglass className="fill-gold size-3 not-motion-reduce:animate-spin" />
-                            ) : (
-                                mpSubmissionState_Content[submissionState]
-                            )}
-                        </Button>
+                    <div className="text-foreground text-center text-xs">
+                        {`(target ${targetScore})`}
                     </div>
                 </div>
+                <div className="flex flex-row justify-between gap-2">
+                    <Button
+                        isDisabled={submissionState !== 'initial'}
+                        handleButtonPress={handleTryAgain}
+                    >
+                        {'Try Again'}
+                    </Button>
+                    <Button
+                        isDisabled={
+                            submissionState !== 'initial' ||
+                            finalScore < targetScore
+                        }
+                        handleButtonPress={() => startTransition(submitAction)}
+                    >
+                        {isSubmissionPending ? (
+                            <Hourglass className="fill-gold size-3 not-motion-reduce:animate-spin" />
+                        ) : (
+                            mpSubmissionState_Content[submissionState]
+                        )}
+                    </Button>
+                </div>
             </div>
-            <div className="absolute bottom-15 left-1/2 -translate-x-1/2">
+            <div className="absolute bottom-15 left-1/2 z-10 -translate-x-1/2">
                 <ButtonLink href={`/play?date=${dateString}`}>
                     {'Back'}
                 </ButtonLink>
