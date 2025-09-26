@@ -7,7 +7,7 @@ import Bribe from '@/game/locations/Bribe'
 import Delay from '@/game/locations/Delay'
 import Influence from '@/game/locations/Influence'
 import Button from '@/ui/Button'
-import { dateOnlyString, getDateWithoutTime } from 'lib/util'
+import { dateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
 import { useNextStep } from 'nextstepjs'
@@ -22,19 +22,29 @@ import {
 import Agent from '@/game/Agent'
 import ButtonLink from '@/ui/ButtonLink'
 import { AnimationContext } from '@/ui/AnimationContext'
+import _ from 'lodash'
 
 interface GameProps {
     readonly date: Date
 }
 
+function getSeed(date: Date): number {
+    const currentDateTime = new Date()
+    const seedDate = _.cloneDeep(date)
+    seedDate.setHours(currentDateTime.getUTCHours())
+    seedDate.setMinutes(currentDateTime.getUTCMinutes())
+    seedDate.setSeconds(currentDateTime.getUTCSeconds())
+    seedDate.setMilliseconds(currentDateTime.getUTCMilliseconds())
+    return seedDate.valueOf()
+}
+
 export default function GameScreen({ date }: GameProps) {
     const dateString = dateOnlyString(date)
-    const justTheTime = Date.now() - getDateWithoutTime(new Date()).valueOf()
     const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
         return {
             date: date,
-            seed: (date.valueOf() + justTheTime).toString(),
+            seed: getSeed(date).toString(),
             turnHistory: []
         }
     })
@@ -252,35 +262,43 @@ export default function GameScreen({ date }: GameProps) {
                         />
                     </div>
                     <div className="flex flex-row flex-wrap items-center justify-center gap-2">
-                        <Button
-                            id="button-reset-turn"
-                            handleButtonPress={handleResetTurn}
-                        >
-                            {'Reset Turn'}
-                        </Button>
-                        <ButtonLink href={`/play?date=${dateString}`}>
-                            {'Quit'}
-                        </ButtonLink>
-                        <Button
-                            id="button-end-turn"
-                            isDisabled={!isPlannedTurnValid}
-                            handleButtonPress={handleEndTurn}
-                        >
-                            <div className="flex flex-row items-center gap-1">
-                                <div>{'End Turn ('}</div>
-                                <div className="fill-gold size-2 -translate-y-1">
-                                    <Hourglass />
+                        <div className="order-1">
+                            <Button
+                                id="button-reset-turn"
+                                handleButtonPress={handleResetTurn}
+                            >
+                                {'Reset Turn'}
+                            </Button>
+                        </div>
+                        <div className="order-2">
+                            <ButtonLink href={`/play?date=${dateString}`}>
+                                {'Quit'}
+                            </ButtonLink>
+                        </div>
+                        <div className="order-3 sm:order-4">
+                            <Button
+                                id="button-end-turn"
+                                isDisabled={!isPlannedTurnValid}
+                                handleButtonPress={handleEndTurn}
+                            >
+                                <div className="flex flex-row items-center gap-1">
+                                    <div>{'End Turn ('}</div>
+                                    <div className="fill-gold size-2 -translate-y-1">
+                                        <Hourglass />
+                                    </div>
+                                    <div>{')'}</div>
                                 </div>
-                                <div>{')'}</div>
-                            </div>
-                        </Button>
-                        <Button
-                            handleButtonPress={() =>
-                                startNextStep('game-tutorial')
-                            }
-                        >
-                            {'How to Play'}
-                        </Button>
+                            </Button>
+                        </div>
+                        <div className="order-4 sm:order-3">
+                            <Button
+                                handleButtonPress={() =>
+                                    startNextStep('game-tutorial')
+                                }
+                            >
+                                {'How to Play'}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </AnimationContext>
