@@ -12,8 +12,19 @@ const ONBOARDING_STEPS: Tour[] = [
                         <div>Welcome to the Empress Returns!</div>
                         <div>
                             This is a solitaire dice game inspired by tarot,
-                            specifically my interpretation of The Empress,
+                            specifically an interpretation of The Empress,
                             Reversed.
+                        </div>
+                        <div>
+                            The Empress, Reversed, represents a lack of
+                            nurturing energy and growth in the asker&apos;s
+                            life. Sometimes it can represent a specific critical
+                            or overbearing person.
+                        </div>
+                        <div>
+                            In this game, the card represents the stifling of an
+                            Empress&apos;s heir, and seizing the opporturtunity
+                            to overcome that repression.
                         </div>
                     </div>
                 ),
@@ -30,9 +41,10 @@ const ONBOARDING_STEPS: Tour[] = [
                             day. Each day a new puzzle is released.
                         </div>
                         <div>
-                            All attempts on a specific puzzle will use the same
-                            seed for random number generation, meaning that the
-                            dice provided and the rolls will be the same.
+                            While every player and attempt will have the same
+                            dice, their rolls will be different each time. If
+                            you have particularly bad luck, you can try again
+                            and submit your best score.
                         </div>
                     </div>
                 ),
@@ -66,6 +78,10 @@ const ONBOARDING_STEPS: Tour[] = [
                         <div>
                             This Dice Preview shows what dice will be used in
                             the puzzle for the day you have selected.
+                        </div>
+                        <div>
+                            In order to submit your score, you will need to at
+                            least beat the Success score listed here.
                         </div>
                     </div>
                 ),
@@ -109,8 +125,9 @@ const ONBOARDING_STEPS: Tour[] = [
                             day&apos;s puzzle.
                         </div>
                         <div>
-                            Try not to submit more than one score for the same
-                            day.
+                            You are free to try as many times as you like. In an
+                            upcoming update, the game will only track your best
+                            score for a given day.
                         </div>
                         <div>Have fun!</div>
                     </div>
