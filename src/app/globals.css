@@ -191,4 +191,5 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     overscroll-behavior: none;
     overflow-x: hidden;
+    overflow-y: auto;
 }

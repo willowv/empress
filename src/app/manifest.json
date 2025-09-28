@@ -1,9 +1,18 @@
 {
     "name": "The Empress Returns",
     "short_name": "Empress",
+    "description": "A solitaire dice game based on tarot.",
+    "start_url": "https://empress.willowv.dev",
+    "id": "",
     "icons": [
         {
             "src": "/web-app-manifest-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/web-app-manifest-192x192-maskable.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "maskable"
@@ -12,11 +21,24 @@
             "src": "/web-app-manifest-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "maskable"
+            "purpose": "any"
         }
     ],
     "theme_color": "#0a0a0a",
     "background_color": "#0a0a0a",
     "display": "fullscreen",
-    "orientation": "portrait"
+    "orientation": "portrait",
+    "categories": ["games"],
+    "prefer_related_applications": false,
+    "shortcuts": [
+        {
+            "name": "Play Latest",
+            "url": "/play",
+            "short_name": "Play",
+            "description": "View the latest puzzle."
+        }
+    ],
+    "edge_side_panel": {
+        "preferred_width": 335
+    }
 }

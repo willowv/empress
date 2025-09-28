@@ -42,7 +42,7 @@ export default function EndScreen({
     const dateString = dateOnlyString(date)
     return (
         <div className="relative flex h-full shrink-0 flex-col items-center select-none">
-            <div className="fill-gold bg-background absolute z-0 h-full">
+            <div className="fill-gold bg-background absolute z-0 h-full min-w-xs">
                 <Chariot />
             </div>
             <div className="z-10 flex h-full max-w-120 flex-col items-center justify-center gap-2 p-5">

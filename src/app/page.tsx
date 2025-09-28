@@ -10,7 +10,7 @@ export default function Home() {
     return (
         <NavAnimator thisPage="/">
             <div className="relative flex h-full flex-col items-center select-none">
-                <div className="fill-gold bg-background h-full">
+                <div className="fill-gold bg-background h-full min-w-xs">
                     <Empress />
                 </div>
                 <div className="absolute top-2/5 left-1/2 h-10 w-65 -translate-x-1/2 -translate-y-1/2 rounded-xl backdrop-blur-md sm:h-15 sm:w-90" />

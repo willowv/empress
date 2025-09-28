@@ -28,7 +28,7 @@ export default function Influence({
         <div
             ref={setNodeRef}
             id="location-influence"
-            className="border-gold flex grow flex-col items-center justify-between border-2 p-2 sm:rounded-tr-2xl"
+            className="border-gold flex flex-col items-center justify-between border-2 p-2 sm:rounded-tr-2xl"
             onClick={() => handleLocationClick('Influence')}
         >
             <div className="text-foreground text-center text-lg font-bold">

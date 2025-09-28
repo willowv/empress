@@ -75,7 +75,11 @@ export default function GameScreen({ date }: GameProps) {
                 session={curSession}
                 date={date}
                 handleTryAgain={() =>
-                    setSession({ ...curSession, turnHistory: [] })
+                    setSession({
+                        date: curSession.date,
+                        seed: generateSeed(curSession.date).toString(),
+                        turnHistory: []
+                    })
                 }
             />
         )
@@ -217,8 +221,8 @@ export default function GameScreen({ date }: GameProps) {
                 )}
             </DragOverlay>
             <AnimationContext value={{ lastEndTurnAt }}>
-                <div className="not-motion-reduce:animate-slidefrombottom flex h-full flex-col justify-center gap-0.5 pt-5 sm:gap-2 sm:pt-0">
-                    <div className="flex flex-col justify-between gap-0.5 sm:flex-row sm:gap-2">
+                <div className="not-motion-reduce:animate-slidefrombottom flex flex-col justify-center gap-0.5 sm:gap-2 sm:pt-0">
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
                         <Court
                             selectedAgentId={selectedAgentId}
                             agents={courtAgents}

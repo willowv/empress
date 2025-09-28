@@ -7,7 +7,7 @@ export default function StoryScreen() {
     return (
         <NavAnimator thisPage="/story">
             <div className="relative flex h-full flex-col items-center justify-center select-none">
-                <div className="fill-gold bg-background absolute h-full">
+                <div className="fill-gold bg-background absolute h-full min-w-xs">
                     <Fool />
                 </div>
                 <div className="flex max-w-120 flex-col items-center gap-2 p-5 sm:gap-4">
