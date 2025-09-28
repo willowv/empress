@@ -70,10 +70,12 @@ export function weightedSelect(weights: number[], rand: () => number): number {
 export function generateSeed(date: Date): number {
     const currentDateTime = new Date()
     const seedDate = _.cloneDeep(date)
-    seedDate.setHours(currentDateTime.getUTCHours())
-    seedDate.setMinutes(currentDateTime.getUTCMinutes())
-    seedDate.setSeconds(currentDateTime.getUTCSeconds())
-    seedDate.setMilliseconds(currentDateTime.getUTCMilliseconds())
+    seedDate.setUTCHours(
+        currentDateTime.getUTCHours(),
+        currentDateTime.getUTCMinutes(),
+        currentDateTime.getUTCSeconds(),
+        currentDateTime.getUTCMilliseconds()
+    )
     return seedDate.valueOf()
 }
 
