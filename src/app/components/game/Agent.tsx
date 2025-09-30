@@ -75,28 +75,17 @@ export default function Agent({
             </div>
             <div
                 className={clsx(
-                    'absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-4xl backdrop-blur-xs',
+                    'text-foreground text-shadow-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-base font-bold text-shadow-md/100',
                     {
-                        'animate-numberbackdropfadein': shouldDoRollAnimation,
+                        'animate-numberblur': shouldDoRollAnimation,
                         'animate-none': !shouldDoRollAnimation
                     }
                 )}
-                style={{ animationDuration: 1000 + animDelay + 'ms' }}
+                style={{
+                    animationDuration: 1000 + animDelay + 'ms'
+                }}
             >
-                <div
-                    className={clsx(
-                        'text-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold' +
-                            {
-                                'animate-numberblur': shouldDoRollAnimation,
-                                'animate-none': !shouldDoRollAnimation
-                            }
-                    )}
-                    style={{
-                        animationDuration: 1000 + animDelay + 'ms'
-                    }}
-                >
-                    {agent.curValue}
-                </div>
+                {agent.curValue}
             </div>
             {state === 'locked' && (
                 <div className="text-foreground fill-gold absolute right-0 bottom-1 size-3">
