@@ -6,22 +6,22 @@ import NavAnimator from 'app/components/navigation/NavAnimator'
 export default function StoryScreen() {
     return (
         <NavAnimator thisPage="/story">
-            <div className="relative flex h-full flex-col items-center justify-center select-none">
-                <div className="fill-gold bg-background absolute h-full min-w-xs">
+            <div className="relative flex h-full flex-col items-center select-none">
+                <div className="fill-gold bg-background w-full sm:h-screen">
                     <Fool />
                 </div>
-                <div className="flex max-w-120 flex-col items-center gap-2 p-5 sm:gap-4">
-                    <div className="text-foreground rounded-lg p-1 text-center text-sm backdrop-blur-xl sm:text-lg">
+                <div className="absolute flex h-full max-w-120 flex-col items-center justify-center gap-2 p-5 sm:gap-4">
+                    <div className="text-foreground rounded-lg p-1 text-center text-base backdrop-blur-xl sm:text-lg">
                         {
                             'As heir to the beloved Empress Reina, you have lived a life of luxury and plenty. While being royalty has its perks, you have long felt stifled by the Empress’s overbearing and critical nature, a side of her rarely seen by the adoring public.'
                         }
                     </div>
-                    <div className="text-foreground rounded-lg p-1 text-center text-sm backdrop-blur-xl sm:text-lg">
+                    <div className="text-foreground rounded-lg p-1 text-center text-base backdrop-blur-xl sm:text-lg">
                         {
                             'A week ago, the Empress departed on a diplomatic mission to a neighboring kingdom, homeland of one of your good friends. This is a unique opportunity to grow your influence in the Empire, to come into your own as a ruler and define who you are as a person. When she returns, will you fade back into your mother’s shadow, or stand as a future leader the people can believe in?'
                         }
                     </div>
-                    <div className="text-foreground rounded-lg p-1 text-center text-sm backdrop-blur-xl sm:text-lg">
+                    <div className="text-foreground rounded-lg p-1 text-center text-base backdrop-blur-xl sm:text-lg">
                         {
                             'You will bring to bear all the intrigue and trickery that brought the Empress to power, sending your agents across the capital to forge alliances and build the influence you will one day need to rule. As long as you can delay the Empress’s return, there is still time. Good luck.'
                         }

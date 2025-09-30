@@ -221,7 +221,7 @@ export default function GameScreen({ date }: GameProps) {
                 )}
             </DragOverlay>
             <AnimationContext value={{ lastEndTurnAt }}>
-                <div className="not-motion-reduce:animate-slidefrombottom flex flex-col justify-center gap-0.5 sm:gap-2 sm:pt-0">
+                <div className="not-motion-reduce:animate-slidefromtop flex flex-col justify-center gap-0.5 sm:gap-2 sm:pt-0">
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
                         <Court
                             selectedAgentId={selectedAgentId}
@@ -255,7 +255,7 @@ export default function GameScreen({ date }: GameProps) {
                             handleLocationClick={handleLocationClick}
                         />
                     </div>
-                    <div className="flex flex-row flex-wrap items-center justify-center gap-2">
+                    <div className="mt-1 flex flex-row flex-wrap items-center justify-around gap-2">
                         <div className="order-1">
                             <Button
                                 id="button-reset-turn"

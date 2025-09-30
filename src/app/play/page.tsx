@@ -24,12 +24,12 @@ export default async function Page(props: {
         <NavAnimator thisPage="/play">
             <div
                 id="play-screen"
-                className="relative flex h-full shrink-0 flex-col items-center select-none"
+                className="relative flex h-full flex-col items-center select-none"
             >
-                <div className="fill-gold bg-background absolute z-0 h-full min-w-xs">
+                <div className="fill-gold bg-background w-full sm:h-screen">
                     <Fortune />
                 </div>
-                <div className="z-10 flex h-full max-w-120 flex-col items-center justify-center gap-2 p-5">
+                <div className="absolute flex h-full max-w-120 flex-col items-center justify-center gap-2 p-5">
                     <QueryParamDateSelector
                         max={getTodayWithoutTime()}
                         min={oneYearAgo}
