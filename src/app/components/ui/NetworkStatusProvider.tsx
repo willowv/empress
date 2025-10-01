@@ -1,6 +1,23 @@
-import { useEffect, useState } from 'react'
+'use client'
 
-export default function useNetworkStatus() {
+import { ReactNode, useEffect, useState } from 'react'
+import { createContext } from 'react'
+
+interface NetworkContextProps {
+    readonly isOnline: boolean
+}
+
+export const NetworkContext = createContext<NetworkContextProps>({
+    isOnline: true
+})
+
+interface NetworkStatusProviderProps {
+    readonly children: ReactNode
+}
+
+export default function NetworkStatusProvider({
+    children
+}: NetworkStatusProviderProps) {
     const [isOnline, setIsOnline] = useState(true)
     const updateNetworkStatus = () => setIsOnline(navigator.onLine)
     useEffect(() => {
@@ -16,5 +33,5 @@ export default function useNetworkStatus() {
         }
     }, []) // Event listeners mean no dependency watch is needed here
 
-    return isOnline
+    return <NetworkContext value={{ isOnline }}>{children}</NetworkContext>
 }

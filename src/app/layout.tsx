@@ -6,6 +6,7 @@ import { NextStepProvider, NextStep } from 'nextstepjs'
 import TutorialCard from '@/ui/TutorialCard'
 import ONBOARDING_STEPS from './tours'
 import PageNavigation from 'app/components/navigation/PageNavigation'
+import NetworkStatusProvider from '@/ui/NetworkStatusProvider'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -39,19 +40,21 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} min-w-xs antialiased`}
             >
-                <NextStepProvider>
-                    <NextStep
-                        steps={ONBOARDING_STEPS}
-                        showNextStep={true}
-                        cardComponent={TutorialCard}
-                        shadowOpacity="0.7"
-                        shadowRgb="74,85,101"
-                        cardTransition={{ duration: 1, type: 'spring' }}
-                    >
-                        <Analytics />
-                        <PageNavigation>{children}</PageNavigation>
-                    </NextStep>
-                </NextStepProvider>
+                <NetworkStatusProvider>
+                    <NextStepProvider>
+                        <NextStep
+                            steps={ONBOARDING_STEPS}
+                            showNextStep={true}
+                            cardComponent={TutorialCard}
+                            shadowOpacity="0.7"
+                            shadowRgb="74,85,101"
+                            cardTransition={{ duration: 1, type: 'spring' }}
+                        >
+                            <Analytics />
+                            <PageNavigation>{children}</PageNavigation>
+                        </NextStep>
+                    </NextStepProvider>
+                </NetworkStatusProvider>
             </body>
         </html>
     )
