@@ -3,6 +3,7 @@
 import * as EG from '@/logic/empress'
 import postgres from 'postgres'
 import { validateSeed } from './random'
+import { revalidatePath } from 'next/cache'
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' })
 
@@ -25,6 +26,7 @@ export async function submitScore(
         await sql`
     INSERT INTO scores (score, numturns, date)
     VALUES (${score}, ${numTurns}, ${date})`
+        revalidatePath(`/play?date=${date}`, 'page')
         return 'success'
     } catch {
         return 'failure'
