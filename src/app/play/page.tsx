@@ -10,6 +10,7 @@ import QueryParamDateSelector from '@/ui/QueryParamDateSelector'
 import Fortune from '@/svg/tarot/Fortune'
 import DicePreview from './DicePreview'
 import NavAnimator from 'app/components/navigation/NavAnimator'
+import { Suspense } from 'react'
 
 export default async function Page(props: {
     searchParams?: Promise<{
@@ -36,11 +37,13 @@ export default async function Page(props: {
                     />
                     <DicePreview date={selectedDate} />
                     <div id="scores" className="max-h-50 grow sm:max-h-60">
-                        <Scores date={selectedDate} />
+                        <Suspense>
+                            <Scores date={selectedDate} />
+                        </Suspense>
                     </div>
                     <div id="button-play" className="z-20">
                         <ButtonLink
-                            href={`/play/${dateOnlyString(selectedDate)}`}
+                            href={`/game?date=${dateOnlyString(selectedDate)}`}
                         >
                             {'Play'}
                         </ButtonLink>
