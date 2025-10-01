@@ -12,7 +12,7 @@ import {
 } from '@/logic/empress'
 import { SubmissionState, submitScore } from 'lib/actions'
 import ButtonLink from '@/ui/ButtonLink'
-import DicePreview from '../play/DicePreview'
+import DicePreview from '../components/game/DicePreview'
 import { NetworkContext } from '@/ui/NetworkStatusProvider'
 
 const mpSubmissionState_Content = {

@@ -8,7 +8,7 @@ import ButtonLink from '@/ui/ButtonLink'
 import Scores from 'app/play/Scores'
 import QueryParamDateSelector from '@/ui/QueryParamDateSelector'
 import Fortune from '@/svg/tarot/Fortune'
-import DicePreview from './DicePreview'
+import DicePreview from '../components/game/DicePreview'
 import NavAnimator from 'app/components/navigation/NavAnimator'
 import { Suspense } from 'react'
 
