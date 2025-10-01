@@ -12,7 +12,8 @@ import {
 } from '@/logic/empress'
 import { SubmissionState, submitScore } from 'lib/actions'
 import ButtonLink from '@/ui/ButtonLink'
-import DicePreview from '../DicePreview'
+import DicePreview from '../play/DicePreview'
+import useNetworkStatus from '@/ui/useNetworkStatus'
 
 const mpSubmissionState_Content = {
     initial: 'Submit Score',
@@ -37,6 +38,7 @@ export default function EndScreen({
             'initial'
         )
 
+    const isOnline = useNetworkStatus()
     const finalScore = getScore(getCurrentState(session))
     const targetScore = calculateTargetScore(getDiceCounts(session))
     const numTurns = session.turnHistory.length
@@ -72,11 +74,14 @@ export default function EndScreen({
                     <Button
                         isDisabled={
                             submissionState !== 'initial' ||
-                            finalScore < targetScore
+                            finalScore < targetScore ||
+                            !isOnline
                         }
                         handleButtonPress={() => startTransition(submitAction)}
                     >
-                        {isSubmissionPending ? (
+                        {!isOnline ? (
+                            'Offline'
+                        ) : isSubmissionPending ? (
                             <Hourglass className="fill-gold size-3 not-motion-reduce:animate-spin" />
                         ) : (
                             mpSubmissionState_Content[submissionState]
