@@ -1,5 +1,4 @@
-import _ from 'lodash'
-import { addDays } from './util'
+import { addDays, withTimeOf } from './util'
 
 /*
     cyrb53 (c) 2018 bryc (github.com/bryc)
@@ -67,15 +66,8 @@ export function weightedSelect(weights: number[], rand: () => number): number {
     })
 }
 
-export function generateSeed(date: Date): number {
-    const currentDateTime = new Date()
-    const seedDate = _.cloneDeep(date)
-    seedDate.setUTCHours(
-        currentDateTime.getUTCHours(),
-        currentDateTime.getUTCMinutes(),
-        currentDateTime.getUTCSeconds(),
-        currentDateTime.getUTCMilliseconds()
-    )
+export function generateSeed(date: Date, currentDateTime: Date): number {
+    const seedDate = withTimeOf(date, currentDateTime)
     return seedDate.valueOf()
 }
 

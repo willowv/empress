@@ -9,9 +9,9 @@ import Influence from '@/game/locations/Influence'
 import Button from '@/ui/Button'
 import {
     addYears,
-    dateOnlyString,
+    getUTCISOString,
     ensureValidDate,
-    getTodayWithoutTime
+    getDateWithoutTime
 } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
@@ -31,17 +31,18 @@ import { generateSeed } from 'lib/random'
 import { notFound, useSearchParams } from 'next/navigation'
 
 export default function GameScreen() {
+    const [currentDateTime] = useState(new Date())
     const dateParam = useSearchParams().get('date') ?? undefined
-    const date = ensureValidDate(dateParam, getTodayWithoutTime())
-    const oneYearAgo = addYears(getTodayWithoutTime(), -1)
+    const date = ensureValidDate(dateParam, getDateWithoutTime(currentDateTime))
+    const oneYearAgo = addYears(getDateWithoutTime(currentDateTime), -1)
     if (date < oneYearAgo) notFound()
 
-    const dateString = dateOnlyString(date)
+    const dateString = getUTCISOString(date)
     const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
         return {
             date: date,
-            seed: generateSeed(date).toString(),
+            seed: generateSeed(date, currentDateTime).toString(),
             turnHistory: []
         }
     })
@@ -84,7 +85,10 @@ export default function GameScreen() {
                 handleTryAgain={() =>
                     setSession({
                         date: curSession.date,
-                        seed: generateSeed(curSession.date).toString(),
+                        seed: generateSeed(
+                            curSession.date,
+                            currentDateTime
+                        ).toString(),
                         turnHistory: []
                     })
                 }

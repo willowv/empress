@@ -1,4 +1,4 @@
-import { weightedSelect } from './random'
+import { generateSeed, validateSeed, weightedSelect } from './random'
 
 describe('weightedSelect', () => {
     it('should select first index when first weight is 1 and others are 0', () => {
@@ -35,5 +35,17 @@ describe('weightedSelect', () => {
         const mockRand = () => 0.5
         const weights = [0, 1, 0]
         expect(weightedSelect(weights, mockRand)).toBe(1)
+    })
+})
+
+describe('generateSeed', () => {
+    it('should always be valid', () => {
+        // Generate a seed after 5pm pacific time
+        const gameDate = new Date('2025-10-05')
+        const currentLocalDate = new Date('2025-10-04T17:01-07:00')
+        const seed = generateSeed(gameDate, currentLocalDate)
+
+        // Try to validate that seed
+        expect(validateSeed(gameDate, `${seed}`)).toBe(true)
     })
 })

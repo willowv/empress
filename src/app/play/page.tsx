@@ -1,8 +1,8 @@
 import {
     addYears,
-    dateOnlyString,
+    getUTCISOString,
     ensureValidDate,
-    getTodayWithoutTime
+    getDateWithoutTime
 } from 'lib/util'
 import ButtonLink from '@/ui/ButtonLink'
 import Scores from 'app/play/Scores'
@@ -19,8 +19,11 @@ export default async function Page(props: {
 }) {
     const searchParams = await props.searchParams
     const dateString = searchParams?.date
-    const selectedDate = ensureValidDate(dateString, getTodayWithoutTime())
-    const oneYearAgo = addYears(getTodayWithoutTime(), -1)
+    const selectedDate = ensureValidDate(
+        dateString,
+        getDateWithoutTime(new Date())
+    )
+    const oneYearAgo = addYears(getDateWithoutTime(new Date()), -1)
     return (
         <NavAnimator thisPage="/play">
             <div
@@ -32,7 +35,7 @@ export default async function Page(props: {
                 </div>
                 <div className="absolute flex h-full max-w-120 flex-col items-center justify-center gap-2 p-5">
                     <QueryParamDateSelector
-                        max={getTodayWithoutTime()}
+                        max={getDateWithoutTime(new Date())}
                         min={oneYearAgo}
                     />
                     <DicePreview date={selectedDate} />
@@ -43,7 +46,7 @@ export default async function Page(props: {
                     </div>
                     <div id="button-play" className="z-20">
                         <ButtonLink
-                            href={`/game?date=${dateOnlyString(selectedDate)}`}
+                            href={`/game?date=${getUTCISOString(selectedDate)}`}
                         >
                             {'Play'}
                         </ButtonLink>
