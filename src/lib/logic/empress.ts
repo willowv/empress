@@ -6,7 +6,7 @@ import {
     randomRoll,
     weightedSelect
 } from 'lib/random'
-import { dateOnlyString } from 'lib/util'
+import { getISODateOnlyString } from 'lib/util'
 
 export type Session = {
     date: Date
@@ -62,7 +62,9 @@ function getConfig(date: Date): EmpressConfig {
 
 export function getDiceCounts(session: Session): Map<DieSize, number> {
     // Dice counts are based just on the date, whereas the rolls are based on the session's full seed.
-    const rand = random_splitmix32(hash_cyrb53(dateOnlyString(session.date)))
+    const rand = random_splitmix32(
+        hash_cyrb53(getISODateOnlyString(session.date))
+    )
     const {
         dieBaseWeights,
         minDiceCount,

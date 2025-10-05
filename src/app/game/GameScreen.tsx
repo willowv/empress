@@ -7,12 +7,7 @@ import Bribe from '@/game/locations/Bribe'
 import Delay from '@/game/locations/Delay'
 import Influence from '@/game/locations/Influence'
 import Button from '@/ui/Button'
-import {
-    addYears,
-    dateOnlyString,
-    ensureValidDate,
-    getTodayWithoutTime
-} from 'lib/util'
+import { getISODateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
 import { useNextStep } from 'nextstepjs'
@@ -28,20 +23,18 @@ import Agent from '@/game/Agent'
 import ButtonLink from '@/ui/ButtonLink'
 import { AnimationContext } from '@/ui/AnimationContext'
 import { generateSeed } from 'lib/random'
-import { notFound, useSearchParams } from 'next/navigation'
 
-export default function GameScreen() {
-    const dateParam = useSearchParams().get('date') ?? undefined
-    const date = ensureValidDate(dateParam, getTodayWithoutTime())
-    const oneYearAgo = addYears(getTodayWithoutTime(), -1)
-    if (date < oneYearAgo) notFound()
+interface GameScreenProps {
+    readonly date: Date
+}
 
-    const dateString = dateOnlyString(date)
+export default function GameScreen({ date }: GameScreenProps) {
+    const dateString = getISODateOnlyString(date)
     const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
         return {
             date: date,
-            seed: generateSeed(date).toString(),
+            seed: generateSeed(date, new Date()).toString(),
             turnHistory: []
         }
     })
@@ -84,7 +77,10 @@ export default function GameScreen() {
                 handleTryAgain={() =>
                     setSession({
                         date: curSession.date,
-                        seed: generateSeed(curSession.date).toString(),
+                        seed: generateSeed(
+                            curSession.date,
+                            new Date()
+                        ).toString(),
                         turnHistory: []
                     })
                 }
