@@ -1,6 +1,6 @@
 import {
     addYears,
-    getUTCISOString,
+    getISODateOnlyString,
     ensureValidDate,
     getDateWithoutTime
 } from 'lib/util'
@@ -45,7 +45,7 @@ export default async function Page(props: {
                     </div>
                     <div id="button-play" className="z-20">
                         <ButtonLink
-                            href={`/game?date=${getUTCISOString(date)}`}
+                            href={`/game?date=${getISODateOnlyString(date)}`}
                         >
                             {'Play'}
                         </ButtonLink>

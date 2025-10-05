@@ -7,7 +7,7 @@ import Bribe from '@/game/locations/Bribe'
 import Delay from '@/game/locations/Delay'
 import Influence from '@/game/locations/Influence'
 import Button from '@/ui/Button'
-import { getUTCISOString } from 'lib/util'
+import { getISODateOnlyString } from 'lib/util'
 import Hourglass from '@/svg/Hourglass'
 import EndScreen from './EndScreen'
 import { useNextStep } from 'nextstepjs'
@@ -29,13 +29,12 @@ interface GameScreenProps {
 }
 
 export default function GameScreen({ date }: GameScreenProps) {
-    const [currentDateTime] = useState(new Date())
-    const dateString = getUTCISOString(date)
+    const dateString = getISODateOnlyString(date)
     const { startNextStep } = useNextStep()
     const [curSession, setSession] = useState<EG.Session>(() => {
         return {
             date: date,
-            seed: generateSeed(date, currentDateTime).toString(),
+            seed: generateSeed(date, new Date()).toString(),
             turnHistory: []
         }
     })
@@ -80,7 +79,7 @@ export default function GameScreen({ date }: GameScreenProps) {
                         date: curSession.date,
                         seed: generateSeed(
                             curSession.date,
-                            currentDateTime
+                            new Date()
                         ).toString(),
                         turnHistory: []
                     })

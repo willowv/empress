@@ -2,7 +2,7 @@
 
 import {
     addDays,
-    getUTCISOString,
+    getISODateOnlyString,
     ensureValidDate,
     getDateWithoutTime
 } from 'lib/util'
@@ -29,7 +29,7 @@ export default function QueryParamDateSelector({
 
     function handleNewDate(date: Date) {
         const params = new URLSearchParams(searchParams)
-        params.set('date', getUTCISOString(date))
+        params.set('date', getISODateOnlyString(date))
         router.replace(`${pathname}?${params.toString()}`)
     }
 

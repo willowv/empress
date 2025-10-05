@@ -1,6 +1,6 @@
 import AgentPreview from '@/game/AgentPreview'
 import { calculateTargetScore, getDiceCounts } from '@/logic/empress'
-import { getUTCISOString } from 'lib/util'
+import { getISODateOnlyString } from 'lib/util'
 
 interface DicePreviewProps {
     readonly date: Date
@@ -9,7 +9,7 @@ interface DicePreviewProps {
 export default function DicePreview({ date }: DicePreviewProps) {
     const mpDieSize_Count = getDiceCounts({
         date: date,
-        seed: getUTCISOString(date),
+        seed: getISODateOnlyString(date),
         turnHistory: []
     })
     const previewDice = mpDieSize_Count

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export function getUTCISOString(date: Date) {
+export function getISODateOnlyString(date: Date) {
     return date.toISOString().split('T')[0]
 }
 

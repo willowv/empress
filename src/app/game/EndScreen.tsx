@@ -1,7 +1,7 @@
 import Hourglass from '@/svg/Hourglass'
 import Chariot from '@/svg/tarot/Chariot'
 import Button from '@/ui/Button'
-import { getUTCISOString } from 'lib/util'
+import { getISODateOnlyString } from 'lib/util'
 import { startTransition, useActionState, useContext } from 'react'
 import {
     calculateTargetScore,
@@ -42,7 +42,7 @@ export default function EndScreen({
     const finalScore = getScore(getCurrentState(session))
     const targetScore = calculateTargetScore(getDiceCounts(session))
     const numTurns = session.turnHistory.length
-    const dateString = getUTCISOString(date)
+    const dateString = getISODateOnlyString(date)
     return (
         <div className="not-motion-reduce:animate-slidefromtop relative flex h-full flex-col items-center select-none">
             <div className="fill-gold bg-background w-full sm:h-screen">

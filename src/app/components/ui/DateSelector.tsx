@@ -2,7 +2,7 @@
 
 import Arrow from '@/svg/Arrow'
 import clsx from 'clsx'
-import { getUTCISOString } from 'lib/util'
+import { getISODateOnlyString } from 'lib/util'
 import React, { useLayoutEffect, useState } from 'react'
 import { animated, useTransition, useReducedMotion } from '@react-spring/web'
 
@@ -68,7 +68,7 @@ export default function DateSelector({
                         }
                         style={springs}
                     >
-                        {getUTCISOString(item)}
+                        {getISODateOnlyString(item)}
                     </animated.div>
                 ))
             }
