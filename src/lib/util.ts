@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export function getUTCISOString(date: Date) {
-    return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`
+    return date.toISOString().split('T')[0]
 }
 
 export function addDays(date: Date, n: number): Date {

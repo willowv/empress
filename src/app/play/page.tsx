@@ -11,6 +11,7 @@ import Fortune from '@/svg/tarot/Fortune'
 import DicePreview from '../components/game/DicePreview'
 import NavAnimator from 'app/components/navigation/NavAnimator'
 import { Suspense } from 'react'
+import { notFound } from 'next/navigation'
 
 export default async function Page(props: {
     searchParams?: Promise<{
@@ -19,11 +20,9 @@ export default async function Page(props: {
 }) {
     const searchParams = await props.searchParams
     const dateString = searchParams?.date
-    const selectedDate = ensureValidDate(
-        dateString,
-        getDateWithoutTime(new Date())
-    )
+    const date = ensureValidDate(dateString, getDateWithoutTime(new Date()))
     const oneYearAgo = addYears(getDateWithoutTime(new Date()), -1)
+    if (date < oneYearAgo) notFound()
     return (
         <NavAnimator thisPage="/play">
             <div
@@ -38,15 +37,15 @@ export default async function Page(props: {
                         max={getDateWithoutTime(new Date())}
                         min={oneYearAgo}
                     />
-                    <DicePreview date={selectedDate} />
+                    <DicePreview date={date} />
                     <div id="scores" className="max-h-50 grow sm:max-h-60">
                         <Suspense>
-                            <Scores date={selectedDate} />
+                            <Scores date={date} />
                         </Suspense>
                     </div>
                     <div id="button-play" className="z-20">
                         <ButtonLink
-                            href={`/game?date=${getUTCISOString(selectedDate)}`}
+                            href={`/game?date=${getUTCISOString(date)}`}
                         >
                             {'Play'}
                         </ButtonLink>

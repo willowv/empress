@@ -4,7 +4,7 @@ import {
     addDays,
     getUTCISOString,
     ensureValidDate,
-    getTodayWithoutTime
+    getDateWithoutTime
 } from 'lib/util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import DateSelector from './DateSelector'
@@ -24,7 +24,7 @@ export default function QueryParamDateSelector({
     const currentDateString = searchParams.get('date')?.toString()
     const currentDate = ensureValidDate(
         currentDateString,
-        getTodayWithoutTime()
+        getDateWithoutTime(new Date())
     )
 
     function handleNewDate(date: Date) {
